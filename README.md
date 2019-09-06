@@ -1,6 +1,6 @@
 
 
-# Windows GUI Library for the Go Programming Language - wingui
+# Windows GUI Library  - wingui
 Golang GUI library for windows, UI created by ResEdit or Visual Studio Resource Editor
 
 Lightweight, high performance and small executable file size Windows GUI library.
@@ -40,5 +40,7 @@ http://tdm-gcc.tdragon.net/
 TODO
 
 
+# Examples
 
-
+see https://github.com/whtiehack/wingui/tree/master/examples
+Welcome PRs.
