@@ -1,6 +1,6 @@
 
 
-# Windows GUI Library - wingui
+# Windows GUI Library for the Go Programming Language - wingui
 Golang GUI library for windows, UI created by ResEdit or Visual Studio Resource Editor
 
 Lightweight, high performance and small executable file size Windows GUI library.
