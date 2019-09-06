@@ -24,3 +24,16 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 # Requires
 
+### GCC
+
+MinGW
+http://www.mingw.org
+
+or 
+
+TDM-GCC
+http://tdm-gcc.tdragon.net/
+
+
+
+
