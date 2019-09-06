@@ -17,7 +17,7 @@ type dialog struct {
 func NewDialog(idd uintptr, parent win.HWND) (dlg *dialog, err error) {
 	dlg = &dialog{
 	}
-	h := win.CreateDialogParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.WndProc), 0)
+	h := win.CreateDialogParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.dialogWndProc), 0)
 	if h == 0 {
 		err = errors.New("Create dialog error:" + strconv.Itoa(int(idd)))
 		return
@@ -29,7 +29,7 @@ func NewDialog(idd uintptr, parent win.HWND) (dlg *dialog, err error) {
 	return
 }
 
-func (dlg *dialog) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+func (dlg *dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	//log.Println("NewDialog.WndProc", dlg, hwnd, msg, wParam, lParam)
 	switch msg {
 	case win.WM_INITDIALOG:
