@@ -26,9 +26,9 @@ func main() {
 	}
 	log.Println("dlg create end", dlg)
 	var btn *wingui.Button
-	_, _ = dlg.NewButton(C.IDB_OK, &btn)
+	btn, _ = dlg.NewButton(C.IDB_OK)
 	btn.OnClicked = modalBtnClicked
-	closeBtn, _ := dlg.NewButton(C.IDB_CANCEL, nil)
+	closeBtn, _ := dlg.NewButton(C.IDB_CANCEL)
 	closeBtn.OnClicked = func() {
 		dlg.Close()
 	}
@@ -40,7 +40,7 @@ func main() {
 func modalBtnClicked() {
 	log.Println("btn clicked")
 	wingui.NewModalDialog(C.IDD_DIALOG_OK, dlg.Handle(), func(okdlg *wingui.Dialog) {
-		okbtn, _ := okdlg.NewButton(C.IDB_OK, nil)
+		okbtn, _ := okdlg.NewButton(C.IDB_OK)
 		okbtn.OnClicked = func() {
 			log.Println("modal btn click")
 			okdlg.Close()

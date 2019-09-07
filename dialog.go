@@ -112,7 +112,7 @@ func (dlg *Dialog) getDlgItem(id uintptr) (h win.HWND, err error) {
 }
 
 // 绑定控件
-func (dlg *Dialog) NewButton(id uintptr, winBase **Button) (btn *Button, err error) {
+func (dlg *Dialog) NewButton(id uintptr) (btn *Button, err error) {
 	var h win.HWND
 	h, err = dlg.getDlgItem(id)
 	if err != nil {
@@ -127,8 +127,5 @@ func (dlg *Dialog) NewButton(id uintptr, winBase **Button) (btn *Button, err err
 		OnClicked: nil,
 	}
 	dlg.items[h] = btn
-	if winBase != nil {
-		*winBase = btn
-	}
 	return
 }
