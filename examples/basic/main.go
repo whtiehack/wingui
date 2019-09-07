@@ -25,6 +25,14 @@ func main() {
 	_ = dlg.NewButton(C.IDB_OK, &btn)
 	btn.OnClicked = func() {
 		log.Println("btn clicked")
+		wingui.NewModalDialog(C.IDD_DIALOG_OK, dlg.Handle(), func(okdlg *wingui.Dialog) {
+			var okbtn *wingui.Button
+			_ = okdlg.NewButton(C.IDB_OK, &okbtn)
+			okbtn.OnClicked = func() {
+				log.Println("modal btn click")
+				okdlg.Close()
+			}
+		})
 	}
 	dlg.Show()
 	wingui.MessageLoop()
