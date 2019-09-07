@@ -27,12 +27,12 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Println("data:", string(data))
 	code := Match(data)
 	err = ioutil.WriteFile(path.Base(*filename)+".go", []byte(code), 0777)
 	if err != nil {
 		log.Panic(err)
 	}
+	log.Println("gen ids finish")
 }
 
 func Match(data []byte) string {
