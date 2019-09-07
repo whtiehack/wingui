@@ -1,25 +1,19 @@
 package main
 
 import (
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui"
 	"log"
-	"os"
 	"syscall"
-	"time"
 )
 
 func main() {
-	win.MessageBox(0, nil, nil, 0)
-	go func() {
-		time.Sleep(2 * time.Second)
-		loaddll()
-	}()
-	wingui.MessageLoop()
+	loaddll()
 }
 
 func loaddll() {
-	cw, _ := os.Getwd()
-	h, err := syscall.LoadLibrary(cw + "/dll/test.dll")
+	//cw, _ := os.Getwd()
+	h, err := syscall.LoadLibrary(`F:\gotest\wingui\examples\dynamic-library\dll\test.dll`)
 	log.Println("load dll", h, err)
+	proc, err := syscall.GetProcAddress(h, "Showui")
+	log.Println("proc", proc, err)
+	_, _, _ = syscall.Syscall(proc, 0, 0, 0, 0)
 }

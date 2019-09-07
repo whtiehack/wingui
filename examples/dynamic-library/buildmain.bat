@@ -1,1 +1,2 @@
-go build -ldflags="-s -w " main.go
+go build   -o main.exe
+
