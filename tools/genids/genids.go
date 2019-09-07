@@ -14,7 +14,7 @@ import (
 
 var (
 	filename    = flag.String("filename", "", "filename")
-	packagename = flag.String("packagename", "ui", "packagename")
+	packagename = flag.String("packagename", "main", "packagename")
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 	}
 	log.Println("data:", string(data))
 	code := Match(data)
-	err = ioutil.WriteFile(path.Dir(*filename)+"/"+path.Base(*filename)+".go", []byte(code), 0777)
+	err = ioutil.WriteFile(path.Base(*filename)+".go", []byte(code), 0777)
 	if err != nil {
 		log.Panic(err)
 	}

@@ -21,6 +21,9 @@ Lightweight, high performance and small executable file size Windows GUI library
 ### Effect
 ![resedit](res/resedit_show.png)
 
+### File size
+![size](res/size.png)
+
 
 # Requires
 
