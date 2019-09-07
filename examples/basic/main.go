@@ -22,17 +22,20 @@ func main() {
 	}
 	log.Println("dlg create end", dlg)
 	var btn *wingui.Button
-	_ = dlg.NewButton(C.IDB_OK, &btn)
+	_, _ = dlg.NewButton(C.IDB_OK, &btn)
 	btn.OnClicked = func() {
 		log.Println("btn clicked")
 		wingui.NewModalDialog(C.IDD_DIALOG_OK, dlg.Handle(), func(okdlg *wingui.Dialog) {
-			var okbtn *wingui.Button
-			_ = okdlg.NewButton(C.IDB_OK, &okbtn)
+			okbtn, _ := okdlg.NewButton(C.IDB_OK, nil)
 			okbtn.OnClicked = func() {
 				log.Println("modal btn click")
 				okdlg.Close()
 			}
 		})
+	}
+	closeBtn, _ := dlg.NewButton(C.IDB_CANCEL, nil)
+	closeBtn.OnClicked = func() {
+		dlg.Close()
 	}
 	dlg.Show()
 	wingui.MessageLoop()
