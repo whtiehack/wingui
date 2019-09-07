@@ -111,6 +111,12 @@ func (dlg *Dialog) getDlgItem(id uintptr) (h win.HWND, err error) {
 	return
 }
 
+func (dlg *Dialog) SetIcon(id uintptr) {
+	h := win.LoadIcon(hInstance, win.MAKEINTRESOURCE(id))
+	dlg.AsWindowBase().SetIcon(0, uintptr(h), false)
+	dlg.AsWindowBase().SetIcon(1, uintptr(h), false)
+}
+
 // 绑定控件
 func (dlg *Dialog) NewButton(id uintptr) (btn *Button, err error) {
 	var h win.HWND

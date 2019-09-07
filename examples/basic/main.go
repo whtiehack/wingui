@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		log.Panic("main dialog create error", err)
 	}
+	dlg.SetIcon(IDI_ICON1)
 	log.Println("dlg create end", dlg)
 	var btn *wingui.Button
 	btn, _ = dlg.NewButton(IDB_OK)
