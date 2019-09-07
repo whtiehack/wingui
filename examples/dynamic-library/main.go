@@ -11,7 +11,7 @@ func main() {
 
 func loaddll() {
 	//cw, _ := os.Getwd()
-	h, err := syscall.LoadLibrary(`F:\gotest\wingui\examples\dynamic-library\dll\test.dll`)
+	h, err := syscall.LoadLibrary(`dll/test.dll`)
 	log.Println("load dll", h, err)
 	proc, err := syscall.GetProcAddress(h, "Showui")
 	log.Println("proc", proc, err)

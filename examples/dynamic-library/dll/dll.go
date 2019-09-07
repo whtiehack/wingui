@@ -1,7 +1,10 @@
 package main
 
 import "C"
-import "log"
+import (
+	"github.com/whtiehack/wingui"
+	"log"
+)
 
 func init() {
 	log.Println("dll init")
@@ -10,10 +13,10 @@ func init() {
 //export Showui
 func Showui() {
 	log.Println("show ui called")
-	//wingui.InitHInstance("test.dll")
-	//wingui.NewModalDialog(IDD_DIALOG1, 0, func(dlg *wingui.Dialog) {
-	//	// do others
-	//})
+	wingui.InitHInstance("test.dll")
+	wingui.NewModalDialog(IDD_DIALOG1, 0, func(dlg *wingui.Dialog) {
+		// do others
+	})
 
 }
 
