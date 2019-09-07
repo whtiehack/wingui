@@ -47,3 +47,11 @@ TODO
 
 see https://github.com/whtiehack/wingui/tree/master/examples
 Welcome PRs.
+
+
+# References 
+
+https://github.com/lxn/walk
+
+https://github.com/sumorf/gowi
+
