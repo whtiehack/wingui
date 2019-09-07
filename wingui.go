@@ -1,3 +1,6 @@
+/**
+wingui Golang GUI library
+*/
 package wingui
 
 /*
