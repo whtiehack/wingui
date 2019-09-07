@@ -21,9 +21,11 @@ func main() {
 		log.Panic("main dialog create error", err)
 	}
 	log.Println("dlg create end", dlg)
-	dlg.Show()
-
-	dlg, err = wingui.NewDialog(C.IDD_DIALOG, dlg.Handle())
+	var btn *wingui.Button
+	_ = dlg.NewButton(C.IDB_OK, &btn)
+	btn.OnClicked = func() {
+		log.Println("btn clicked")
+	}
 	dlg.Show()
 	wingui.MessageLoop()
 	log.Println("stoped")

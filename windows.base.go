@@ -134,7 +134,7 @@ func (w *WindowBase) SetBounds(value Rectangle) {
 	win.MoveWindow(w.hwnd, int32(value.X), int32(value.Y), int32(value.Width), int32(value.Height), true)
 }
 
-func (w *WindowBase) WndProc(msg uint32, wparam, lparam uintptr) uintptr {
+func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	log.Println("WidgetBase.WndProc")
 	return uintptr(0)
 }
