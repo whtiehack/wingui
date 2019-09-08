@@ -4,4 +4,6 @@ package main
 
 const (
 	IDD_DIALOG1 = 100
+	IDB_OK = 40000
+	IDB_CANCEL = 40001
 )

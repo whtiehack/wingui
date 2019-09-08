@@ -5,6 +5,9 @@ import (
 	"syscall"
 )
 
+// May be cause error use Go as main program.
+// details: https://github.com/golang/go/issues/22192
+// https://github.com/golang/go/issues/34168
 func main() {
 	loaddll()
 }
