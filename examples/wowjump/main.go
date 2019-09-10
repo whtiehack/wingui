@@ -31,6 +31,8 @@ func init() {
 		win.MessageBox(0, &syscall.StringToUTF16("进程已经开启了，不可以多开")[0], nil, 0)
 		os.Exit(-1)
 	}
+	// control 
+	go process()
 }
 
 var btn *wingui.Button
@@ -102,7 +104,7 @@ func btnClick() {
 		}
 		out.SetText("")
 		log.Printf("找到 %d 个 WOW窗口\n", len(logouts))
-		text = "关闭"
+		text = "停止"
 		//str := skillKey.Text()
 		//config.SkillKey = str
 		//randomSkill.ParseSkillKey(str)

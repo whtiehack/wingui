@@ -6,6 +6,7 @@ import (
 	"github.com/whtiehack/wingui"
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"syscall"
 )
@@ -29,7 +30,8 @@ var config = &Config{
 }
 
 func init() {
-	file, err := ioutil.ReadFile("wowjump_config.txt")
+	configDir, _ := os.UserConfigDir()
+	file, err := ioutil.ReadFile(configDir + "/wowjump/wowjump_config.txt")
 	if err != nil {
 		return
 	}
@@ -48,7 +50,8 @@ func (c *Config) Save() {
 	config.InputTime, _ = strconv.Atoi(c.editInputTime.Text())
 	config.CharWaitTime, _ = strconv.Atoi(c.editCharWaitTime.Text())
 	file, _ := json.MarshalIndent(c, "", "    ")
-	ioutil.WriteFile("wowjump_config.txt", file, 777)
+	configDir, _ := os.UserConfigDir()
+	ioutil.WriteFile(configDir+"/wowjump/wowjump_config.txt", file, 777)
 }
 
 func (c *Config) InitVal() {
