@@ -7,9 +7,18 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 # UI Design tool
 
+> ResEdit
+> Visual Studio Resource Editor
+
+
+
+<details><summary> Capture </summary><br>
+
+
 ### ResEdit
 ![resedit](res/resedit.png)
 
+![wowjump](res/wowjumpres.png)
 [ResEdit Download](http://www.resedit.net/)
 
 
@@ -20,9 +29,13 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 ### Effect
 ![resedit](res/resedit_show.png)
+![wowjump](res/wowjump.png)
 
 ### File size
 ![size](res/size.png)
+
+
+</details>
 
 
 # Requires
