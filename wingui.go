@@ -4,8 +4,8 @@ wingui Golang GUI library
 package wingui
 
 /*
-
 void MessageLoop();
+void SetCurrentDialog(long long int h);
 */
 import "C"
 import (
@@ -34,4 +34,9 @@ func InitHInstance(lpModuleName string) {
 // Message loop
 func MessageLoop() {
 	C.MessageLoop()
+}
+
+// SetCurrentDialog  make sure Message Loop could process dialog msg correct
+func SetCurrentDialog(h win.HWND) {
+	C.SetCurrentDialog(C.longlong(uintptr(h)))
 }

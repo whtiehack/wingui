@@ -11,7 +11,7 @@ var dlg *wingui.Dialog
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
 func main() {
 	var err error
-	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, &wingui.DialogConfig{TabStop: true})
+	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, nil)
 	if err != nil {
 		log.Panic("main dialog create error", err)
 	}
@@ -19,6 +19,7 @@ func main() {
 	log.Println("dlg create end", dlg)
 
 	dlg.Show()
+	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
 	log.Println("stoped")
 }
