@@ -13,31 +13,6 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 
 
-<details><summary> Capture detail </summary><br>
-
-
-### ResEdit
-![resedit](res/resedit.png)
-
-![wowjump](res/wowjumpres.png)
-[ResEdit Download](http://www.resedit.net/)
-
-
-### Visual Studio Resource Editor
-
-![vsreseditor](res/vsreseditor.png)
-
-
-### Effect
-![resedit](res/resedit_show.png)
-![wowjump](res/wowjump.png)
-
-### File size
-![size](res/size.png)
-
-
-</details>
-
 
 # Requires
 
@@ -69,3 +44,30 @@ https://github.com/lxn/walk
 
 https://github.com/sumorf/gowi
 
+
+
+
+<details><summary> UI Screenshot details </summary><br>
+
+
+### ResEdit
+![resedit](res/resedit.png)
+
+![wowjump](res/wowjumpres.png)
+[ResEdit Download](http://www.resedit.net/)
+
+
+### Visual Studio Resource Editor
+
+![vsreseditor](res/vsreseditor.png)
+
+
+### Effect
+![resedit](res/resedit_show.png)
+![wowjump](res/wowjump.png)
+
+### File size
+![size](res/size.png)
+
+
+</details>
