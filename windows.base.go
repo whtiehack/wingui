@@ -2,7 +2,6 @@ package wingui
 
 import (
 	"github.com/lxn/win"
-	"log"
 	"syscall"
 	"unsafe"
 )
@@ -23,7 +22,7 @@ func (w *WindowBase) Handle() win.HWND {
 }
 
 func (w *WindowBase) SetWindowText(title string) {
-	log.Printf("SetCaption hwnd: %v, %s\n", w.hwnd, title)
+	// log.Printf("SetCaption hwnd: %v, %s\n", w.hwnd, title)
 	//win.SetWindowText(w.hwnd, title)
 	win.SendMessage(w.hwnd, win.WM_SETTEXT, 0, uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(title))))
 }
@@ -33,6 +32,14 @@ func (w *WindowBase) GetWindowText() string {
 	buf := make([]uint16, textLength+1)
 	win.SendMessage(w.hwnd, win.WM_GETTEXT, uintptr(textLength+1), uintptr(unsafe.Pointer(&buf[0])))
 	return syscall.UTF16ToString(buf)
+}
+
+func (w *WindowBase) Text() string {
+	return w.GetWindowText()
+}
+
+func (w *WindowBase) SetText(str string) {
+	w.SetWindowText(str)
 }
 
 // IconType: 1 - ICON_BIG; 0 - ICON_SMALL
@@ -135,6 +142,6 @@ func (w *WindowBase) SetBounds(value Rectangle) {
 }
 
 func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
-	log.Println("WidgetBase.WndProc")
+	// log.Println("WidgetBase.WndProc")
 	return uintptr(0)
 }

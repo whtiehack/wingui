@@ -148,3 +148,20 @@ func (dlg *Dialog) NewButton(id uintptr) (btn *Button, err error) {
 	dlg.items[h] = btn
 	return
 }
+
+func (dlg *Dialog) NewEdit(id uintptr) (edit *Edit, err error) {
+	var h win.HWND
+	h, err = dlg.getDlgItem(id)
+	if err != nil {
+		return
+	}
+	edit = &Edit{
+		WindowBase: WindowBase{
+			hwnd:   h,
+			idd:    id,
+			parent: dlg.hwnd,
+		},
+	}
+	dlg.items[h] = edit
+	return
+}

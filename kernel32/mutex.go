@@ -39,16 +39,3 @@ func OpenMutex(dwDesiredAccess uintptr, bInheritHandle uintptr, lpName string) (
 		return ret, err
 	}
 }
-
-// 防止进程多开，返回 true 表示进程已经开启
-func ProcessMutex(name string) bool {
-	r, err := openMutex(name)
-	if err == nil || r != 0 {
-		return true
-	}
-	r, err = createMutex(name)
-	if err != nil || r == 0 {
-		return true
-	}
-	return false
-}
