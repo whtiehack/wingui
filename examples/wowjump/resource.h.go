@@ -4,6 +4,7 @@ package main
 
 const (
 	IDD_DIALOG_MAIN = 101
+	IDI_ICON1 = 102
 	IDE_INPUT_TIME = 40000
 	IDE_LOG = 40001
 	IDB_RUN = 40002

@@ -39,6 +39,14 @@ FONT 8, "Ms Shell Dlg"
 
 
 //
+// Icon resources
+//
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+IDI_ICON1          ICON           ".\\wow.ico"
+
+
+
+//
 // Version Information resources
 //
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
