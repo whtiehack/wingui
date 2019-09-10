@@ -8,11 +8,12 @@ Lightweight, high performance and small executable file size Windows GUI library
 # UI Design tool
 
 > ResEdit
+
 > Visual Studio Resource Editor
 
 
 
-<details><summary> Capture </summary><br>
+<details><summary> Capture detail </summary><br>
 
 
 ### ResEdit
