@@ -10,3 +10,4 @@
 #define IDE_NORMAL_TIME                         40003
 #define IDE_CHAR_WAIT_TIME                      40004
 #define IDE_ENTER_TIME                          40005
+#define IDS_WINGUI                              40006

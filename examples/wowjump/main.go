@@ -31,7 +31,7 @@ func init() {
 		win.MessageBox(0, &syscall.StringToUTF16("进程已经开启了，不可以多开")[0], nil, 0)
 		os.Exit(-1)
 	}
-	// control 
+	// control
 	go process()
 }
 
@@ -46,16 +46,18 @@ func main() {
 		log.Panic("main dialog create error", err)
 	}
 	dlg.SetIcon(IDI_ICON1)
-	editLog, _ := dlg.NewEdit(IDE_LOG)
+	editLog := wingui.NewEdit(IDE_LOG)
 	out = editLog
-	SetLogOutput(editLog)
-	config.editNormaltime, _ = dlg.NewEdit(IDE_NORMAL_TIME)
-	config.editEnterTime, _ = dlg.NewEdit(IDE_ENTER_TIME)
-	config.editInputTime, _ = dlg.NewEdit(IDE_INPUT_TIME)
-	config.editCharWaitTime, _ = dlg.NewEdit(IDE_CHAR_WAIT_TIME)
-	config.InitVal()
-	btn, _ = dlg.NewButton(IDB_RUN)
+	btn = wingui.NewButton(IDB_RUN)
 	btn.OnClicked = btnClick
+	SetLogOutput(editLog)
+	config.editNormaltime = wingui.NewEdit(IDE_NORMAL_TIME)
+	config.editEnterTime = wingui.NewEdit(IDE_ENTER_TIME)
+	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
+	config.editCharWaitTime = wingui.NewEdit(IDE_CHAR_WAIT_TIME)
+	dlg.AddWidgets([]wingui.Widget{editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime})
+
+	config.InitVal()
 	dlg.Show()
 	// Make sure Tabstop can work.
 	wingui.SetCurrentDialog(dlg.Handle())

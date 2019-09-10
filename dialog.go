@@ -8,8 +8,10 @@ import (
 	"syscall"
 )
 
-type WndProc interface {
+type Widget interface {
 	WndProc(msg uint32, wParam, lParam uintptr) uintptr
+	AsWindowBase() *WindowBase
+	Handle() win.HWND
 }
 
 type DialogConfig struct {
@@ -22,7 +24,7 @@ var dlgCount = 0
 
 type Dialog struct {
 	WindowBase
-	items  map[win.HWND]WndProc
+	items  map[win.HWND]Widget
 	config *DialogConfig
 	// Indicates whether it is a modal dialog
 	cb ModalDialogCallBack
@@ -33,7 +35,7 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 		dialogConfig = &DialogConfig{}
 	}
 	dlg = &Dialog{
-		items:  make(map[win.HWND]WndProc),
+		items:  make(map[win.HWND]Widget),
 		config: dialogConfig,
 	}
 	dlg.idd = idd
@@ -52,7 +54,7 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 		dialogConfig = &DialogConfig{}
 	}
 	dlg := &Dialog{
-		items:  make(map[win.HWND]WndProc),
+		items:  make(map[win.HWND]Widget),
 		config: dialogConfig,
 		cb:     cb,
 	}
@@ -131,37 +133,26 @@ func (dlg *Dialog) SetIcon(id uintptr) {
 }
 
 // 绑定控件
-func (dlg *Dialog) NewButton(id uintptr) (btn *Button, err error) {
+func (dlg *Dialog) AddWidget(widget Widget) error {
 	var h win.HWND
-	h, err = dlg.getDlgItem(id)
+	var err error
+	base := widget.AsWindowBase()
+	h, err = dlg.getDlgItem(base.idd)
 	if err != nil {
-		return
+		return err
 	}
-	btn = &Button{
-		WindowBase: WindowBase{
-			hwnd:   h,
-			idd:    id,
-			parent: dlg.hwnd,
-		},
-		OnClicked: nil,
-	}
-	dlg.items[h] = btn
-	return
+	base.hwnd = h
+	base.parent = dlg.hwnd
+	dlg.items[h] = widget
+	return err
 }
 
-func (dlg *Dialog) NewEdit(id uintptr) (edit *Edit, err error) {
-	var h win.HWND
-	h, err = dlg.getDlgItem(id)
-	if err != nil {
-		return
+func (dlg *Dialog) AddWidgets(widgets []Widget) error {
+	for _, w := range widgets {
+		err := dlg.AddWidget(w)
+		if err != nil {
+			return err
+		}
 	}
-	edit = &Edit{
-		WindowBase: WindowBase{
-			hwnd:   h,
-			idd:    id,
-			parent: dlg.hwnd,
-		},
-	}
-	dlg.items[h] = edit
-	return
+	return nil
 }

@@ -41,3 +41,7 @@ func (te *Edit) AppendText(value string) {
 func (te *Edit) TextLength() int {
 	return int(te.SendMessage(win.WM_GETTEXTLENGTH, 0, 0))
 }
+
+func NewEdit(idd uintptr) *Edit {
+	return &Edit{WindowBase{idd: idd}}
+}

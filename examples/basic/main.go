@@ -23,13 +23,13 @@ func main() {
 	}
 	dlg.SetIcon(IDI_ICON1)
 	log.Println("dlg create end", dlg)
-	var btn *wingui.Button
-	btn, _ = dlg.NewButton(IDB_OK)
+	btn := wingui.NewButton(IDB_OK)
 	btn.OnClicked = modalBtnClicked
-	closeBtn, _ := dlg.NewButton(IDB_CANCEL)
+	closeBtn := wingui.NewButton(IDB_CANCEL)
 	closeBtn.OnClicked = func() {
 		dlg.Close()
 	}
+	dlg.AddWidgets([]wingui.Widget{btn, closeBtn})
 	dlg.Show()
 	wingui.MessageLoop()
 	log.Println("stoped")
@@ -38,10 +38,11 @@ func main() {
 func modalBtnClicked() {
 	log.Println("btn clicked")
 	wingui.NewModalDialog(IDD_DIALOG_OK, dlg.Handle(), nil, func(okdlg *wingui.Dialog) {
-		okbtn, _ := okdlg.NewButton(IDB_OK)
+		okbtn := wingui.NewButton(IDB_OK)
 		okbtn.OnClicked = func() {
 			log.Println("modal btn click")
 			okdlg.Close()
 		}
+		okdlg.AddWidget(okbtn)
 	})
 }

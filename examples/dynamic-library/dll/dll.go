@@ -23,9 +23,10 @@ func dlgcb(dlg *wingui.Dialog) {
 	close := func() {
 		dlg.Close()
 	}
-	btn1, _ := dlg.NewButton(IDB_OK)
-	btn2, _ := dlg.NewButton(IDB_CANCEL)
+	btn1 := wingui.NewButton(IDB_OK)
+	btn2 := wingui.NewButton(IDB_CANCEL)
 	btn1.OnClicked, btn2.OnClicked = close, close
+	dlg.AddWidgets([]wingui.Widget{btn1, btn2})
 }
 
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main

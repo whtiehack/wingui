@@ -13,3 +13,7 @@ func (b *Button) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	b.AsWindowBase().WndProc(msg, wParam, lParam)
 	return 0
 }
+
+func NewButton(idd uintptr) *Button {
+	return &Button{WindowBase{idd: idd}, nil}
+}
