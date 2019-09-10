@@ -41,7 +41,8 @@ func main() {
 		log.Panic("main dialog create error", err)
 	}
 	dlg.SetIcon(IDI_ICON1)
-	log.Println("dlg create end", dlg)
+	editLog, _ := dlg.NewEdit(IDE_LOG)
+	SetLogOutput(editLog)
 	config.editNormaltime, _ = dlg.NewEdit(IDE_NORMAL_TIME)
 	config.editEnterTime, _ = dlg.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime, _ = dlg.NewEdit(IDE_INPUT_TIME)
@@ -51,4 +52,23 @@ func main() {
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
 	log.Println("stoped")
+}
+
+type MyLogoutput struct {
+	edit  *wingui.Edit
+	count int
+}
+
+func (m *MyLogoutput) Write(p []byte) (n int, err error) {
+	n, err = os.Stdout.Write(p)
+	m.count++
+	if m.count >= 1000 {
+		m.edit.SetText("")
+	}
+	m.edit.AppendText(string(p))
+	return
+}
+func SetLogOutput(edit *wingui.Edit) {
+	m := &MyLogoutput{edit: edit}
+	log.SetOutput(m)
 }

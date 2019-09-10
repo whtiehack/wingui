@@ -145,3 +145,8 @@ func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("WidgetBase.WndProc")
 	return uintptr(0)
 }
+
+// SendMessage sends a message to the window and returns the result.
+func (w *WindowBase) SendMessage(msg uint32, wParam, lParam uintptr) uintptr {
+	return win.SendMessage(w.hwnd, msg, wParam, lParam)
+}
