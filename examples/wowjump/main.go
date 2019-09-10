@@ -10,6 +10,7 @@ import (
 )
 
 var dlg *wingui.Dialog
+var out *wingui.Edit
 
 // 防止进程多开，返回 true 表示进程已经开启
 func ProcessMutex(name string) bool {
@@ -32,6 +33,8 @@ func init() {
 	}
 }
 
+var btn *wingui.Button
+
 // optional  genereate resource IDs
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
 func main() {
@@ -42,13 +45,17 @@ func main() {
 	}
 	dlg.SetIcon(IDI_ICON1)
 	editLog, _ := dlg.NewEdit(IDE_LOG)
+	out = editLog
 	SetLogOutput(editLog)
 	config.editNormaltime, _ = dlg.NewEdit(IDE_NORMAL_TIME)
 	config.editEnterTime, _ = dlg.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime, _ = dlg.NewEdit(IDE_INPUT_TIME)
 	config.editCharWaitTime, _ = dlg.NewEdit(IDE_CHAR_WAIT_TIME)
 	config.InitVal()
+	btn, _ = dlg.NewButton(IDB_RUN)
+	btn.OnClicked = btnClick
 	dlg.Show()
+	// Make sure Tabstop can work.
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
 	log.Println("stoped")
@@ -65,10 +72,44 @@ func (m *MyLogoutput) Write(p []byte) (n int, err error) {
 	if m.count >= 1000 {
 		m.edit.SetText("")
 	}
-	m.edit.AppendText(string(p))
+	m.edit.AppendText(string(p) + "\r\n")
 	return
 }
 func SetLogOutput(edit *wingui.Edit) {
 	m := &MyLogoutput{edit: edit}
 	log.SetOutput(m)
+}
+
+func btnClick() {
+	if clicking {
+		return
+	}
+	clicking = true
+	defer func() { clicking = false }()
+	mux.Lock()
+	defer mux.Unlock()
+	config.Save()
+	running = !running
+	//move.Retset()
+	//jump.Reset()
+	var text = "开启"
+	if running {
+		logouts = GetMultiLogout()
+		if len(logouts) == 0 {
+			running = !running
+			log.Println("没有找到WOW窗口")
+			return
+		}
+		out.SetText("")
+		log.Printf("找到 %d 个 WOW窗口\n", len(logouts))
+		text = "关闭"
+		//str := skillKey.Text()
+		//config.SkillKey = str
+		//randomSkill.ParseSkillKey(str)
+		log.Println("开始运行")
+	} else {
+		log.Println("已经停止运行")
+	}
+	config.EditEnable(!running)
+	btn.SetText(text)
 }

@@ -16,7 +16,7 @@ func init() {
 	getNextWindow = libuser32.NewProc("GetNextWindow ")
 }
 func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpWindowName *uint16) win.HWND {
-	ret, _, _ := findWindowEx.Call(4,
+	ret, _, _ := findWindowEx.Call(
 		uintptr(hWndParent),
 		uintptr(hWndChildAfter),
 		uintptr(unsafe.Pointer(lpClassName)),
@@ -26,6 +26,6 @@ func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpW
 }
 
 func GetNextWindow(hWnd win.HWND, wCmd uintptr) win.HWND {
-	ret, _, _ := getNextWindow.Call(2, uintptr(hWnd), wCmd)
+	ret, _, _ := getNextWindow.Call(uintptr(hWnd), wCmd)
 	return win.HWND(ret)
 }
