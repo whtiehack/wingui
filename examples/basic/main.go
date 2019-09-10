@@ -17,7 +17,7 @@ var dlg *wingui.Dialog
 func main() {
 	log.Printf("resource %v %#[1]v  \n", IDD_DIALOG)
 	var err error
-	dlg, err = wingui.NewDialog(IDD_DIALOG, 0)
+	dlg, err = wingui.NewDialog(IDD_DIALOG, 0, nil)
 	if err != nil {
 		log.Panic("main dialog create error", err)
 	}
@@ -37,7 +37,7 @@ func main() {
 
 func modalBtnClicked() {
 	log.Println("btn clicked")
-	wingui.NewModalDialog(IDD_DIALOG_OK, dlg.Handle(), func(okdlg *wingui.Dialog) {
+	wingui.NewModalDialog(IDD_DIALOG_OK, dlg.Handle(), nil, func(okdlg *wingui.Dialog) {
 		okbtn, _ := okdlg.NewButton(IDB_OK)
 		okbtn.OnClicked = func() {
 			log.Println("modal btn click")

@@ -12,20 +12,29 @@ type WndProc interface {
 	WndProc(msg uint32, wParam, lParam uintptr) uintptr
 }
 
+type DialogConfig struct {
+	Style uint32
+}
+
 type ModalDialogCallBack func(dlg *Dialog)
 
 var dlgCount = 0
 
 type Dialog struct {
 	WindowBase
-	items map[win.HWND]WndProc
+	items  map[win.HWND]WndProc
+	config *DialogConfig
 	// Indicates whether it is a modal dialog
 	cb ModalDialogCallBack
 }
 
-func NewDialog(idd uintptr, parent win.HWND) (dlg *Dialog, err error) {
+func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *Dialog, err error) {
+	if dialogConfig == nil {
+		dialogConfig = &DialogConfig{}
+	}
 	dlg = &Dialog{
-		items: make(map[win.HWND]WndProc),
+		items:  make(map[win.HWND]WndProc),
+		config: dialogConfig,
 	}
 	dlg.idd = idd
 	dlg.parent = parent
@@ -38,10 +47,14 @@ func NewDialog(idd uintptr, parent win.HWND) (dlg *Dialog, err error) {
 	return
 }
 
-func NewModalDialog(idd uintptr, parent win.HWND, cb ModalDialogCallBack) int {
+func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb ModalDialogCallBack) int {
+	if dialogConfig == nil {
+		dialogConfig = &DialogConfig{}
+	}
 	dlg := &Dialog{
-		items: make(map[win.HWND]WndProc),
-		cb:    cb,
+		items:  make(map[win.HWND]WndProc),
+		config: dialogConfig,
+		cb:     cb,
 	}
 	dlg.idd = idd
 	dlg.parent = parent
@@ -60,7 +73,7 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		}
 		return 1
 	case win.WM_COMMAND:
-		// log.Printf("h:%v WM_COMMAND msg=%v wp %v lp %v\n", dlg.hwnd, msg, wParam, lParam)
+		// log.Printf("h:%v WM_COMMAND msg=%v wp %v lp %v   hiwp:%v  lowp:%v\n", dlg.hwnd, msg, wParam, lParam, win.HIWORD(uint32(wParam)), win.LOWORD(uint32(wParam)))
 		if lParam != 0 {
 			h := win.HWND(lParam)
 			if item, ok := dlg.items[h]; ok {

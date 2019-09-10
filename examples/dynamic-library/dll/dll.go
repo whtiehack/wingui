@@ -14,7 +14,7 @@ func init() {
 //export Showui
 func Showui() {
 	log.Println("show ui called")
-	wingui.NewModalDialog(IDD_DIALOG1, 0, dlgcb)
+	wingui.NewModalDialog(IDD_DIALOG1, 0, nil, dlgcb)
 	log.Println("dlg end")
 }
 
