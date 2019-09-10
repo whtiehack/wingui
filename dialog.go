@@ -61,7 +61,7 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 	return win.DialogBoxParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.dialogWndProc), 0)
 }
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	//log.Println("NewDialog.WndProc", dlg, hwnd, msg, wParam, lParam)
+	// log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(wParam), 16), strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
 	switch msg {
 	case win.WM_INITDIALOG:
 		log.Println("wm init Dialog", hwnd, dlg.idd)
