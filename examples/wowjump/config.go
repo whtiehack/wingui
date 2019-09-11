@@ -31,7 +31,7 @@ var config = &Config{
 }
 
 func init() {
-	configDir, _ := os.UserConfigDir()
+	configDir, _ := os.UserHomeDir()
 	file, err := ioutil.ReadFile(configDir + "/wowjump/wowjump_config.txt")
 	if err != nil {
 		return
@@ -52,7 +52,7 @@ func (c *Config) Save() {
 	config.InputTime, _ = strconv.Atoi(c.editInputTime.Text())
 	config.CharWaitTime, _ = strconv.Atoi(c.editCharWaitTime.Text())
 	file, _ := json.MarshalIndent(c, "", "    ")
-	configDir, _ := os.UserConfigDir()
+	configDir, _ := os.UserHomeDir()
 	ioutil.WriteFile(configDir+"/wowjump/wowjump_config.txt", file, 777)
 }
 

@@ -32,6 +32,7 @@ func main() {
 	}
 	dlg.BindWidgets(btn, closeBtn)
 	dlg.Show()
+	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
 	log.Println("stoped")
 }

@@ -8,7 +8,7 @@ int main(){
     HMODULE h;
     FARPROC proc;
     printf("main start\n");
-    h = LoadLibraryA("F:/goproj/wingui/examples/dynamic-library/dll/test.dll");
+    h = LoadLibraryA("dll/test.dll");
     //h = LoadLibraryA("F:/goproj/checkdll_log/dll/test.dll");
     printf("main load library %X\n",h);
     proc = GetProcAddress(h, "Showui");

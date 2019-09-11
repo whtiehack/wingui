@@ -3,7 +3,10 @@
 package main
 
 const (
+	// IDD_DIALOG1 const uintptr
 	IDD_DIALOG1 = 100
+	// IDB_OK const uintptr
 	IDB_OK = 40000
+	// IDB_CANCEL const uintptr
 	IDB_CANCEL = 40001
 )
