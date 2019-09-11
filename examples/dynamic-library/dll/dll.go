@@ -1,9 +1,9 @@
 package main
 
-import "C"
 import (
-	"github.com/whtiehack/wingui"
 	"log"
+
+	"github.com/whtiehack/wingui"
 )
 
 func init() {
@@ -26,7 +26,7 @@ func dlgcb(dlg *wingui.Dialog) {
 	btn1 := wingui.NewButton(IDB_OK)
 	btn2 := wingui.NewButton(IDB_CANCEL)
 	btn1.OnClicked, btn2.OnClicked = close, close
-	dlg.AddWidgets([]wingui.Widget{btn1, btn2})
+	dlg.BindWidgets(btn1, btn2)
 }
 
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main

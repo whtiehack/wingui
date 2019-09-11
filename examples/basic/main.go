@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/whtiehack/wingui"
 	"log"
 	"os"
+
+	"github.com/whtiehack/wingui"
 )
 
 func init() {
@@ -29,7 +30,7 @@ func main() {
 	closeBtn.OnClicked = func() {
 		dlg.Close()
 	}
-	dlg.AddWidgets([]wingui.Widget{btn, closeBtn})
+	dlg.BindWidgets(btn, closeBtn)
 	dlg.Show()
 	wingui.MessageLoop()
 	log.Println("stoped")
@@ -43,6 +44,6 @@ func modalBtnClicked() {
 			log.Println("modal btn click")
 			okdlg.Close()
 		}
-		okdlg.AddWidget(okbtn)
+		okdlg.BindWidgets(okbtn)
 	})
 }
