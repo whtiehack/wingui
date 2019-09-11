@@ -46,6 +46,9 @@ func match(data []byte) string {
 	builder.WriteString(*packagename)
 	builder.WriteString("\n\nconst (\n")
 	for _, a := range v {
+		builder.WriteString("	// ")
+		builder.Write(a[1])
+		builder.WriteString(" const uintptr\n")
 		builder.WriteString("	")
 		builder.Write(a[1])
 		builder.WriteString(" = ")
