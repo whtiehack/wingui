@@ -86,7 +86,7 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		if lParam != 0 {
 			h := win.HWND(lParam)
 			if item, ok := dlg.items[h]; ok {
-				item.WndProc(msg, wParam, lParam)
+				return item.WndProc(msg, wParam, lParam)
 			}
 		}
 		//log.Printf("WM_COMMAND msg=%v\n", msg)

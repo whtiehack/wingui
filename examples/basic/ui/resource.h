@@ -8,3 +8,4 @@
 #define IDB_OK                                  40000
 #define IDB_CANCEL                              40001
 #define IDE_EDIT                                40002
+#define IDB_NORMAL                              40003

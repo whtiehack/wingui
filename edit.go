@@ -15,8 +15,7 @@ type Edit struct {
 // WndProc Edit Window WndProc.
 func (e *Edit) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("btn wnd proc", b.hwnd, msg, wParam, lParam)
-	e.AsWindowBase().WndProc(msg, wParam, lParam)
-	return 0
+	return e.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
 // TextSelection get Edit selection.
@@ -54,4 +53,11 @@ func (e *Edit) TextLength() int {
 // NewEdit create a new Edit ,need bind to Dialog for use.
 func NewEdit(idd uintptr) *Edit {
 	return &Edit{WindowBase{idd: idd}}
+}
+
+//BindNewEdit create a new Edit and bind to dlg.
+func BindNewEdit(idd uintptr, dlg *Dialog) (*Edit, error) {
+	edit := &Edit{WindowBase{idd: idd}}
+	err := dlg.BindWidgets(edit)
+	return edit, err
 }

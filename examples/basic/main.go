@@ -31,10 +31,18 @@ func main() {
 		dlg.Close()
 	}
 	dlg.BindWidgets(btn, closeBtn)
+
+	normalBtn, _ := wingui.BindNewButton(IDB_NORMAL, dlg)
+	normalBtn.OnClicked = normalBtnClicked
 	dlg.Show()
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
 	log.Println("stoped")
+}
+
+func normalBtnClicked() {
+	d, _ := wingui.NewDialog(IDD_DIALOG_OK, dlg.Handle(), nil)
+	d.Show()
 }
 
 func modalBtnClicked() {

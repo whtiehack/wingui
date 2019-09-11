@@ -38,6 +38,7 @@ func MessageLoop() {
 }
 
 // SetCurrentDialog  make sure Message Loop could process dialog msg correct,such as Tabstop msg.
+//This is a optional method.
 func SetCurrentDialog(h win.HWND) {
 	C.SetCurrentDialog(C.longlong(uintptr(h)))
 }

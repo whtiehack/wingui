@@ -15,4 +15,6 @@ const (
 	IDB_CANCEL = 40001
 	// IDE_EDIT const uintptr
 	IDE_EDIT = 40002
+	// IDB_NORMAL const uintptr
+	IDB_NORMAL = 40003
 )
