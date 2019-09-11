@@ -116,9 +116,9 @@ func (l *Logout) inputEnter() bool {
 	if !l.CheckWindow() {
 		return false
 	}
-	keybd_input(uint('\r'), false)
+	keybdInput(uint('\r'), false)
 	randomSleep(211, 155)
-	keybd_input(uint('\r'), true)
+	keybdInput(uint('\r'), true)
 	return true
 }
 
@@ -126,15 +126,15 @@ func (l *Logout) logout() bool {
 	if !l.CheckWindow() {
 		return false
 	}
-	keybd_input(uint('\r'), false)
+	keybdInput(uint('\r'), false)
 	randomSleep(211, 155)
-	keybd_input(uint('\r'), true)
+	keybdInput(uint('\r'), true)
 	randomSleep(211, 155)
-	SendString("/logout", 333)
+	sendString("/logout", 333)
 	randomSleep(211, 155)
-	keybd_input(uint('\r'), false)
+	keybdInput(uint('\r'), false)
 	randomSleep(111, 55)
-	keybd_input(uint('\r'), true)
+	keybdInput(uint('\r'), true)
 	return true
 }
 
