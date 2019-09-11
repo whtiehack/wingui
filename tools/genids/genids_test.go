@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestMatch(t *testing.T) {
-	Match([]byte(`
+	match([]byte(`
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // 供 Project1.rc 使用
@@ -38,7 +38,7 @@ func TestMatch(t *testing.T) {
 
 `))
 
-	Match([]byte(`
+	match([]byte(`
 #ifndef IDC_STATIC
 #define IDC_STATIC (-1)
 #endif

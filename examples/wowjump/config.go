@@ -2,13 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"syscall"
+
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui"
 )
 
 type Config struct {
