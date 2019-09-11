@@ -1,20 +1,21 @@
 package main
 
 import (
-	"github.com/lxn/win"
 	"log"
 	"math/rand"
 	"time"
 	"unsafe"
+
+	"github.com/lxn/win"
 )
 
-var g_scrx int32;
+var gScrx int32
 
-var g_scry int32;
+var gScry int32
 
 func init() {
-	g_scrx = win.GetSystemMetrics(win.SM_CXSCREEN)
-	g_scry = win.GetSystemMetrics(win.SM_CYSCREEN)
+	gScrx = win.GetSystemMetrics(win.SM_CXSCREEN)
+	gScry = win.GetSystemMetrics(win.SM_CYSCREEN)
 }
 func sleep(t int) {
 	time.Sleep(time.Duration(t) * time.Millisecond)
@@ -25,7 +26,7 @@ func randomSleep(t int, low int) {
 	sleep(rand.Int()%t + low)
 }
 
-func keybd_input(key uint, isUp bool) {
+func keybdInput(key uint, isUp bool) {
 	//key = w32.MapVirtualKey(key,1)
 	input := []win.KEYBD_INPUT{
 		{
@@ -45,7 +46,7 @@ func keybd_input(key uint, isUp bool) {
 	}
 }
 
-func SendString(str string, delay int) {
+func sendString(str string, delay int) {
 	//key = w32.MapVirtualKey(key,1)
 	for _, v := range str {
 		input := []win.KEYBD_INPUT{
@@ -65,13 +66,13 @@ func SendString(str string, delay int) {
 	}
 }
 
-func mouse_move(x, y uint, times uint32, dwflag uint32) {
+func mouseMove(x, y uint, times uint32, dwflag uint32) {
 	input := []win.MOUSE_INPUT{
 		{
 			Type: win.INPUT_MOUSE,
 			Mi: win.MOUSEINPUT{
-				Dx:          int32(65535 * int(x) / int(g_scrx)),
-				Dy:          int32(65535 * int(y) / int(g_scry)),
+				Dx:          int32(65535 * int(x) / int(gScrx)),
+				Dy:          int32(65535 * int(y) / int(gScry)),
 				DwFlags:     dwflag,
 				MouseData:   0,
 				DwExtraInfo: 0,
@@ -85,12 +86,12 @@ func mouse_move(x, y uint, times uint32, dwflag uint32) {
 	}
 }
 
-var frame int32 = 0
-var caption int32 = 0
+var frame int32
+var caption int32
 
 func init() {
-	frame = win.GetSystemMetrics(win.SM_CXFRAME);
-	caption = win.GetSystemMetrics(win.SM_CYCAPTION);
+	frame = win.GetSystemMetrics(win.SM_CXFRAME)
+	caption = win.GetSystemMetrics(win.SM_CYCAPTION)
 }
 func randomMoveMouse() {
 	//h := win.FindWindow(syscall.StringToUTF16Ptr("GxWindowClass"), nil)
@@ -104,7 +105,7 @@ func randomMoveMouse() {
 	x := uint(rect.Left + rand.Int31()%(rect.Right-rect.Left))
 	y := uint(rect.Top + rand.Int31()%(rect.Bottom-rect.Top))
 	//log.Printf("!! x y", x, y)
-	mouse_move(x, y, 0, win.MOUSEEVENTF_ABSOLUTE|win.MOUSEEVENTF_MOVE)
+	mouseMove(x, y, 0, win.MOUSEEVENTF_ABSOLUTE|win.MOUSEEVENTF_MOVE)
 	//mouse_move(x, y, 0, win.MOUSEEVENTF_LEFTDOWN)
 	//mouse_move(x, y, 0, win.MOUSEEVENTF_LEFTUP)
 

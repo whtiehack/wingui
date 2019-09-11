@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	code := Match(data)
+	code := match(data)
 	err = ioutil.WriteFile(path.Base(*filename)+".go", []byte(code), 0777)
 	if err != nil {
 		log.Panic(err)
@@ -35,7 +35,7 @@ func main() {
 	log.Println("gen ids finish")
 }
 
-func Match(data []byte) string {
+func match(data []byte) string {
 	reg := regexp.MustCompile(`#define\s+(\w+)\s+(\d+)\w*`)
 	v := reg.FindAllSubmatch(data, -1)
 	log.Println("Match length ", len(v))

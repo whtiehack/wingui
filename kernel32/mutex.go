@@ -11,6 +11,7 @@ var (
 	procOpenMutex   = kernel32.NewProc("OpenMutexW")
 )
 
+//CreateMutex kernel32 API CreateMutex
 func CreateMutex(name string) (uintptr, error) {
 	paramMutexName := uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(name)))
 
@@ -24,6 +25,7 @@ func CreateMutex(name string) (uintptr, error) {
 	}
 }
 
+//OpenMutex kernel32 API OpenMutex
 // 2031617 SYNCRONIZE
 func OpenMutex(dwDesiredAccess uintptr, bInheritHandle uintptr, lpName string) (uintptr, error) {
 	paramMutexName := uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(lpName)))

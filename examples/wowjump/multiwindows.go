@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui/user32"
 	"log"
 	"strconv"
 	"syscall"
+
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui/user32"
 )
 
 func getHwnds() []win.HWND {
@@ -26,6 +27,7 @@ func getHwnds() []win.HWND {
 	return hwndArr
 }
 
+//GetMultiLogout get need control WOW windows and need user confirm.
 func GetMultiLogout() []*Logout {
 	arr := getHwnds()
 	logouts := make([]*Logout, 0, 5)

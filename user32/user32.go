@@ -1,9 +1,10 @@
 package user32
 
 import (
+	"unsafe"
+
 	"github.com/lxn/win"
 	"golang.org/x/sys/windows"
-	"unsafe"
 )
 
 var libuser32 *windows.LazyDLL
@@ -15,6 +16,8 @@ func init() {
 	findWindowEx = libuser32.NewProc("FindWindowExW")
 	getNextWindow = libuser32.NewProc("GetNextWindow ")
 }
+
+//FindWindowEx user32 API FindWindowEx
 func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpWindowName *uint16) win.HWND {
 	ret, _, _ := findWindowEx.Call(
 		uintptr(hWndParent),
@@ -25,6 +28,7 @@ func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpW
 	return win.HWND(ret)
 }
 
+//GetNextWindow user32 API GetNextWindow
 func GetNextWindow(hWnd win.HWND, wCmd uintptr) win.HWND {
 	ret, _, _ := getNextWindow.Call(uintptr(hWnd), wCmd)
 	return win.HWND(ret)

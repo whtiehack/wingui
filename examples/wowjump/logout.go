@@ -1,22 +1,28 @@
 package main
 
 import (
-	"github.com/lxn/win"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/lxn/win"
 )
 
+//LogoutStatus logout status.
 type LogoutStatus int
 
 const (
-	// 正常
+	//NORMAL 正常
 	NORMAL LogoutStatus = iota
+	//INPUT inputing
 	INPUT
+	//CHAR char
 	CHAR
+	//ENTERING entering
 	ENTERING
 )
 
+//Logout control Wow window status.
 type Logout struct {
 	prevTime     time.Time
 	subTime      time.Duration
@@ -24,6 +30,7 @@ type Logout struct {
 	hwnd         win.HWND
 }
 
+//Update should be invoke by period.
 func (l *Logout) Update() {
 	switch l.currentState {
 	case NORMAL:
@@ -98,6 +105,7 @@ func (l *Logout) enter() {
 	}
 }
 
+//Reset should be invoke by reset status.
 func (l *Logout) Reset() {
 	l.currentState = NORMAL
 	l.subTime = 0
@@ -130,10 +138,12 @@ func (l *Logout) logout() bool {
 	return true
 }
 
+//IsValid check the windows is valid.
 func (l *Logout) IsValid() bool {
 	return win.IsWindowVisible(l.hwnd)
 }
 
+//CheckWindow check the window if in the foreground and in focus.
 func (l *Logout) CheckWindow() bool {
 	// 检查窗口
 	if !l.IsValid() {
@@ -150,6 +160,7 @@ func (l *Logout) CheckWindow() bool {
 	return true
 }
 
+//TryGetWindow try focus window.
 func (l *Logout) TryGetWindow() bool {
 	focus := win.GetForegroundWindow()
 	if focus != l.hwnd {
