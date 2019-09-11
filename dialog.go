@@ -18,7 +18,8 @@ type Widget interface {
 
 // DialogConfig  TODO.
 type DialogConfig struct {
-	Style uint32
+	Style   uint32
+	Widgets []Widget
 }
 
 // ModalDialogCallBack is modal dialog callback
@@ -32,7 +33,8 @@ type Dialog struct {
 	items  map[win.HWND]Widget
 	config *DialogConfig
 	// Indicates whether it is a modal dialog
-	cb ModalDialogCallBack
+	cb          ModalDialogCallBack
+	wndCallBack uintptr
 }
 
 // NewDialog create a new Dialog.
@@ -46,7 +48,8 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 	}
 	dlg.idd = idd
 	dlg.parent = parent
-	h := win.CreateDialogParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.dialogWndProc), 0)
+	dlg.wndCallBack = syscall.NewCallback(dlg.dialogWndProc)
+	h := win.CreateDialogParam(hInstance, win.MAKEINTRESOURCE(idd), parent, dlg.wndCallBack, 0)
 	if h == 0 {
 		err = errors.New("Create Dialog error:" + strconv.Itoa(int(idd)))
 		return
@@ -69,12 +72,33 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 	dlg.parent = parent
 	return win.DialogBoxParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.dialogWndProc), 0)
 }
+
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	// log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(wParam), 16), strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
+	//log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
+	if lParam != 0 {
+		h := win.HWND(lParam)
+		if item, ok := dlg.items[h]; ok {
+			return item.WndProc(msg, wParam, lParam)
+		}
+	}
+	// TODO：
+	//if hwnd != dlg.hwnd {
+	//	if item, ok := dlg.items[hwnd]; ok {
+	//		return item.WndProc(msg, wParam, lParam)
+	//	} else {
+	//		log.Println("error hwnd!!", hwnd)
+	//	}
+	//}
 	switch msg {
+	//case win.WM_ACTIVATEAPP:
+	//
+	//	return 1
 	case win.WM_INITDIALOG:
 		log.Println("wm init Dialog", hwnd, dlg.idd)
 		dlg.hwnd = hwnd
+		if dlg.config.Widgets != nil {
+			dlg.BindWidgets(dlg.config.Widgets...)
+		}
 		if dlg.cb != nil {
 			dlgCount++
 			dlg.cb(dlg)
@@ -83,12 +107,6 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		return 1
 	case win.WM_COMMAND:
 		// log.Printf("h:%v WM_COMMAND msg=%v wp %v lp %v   hiwp:%v  lowp:%v\n", dlg.hwnd, msg, wParam, lParam, win.HIWORD(uint32(wParam)), win.LOWORD(uint32(wParam)))
-		if lParam != 0 {
-			h := win.HWND(lParam)
-			if item, ok := dlg.items[h]; ok {
-				return item.WndProc(msg, wParam, lParam)
-			}
-		}
 		//log.Printf("WM_COMMAND msg=%v\n", msg)
 		//if lParam != 0 { //Reflect message to control
 		//	h := win.HWND(lParam)
@@ -148,8 +166,10 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 		base := w.AsWindowBase()
 		h, err = dlg.getDlgItem(base.idd)
 		if err != nil {
+			log.Println("BindWidgets error", err, widgets)
 			return err
 		}
+		// TODO： win.SetWindowLong(h, win.GWL_WNDPROC, int32(dlg.wndCallBack))
 		base.hwnd = h
 		base.parent = dlg.hwnd
 		dlg.items[h] = w

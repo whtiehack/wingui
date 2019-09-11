@@ -42,7 +42,10 @@ var btn *wingui.Button
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
 func main() {
 	var err error
-	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, nil)
+	staticWingui := wingui.NewStatic(IDS_WINGUI)
+	staticWingui.Color = wingui.RGB(0, 0, 255)
+	staticWingui.BkMode = win.TRANSPARENT
+	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, &wingui.DialogConfig{Widgets: []wingui.Widget{staticWingui}})
 	if err != nil {
 		log.Panic("main dialog create error", err)
 	}
@@ -81,8 +84,8 @@ func (m *myLogoutput) Write(p []byte) (n int, err error) {
 	return
 }
 func setLogOutput(edit *wingui.Edit) {
-	m := &myLogoutput{edit: edit}
-	log.SetOutput(m)
+	//m := &myLogoutput{edit: edit}
+	//log.SetOutput(m)
 }
 
 func btnClick() {
