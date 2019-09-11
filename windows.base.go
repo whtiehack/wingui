@@ -9,9 +9,10 @@ import (
 
 // WindowBase is an interface that provides operations common to all windows.
 type WindowBase struct {
-	hwnd   win.HWND
-	parent win.HWND
-	idd    uintptr
+	hwnd          win.HWND
+	parent        win.HWND
+	idd           uintptr
+	lpPrevWndFunc uintptr
 }
 
 // AsWindowBase  return a *WindowBase.
@@ -166,6 +167,9 @@ func (w *WindowBase) SetBounds(value Rectangle) {
 // WndProc process window message.
 func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("WidgetBase.WndProc")
+	if w.lpPrevWndFunc != 0 {
+		return win.CallWindowProc(w.lpPrevWndFunc, w.hwnd, msg, wParam, lParam)
+	}
 	return uintptr(0)
 }
 

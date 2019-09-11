@@ -2,7 +2,6 @@ package wingui
 
 import (
 	"github.com/lxn/win"
-	"log"
 )
 
 // Static a static label widget for Dialog.
@@ -16,7 +15,7 @@ type Static struct {
 
 // WndProc Button window WndProc.
 func (b *Static) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
-	log.Print("static msg", msg)
+	// log.Print("static msg", msg)
 	switch msg {
 	case win.WM_CTLCOLORSTATIC:
 		if b.Color != 0 && b.BkMode != 0 {

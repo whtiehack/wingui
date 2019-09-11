@@ -75,20 +75,15 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	//log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
-	if lParam != 0 {
-		h := win.HWND(lParam)
-		if item, ok := dlg.items[h]; ok {
+	// TODO：
+	if dlg.hwnd != 0 && hwnd != dlg.hwnd {
+		if item, ok := dlg.items[hwnd]; ok {
 			return item.WndProc(msg, wParam, lParam)
+		} else {
+			log.Println("error hwnd!!", hwnd)
 		}
 	}
-	// TODO：
-	//if hwnd != dlg.hwnd {
-	//	if item, ok := dlg.items[hwnd]; ok {
-	//		return item.WndProc(msg, wParam, lParam)
-	//	} else {
-	//		log.Println("error hwnd!!", hwnd)
-	//	}
-	//}
+
 	switch msg {
 	//case win.WM_ACTIVATEAPP:
 	//
@@ -169,7 +164,8 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 			log.Println("BindWidgets error", err, widgets)
 			return err
 		}
-		// TODO： win.SetWindowLong(h, win.GWL_WNDPROC, int32(dlg.wndCallBack))
+		base.lpPrevWndFunc = win.SetWindowLongPtr(h, win.GWL_WNDPROC, dlg.wndCallBack)
+
 		base.hwnd = h
 		base.parent = dlg.hwnd
 		dlg.items[h] = w
