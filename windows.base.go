@@ -1,32 +1,37 @@
 package wingui
 
 import (
-	"github.com/lxn/win"
 	"syscall"
 	"unsafe"
+
+	"github.com/lxn/win"
 )
 
-// WindowBase
+// WindowBase is an interface that provides operations common to all windows.
 type WindowBase struct {
 	hwnd   win.HWND
 	parent win.HWND
 	idd    uintptr
 }
 
+// AsWindowBase  return a *WindowBase.
 func (w *WindowBase) AsWindowBase() *WindowBase {
 	return w
 }
 
+// Handle get hwnd.
 func (w *WindowBase) Handle() win.HWND {
 	return w.hwnd
 }
 
+// SetWindowText set text
 func (w *WindowBase) SetWindowText(title string) {
 	// log.Printf("SetCaption hwnd: %v, %s\n", w.hwnd, title)
 	//win.SetWindowText(w.hwnd, title)
 	win.SendMessage(w.hwnd, win.WM_SETTEXT, 0, uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(title))))
 }
 
+// GetWindowText get text.
 func (w *WindowBase) GetWindowText() string {
 	textLength := win.SendMessage(w.hwnd, win.WM_GETTEXTLENGTH, 0, 0)
 	buf := make([]uint16, textLength+1)
@@ -34,14 +39,17 @@ func (w *WindowBase) GetWindowText() string {
 	return syscall.UTF16ToString(buf)
 }
 
+// Text alias to GetWindowText
 func (w *WindowBase) Text() string {
 	return w.GetWindowText()
 }
 
+// SetText alias to SetWindowText
 func (w *WindowBase) SetText(str string) {
 	w.SetWindowText(str)
 }
 
+// SetIcon set window icon.
 // IconType: 1 - ICON_BIG; 0 - ICON_SMALL
 // Icon: Resource Id or Icon Handle
 // LoadIcon: If Icon is ResourceId then invoke LoadIcon
@@ -55,38 +63,47 @@ func (w *WindowBase) SetIcon(iconType int, icon uintptr, loadIcon bool) {
 	win.SendMessage(w.hwnd, win.WM_SETICON, uintptr(iconType), icon)
 }
 
+// Show set window show.
 func (w *WindowBase) Show() {
 	win.ShowWindow(w.hwnd, win.SW_SHOW)
 }
 
+//Hide set window hide.
 func (w *WindowBase) Hide() {
 	win.ShowWindow(w.hwnd, win.SW_HIDE)
 }
 
+//ShowMinimized show minimized btn.
 func (w *WindowBase) ShowMinimized() {
 	win.ShowWindow(w.hwnd, win.SW_MINIMIZE)
 }
 
+//ShowMaximized show maximized btn.
 func (w *WindowBase) ShowMaximized() {
 	win.ShowWindow(w.hwnd, win.SW_MAXIMIZE)
 }
 
+//ShowFullScreen ShowFullScreen
 func (w *WindowBase) ShowFullScreen() {
 	win.ShowWindow(w.hwnd, win.SW_SHOWMAXIMIZED)
 }
 
+// ShowNormal ShowNormal
 func (w *WindowBase) ShowNormal() {
 	win.ShowWindow(w.hwnd, win.SW_SHOWNORMAL)
 }
 
+//IsEnabled check windows is enabled.
 func (w *WindowBase) IsEnabled() bool {
 	return win.IsWindowEnabled(w.hwnd)
 }
 
+// IsVisible check window is visible.
 func (w *WindowBase) IsVisible() bool {
 	return win.IsWindowVisible(w.hwnd)
 }
 
+// SetVisible set window visible status.
 func (w *WindowBase) SetVisible(value bool) {
 	var cmd int32
 	if value {
@@ -97,22 +114,27 @@ func (w *WindowBase) SetVisible(value bool) {
 	win.ShowWindow(w.hwnd, cmd)
 }
 
+// SetEnabled set window enable status.
 func (w *WindowBase) SetEnabled(b bool) {
 	win.EnableWindow(w.hwnd, b)
 }
 
+// SetDisabled reverse of SetEnabled
 func (w *WindowBase) SetDisabled(disable bool) {
 	win.EnableWindow(w.hwnd, !disable)
 }
 
+//Close close window.
 func (w *WindowBase) Close() {
 	win.SendMessage(w.hwnd, win.WM_CLOSE, 0, 0)
 }
 
+// SetFocus set focus.
 func (w *WindowBase) SetFocus() {
 	win.SetFocus(w.hwnd)
 }
 
+//GetWindowRect get window rect
 func (w *WindowBase) GetWindowRect() win.RECT {
 	var rect win.RECT
 	win.GetWindowRect(w.hwnd, &rect)
@@ -121,12 +143,11 @@ func (w *WindowBase) GetWindowRect() win.RECT {
 
 // BoundsPixels returns the outer bounding box Rectangle of the *WindowBase, including
 // decorations.
-//
 // The coordinates are relative to the screen.
-func (wb *WindowBase) BoundsPixels() Rectangle {
+func (w *WindowBase) BoundsPixels() Rectangle {
 	var r win.RECT
 
-	if !win.GetWindowRect(wb.hwnd, &r) {
+	if !win.GetWindowRect(w.hwnd, &r) {
 		return Rectangle{}
 	}
 	return Rectangle{
@@ -137,10 +158,12 @@ func (wb *WindowBase) BoundsPixels() Rectangle {
 	}
 }
 
+// SetBounds set window rect.
 func (w *WindowBase) SetBounds(value Rectangle) {
 	win.MoveWindow(w.hwnd, int32(value.X), int32(value.Y), int32(value.Width), int32(value.Height), true)
 }
 
+// WndProc process window message.
 func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("WidgetBase.WndProc")
 	return uintptr(0)

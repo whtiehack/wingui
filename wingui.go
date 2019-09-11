@@ -22,6 +22,7 @@ func init() {
 	InitHInstance("")
 }
 
+//InitHInstance init hInstance,used by Dialog APIs.
 func InitHInstance(lpModuleName string) {
 	var name *uint16
 	if lpModuleName != "" {
@@ -31,12 +32,12 @@ func InitHInstance(lpModuleName string) {
 	log.Println("hInstance", hInstance)
 }
 
-// Message loop
+// MessageLoop start windows message loop.
 func MessageLoop() {
 	C.MessageLoop()
 }
 
-// SetCurrentDialog  make sure Message Loop could process dialog msg correct
+// SetCurrentDialog  make sure Message Loop could process dialog msg correct,such as Tabstop msg.
 func SetCurrentDialog(h win.HWND) {
 	C.SetCurrentDialog(C.longlong(uintptr(h)))
 }

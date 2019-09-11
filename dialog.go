@@ -2,26 +2,31 @@ package wingui
 
 import (
 	"errors"
-	"github.com/lxn/win"
 	"log"
 	"strconv"
 	"syscall"
+
+	"github.com/lxn/win"
 )
 
+// Widget inspect dialog item.
 type Widget interface {
 	WndProc(msg uint32, wParam, lParam uintptr) uintptr
 	AsWindowBase() *WindowBase
 	Handle() win.HWND
 }
 
+// DialogConfig  TODO.
 type DialogConfig struct {
 	Style uint32
 }
 
+// ModalDialogCallBack is modal dialog callback
 type ModalDialogCallBack func(dlg *Dialog)
 
 var dlgCount = 0
 
+// Dialog is  main windows struct.
 type Dialog struct {
 	WindowBase
 	items  map[win.HWND]Widget
@@ -30,6 +35,7 @@ type Dialog struct {
 	cb ModalDialogCallBack
 }
 
+// NewDialog create a new Dialog.
 func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *Dialog, err error) {
 	if dialogConfig == nil {
 		dialogConfig = &DialogConfig{}
@@ -49,6 +55,7 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 	return
 }
 
+// NewModalDialog create a new modal dialog
 func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb ModalDialogCallBack) int {
 	if dialogConfig == nil {
 		dialogConfig = &DialogConfig{}
@@ -126,33 +133,27 @@ func (dlg *Dialog) getDlgItem(id uintptr) (h win.HWND, err error) {
 	return
 }
 
+// SetIcon set Window Icon.
 func (dlg *Dialog) SetIcon(id uintptr) {
 	h := win.LoadIcon(hInstance, win.MAKEINTRESOURCE(id))
 	dlg.AsWindowBase().SetIcon(0, uintptr(h), false)
 	dlg.AsWindowBase().SetIcon(1, uintptr(h), false)
 }
 
-// 绑定控件
-func (dlg *Dialog) AddWidget(widget Widget) error {
+// BindWidgets bind dialog items.
+func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 	var h win.HWND
 	var err error
-	base := widget.AsWindowBase()
-	h, err = dlg.getDlgItem(base.idd)
-	if err != nil {
-		return err
-	}
-	base.hwnd = h
-	base.parent = dlg.hwnd
-	dlg.items[h] = widget
-	return err
-}
-
-func (dlg *Dialog) AddWidgets(widgets []Widget) error {
 	for _, w := range widgets {
-		err := dlg.AddWidget(w)
+		base := w.AsWindowBase()
+		h, err = dlg.getDlgItem(base.idd)
 		if err != nil {
 			return err
 		}
+		base.hwnd = h
+		base.parent = dlg.hwnd
+		dlg.items[h] = w
 	}
-	return nil
+
+	return err
 }

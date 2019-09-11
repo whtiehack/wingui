@@ -11,6 +11,7 @@ func rectFromRECT(r win.RECT) Rectangle {
 	}
 }
 
+// Rectangle is a Rect struct
 type Rectangle struct {
 	X, Y, Width, Height int
 }
