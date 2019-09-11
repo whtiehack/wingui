@@ -1,18 +1,19 @@
 package main
 
 import (
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui"
-	"github.com/whtiehack/wingui/kernel32"
 	"log"
 	"os"
 	"syscall"
+
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui"
+	"github.com/whtiehack/wingui/kernel32"
 )
 
 var dlg *wingui.Dialog
 var out *wingui.Edit
 
-// 防止进程多开，返回 true 表示进程已经开启
+// ProcessMutex 防止进程多开，返回 true 表示进程已经开启
 func ProcessMutex(name string) bool {
 	r, err := kernel32.OpenMutex(2031617, 1, name)
 	if err == nil || r != 0 {
@@ -50,12 +51,12 @@ func main() {
 	out = editLog
 	btn = wingui.NewButton(IDB_RUN)
 	btn.OnClicked = btnClick
-	SetLogOutput(editLog)
+	setLogOutput(editLog)
 	config.editNormaltime = wingui.NewEdit(IDE_NORMAL_TIME)
 	config.editEnterTime = wingui.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
 	config.editCharWaitTime = wingui.NewEdit(IDE_CHAR_WAIT_TIME)
-	dlg.AddWidgets([]wingui.Widget{editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime})
+	dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime)
 
 	config.InitVal()
 	dlg.Show()
@@ -65,12 +66,12 @@ func main() {
 	log.Println("stoped")
 }
 
-type MyLogoutput struct {
+type myLogoutput struct {
 	edit  *wingui.Edit
 	count int
 }
 
-func (m *MyLogoutput) Write(p []byte) (n int, err error) {
+func (m *myLogoutput) Write(p []byte) (n int, err error) {
 	n, err = os.Stdout.Write(p)
 	m.count++
 	if m.count >= 1000 {
@@ -79,8 +80,8 @@ func (m *MyLogoutput) Write(p []byte) (n int, err error) {
 	m.edit.AppendText(string(p) + "\r\n")
 	return
 }
-func SetLogOutput(edit *wingui.Edit) {
-	m := &MyLogoutput{edit: edit}
+func setLogOutput(edit *wingui.Edit) {
+	m := &myLogoutput{edit: edit}
 	log.SetOutput(m)
 }
 
