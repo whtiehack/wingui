@@ -19,8 +19,9 @@ type WindowBase struct {
 
 	// The following fields need to enable window subclassing
 
-	// ShowCursor is a cursor resource id,set mouse move show cursor,
-	ShowCursor uintptr
+	// ShowCursor is HCURSOR,need loadCursor by self.
+	// example: win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND))
+	ShowCursor win.HCURSOR
 }
 
 // AsWindowBase  return a *WindowBase.
@@ -190,7 +191,7 @@ func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 			tme.HwndTrack = w.hwnd
 			tme.DwHoverTime = 10
 			win.TrackMouseEvent(&tme)
-			win.SetCursor(win.LoadCursor(hInstance, win.MAKEINTRESOURCE(w.ShowCursor)))
+			win.SetCursor(w.ShowCursor)
 		}
 		break
 	}

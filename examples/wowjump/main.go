@@ -46,7 +46,7 @@ func main() {
 	staticWingui := wingui.NewStatic(IDS_WINGUI)
 	staticWingui.Subclassing = true
 	staticWingui.Color = wingui.RGB(0, 0, 255)
-	staticWingui.ShowCursor = win.IDC_HAND
+	staticWingui.ShowCursor = win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND))
 	staticWingui.BkMode = win.TRANSPARENT
 	staticWingui.OnClicked = openWinguiLink
 	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, &wingui.DialogConfig{Widgets: []wingui.Widget{staticWingui}})
