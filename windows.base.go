@@ -1,7 +1,6 @@
 package wingui
 
 import (
-	"log"
 	"syscall"
 	"unsafe"
 
@@ -178,7 +177,7 @@ func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("WidgetBase.WndProc")
 	switch msg {
 	case win.WM_MOUSEMOVE:
-		log.Println("base wndproc mouse move")
+		// log.Println("base wndproc mouse move")
 		if w.ShowCursor != 0 {
 			//tms.cbSize = sizeof(tms);
 			//tms.hwndTrack = hWnd;

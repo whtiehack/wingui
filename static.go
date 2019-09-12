@@ -12,7 +12,7 @@ type Static struct {
 	//BkMode must set same as Color
 	BkMode int32
 
-	// OnClicked must set tranparent to true before use.
+	// OnClicked must set appearance Notify to true before use.
 	OnClicked func()
 }
 

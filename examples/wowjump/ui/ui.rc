@@ -20,7 +20,7 @@ EXSTYLE WS_EX_WINDOWEDGE
 CAPTION "魔兽防暂离"
 FONT 8, "Ms Shell Dlg"
 {
-    LTEXT           "WinGUI GitHub", IDS_WINGUI, 230, 225, 55, 9, SS_LEFT, WS_EX_STATICEDGE
+    LTEXT           "WinGUI GitHub", IDS_WINGUI, 230, 225, 55, 9, SS_LEFT | SS_NOTIFY, WS_EX_STATICEDGE
     LTEXT           "修改了时间建议盯着看一下，会不会有问题。\n<开启>之前建议先手动小退一下。", 0, 7, 222, 161, 17, SS_LEFT, WS_EX_LEFT
     LTEXT           "变量配置(单位都是秒),填写的时间都是最短时间,实际时间是大于配置时间的:", 0, 6, 173, 267, 9, SS_LEFT, WS_EX_LEFT
     LTEXT           "游戏内挂机时间:", 0, 7, 189, 59, 9, SS_LEFT, WS_EX_LEFT
