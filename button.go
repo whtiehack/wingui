@@ -19,26 +19,18 @@ func (b *Button) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 			b.OnClicked()
 		}
 		return 1
-	case win.WM_LBUTTONUP:
-		//if b.OnClicked != nil {
-		//	b.OnClicked()
-		//}
-		break
-	case win.WM_MOUSEMOVE:
-		//	log.Print("btn mouse move")
-		break
 	}
 	return b.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
-// NewButton create a new Button,need bind to Dialog for use.
+// NewButton create a new Button,need bind to Dialog before use.
 func NewButton(idd uintptr) *Button {
 	return &Button{WindowBase{idd: idd}, nil}
 }
 
 // BindNewButton create a new Button and bind to target dlg.
 func BindNewButton(idd uintptr, dlg *Dialog) (*Button, error) {
-	b := &Button{WindowBase{idd: idd}, nil}
+	b := NewButton(idd)
 	err := dlg.BindWidgets(b)
 	return b, err
 }

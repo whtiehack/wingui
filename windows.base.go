@@ -1,6 +1,7 @@
 package wingui
 
 import (
+	"log"
 	"syscall"
 	"unsafe"
 
@@ -13,6 +14,14 @@ type WindowBase struct {
 	parent        win.HWND
 	idd           uintptr
 	lpPrevWndFunc uintptr
+	// Subclassing indicate that this window need Subclass,
+	// make sure set this flag before bind to Dialog.
+	Subclassing bool
+
+	// The following fields need to enable window subclassing
+
+	// ShowCursor is a cursor resource id,set mouse move show cursor,
+	ShowCursor uintptr
 }
 
 // AsWindowBase  return a *WindowBase.
@@ -167,6 +176,25 @@ func (w *WindowBase) SetBounds(value Rectangle) {
 // WndProc process window message.
 func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("WidgetBase.WndProc")
+	switch msg {
+	case win.WM_MOUSEMOVE:
+		log.Println("base wndproc mouse move")
+		if w.ShowCursor != 0 {
+			//tms.cbSize = sizeof(tms);
+			//tms.hwndTrack = hWnd;
+			//tms.dwFlags = TME_HOVER | TME_LEAVE;
+			//tms.dwHoverTime = 10;
+			//TrackMouseEvent(&tms);
+			var tme win.TRACKMOUSEEVENT
+			tme.CbSize = uint32(unsafe.Sizeof(tme))
+			tme.DwFlags = win.TME_LEAVE | win.TME_HOVER
+			tme.HwndTrack = w.hwnd
+			tme.DwHoverTime = 10
+			win.TrackMouseEvent(&tme)
+			win.SetCursor(win.LoadCursor(hInstance, win.MAKEINTRESOURCE(w.ShowCursor)))
+		}
+		break
+	}
 	if w.lpPrevWndFunc != 0 {
 		return win.CallWindowProc(w.lpPrevWndFunc, w.hwnd, msg, wParam, lParam)
 	}

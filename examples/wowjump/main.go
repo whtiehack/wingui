@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"os/exec"
 	"syscall"
 
 	"github.com/lxn/win"
@@ -43,8 +44,11 @@ var btn *wingui.Button
 func main() {
 	var err error
 	staticWingui := wingui.NewStatic(IDS_WINGUI)
+	staticWingui.Subclassing = true
 	staticWingui.Color = wingui.RGB(0, 0, 255)
+	staticWingui.ShowCursor = win.IDC_HAND
 	staticWingui.BkMode = win.TRANSPARENT
+	staticWingui.OnClicked = openWinguiLink
 	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, &wingui.DialogConfig{Widgets: []wingui.Widget{staticWingui}})
 	if err != nil {
 		log.Panic("main dialog create error", err)
@@ -84,8 +88,8 @@ func (m *myLogoutput) Write(p []byte) (n int, err error) {
 	return
 }
 func setLogOutput(edit *wingui.Edit) {
-	//m := &myLogoutput{edit: edit}
-	//log.SetOutput(m)
+	m := &myLogoutput{edit: edit}
+	log.SetOutput(m)
 }
 
 func btnClick() {
@@ -120,4 +124,10 @@ func btnClick() {
 	}
 	config.EditEnable(!running)
 	btn.SetText(text)
+}
+
+func openWinguiLink() {
+	cmd := exec.Command("cmd", "/c", "start", "https://github.com/whtiehack/wingui")
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	cmd.Start()
 }

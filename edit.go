@@ -50,14 +50,14 @@ func (e *Edit) TextLength() int {
 	return int(e.SendMessage(win.WM_GETTEXTLENGTH, 0, 0))
 }
 
-// NewEdit create a new Edit ,need bind to Dialog for use.
+// NewEdit create a new Edit ,need bind to Dialog before use.
 func NewEdit(idd uintptr) *Edit {
 	return &Edit{WindowBase{idd: idd}}
 }
 
 //BindNewEdit create a new Edit and bind to dlg.
 func BindNewEdit(idd uintptr, dlg *Dialog) (*Edit, error) {
-	edit := &Edit{WindowBase{idd: idd}}
+	edit := NewEdit(idd)
 	err := dlg.BindWidgets(edit)
 	return edit, err
 }

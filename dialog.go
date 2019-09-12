@@ -76,11 +76,13 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	//log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
-	// TODO：
-	if item, ok := dlg.items[hwnd]; ok {
-		return item.WndProc(msg, wParam, lParam)
+	// process subclassing items
+	if dlg.hwnd != hwnd {
+		if item, ok := dlg.items[hwnd]; ok {
+			return item.WndProc(msg, wParam, lParam)
+		}
 	}
-	if lParam != 0 {
+	if lParam != 0 && dlg.hwnd == hwnd {
 		if item, ok := dlg.items[win.HWND(lParam)]; ok {
 			return item.WndProc(msg, wParam, lParam)
 		}
@@ -102,22 +104,7 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		}
 		return 1
 	case win.WM_COMMAND:
-		// log.Printf("h:%v WM_COMMAND msg=%v wp %v lp %v   hiwp:%v  lowp:%v\n", dlg.hwnd, msg, wParam, lParam, win.HIWORD(uint32(wParam)), win.LOWORD(uint32(wParam)))
-		//log.Printf("WM_COMMAND msg=%v\n", msg)
-		//if lParam != 0 { //Reflect message to control
-		//	h := win.HWND(lParam)
-		//	log.Printf("WM_COMMAND h=%v\n", h)
-		//	if handler := GetMsgHandler(h); handler != nil {
-		//		log.Println("WM_COMMAND handler.WndProc")
-		//		ret := handler.WndProc(msg, wParam, lParam)
-		//		if ret != 0 {
-		//			//win.SetWindowLong(hwnd, win.DWL_MSGRESULT, int32(ret))
-		//			log.Println("WM_COMMAND TRUE")
-		//			return win.TRUE
-		//		}
-		//	}
-		//}
-		// log.Println("WM_COMMAND DONE")
+		// process WM_COMMAND for dlg items.
 		return 0
 	case win.WM_CLOSE:
 		log.Println("WM_CLOSE", hwnd)
@@ -135,6 +122,7 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		}
 		return 0
 	}
+
 	return uintptr(0)
 }
 
@@ -165,8 +153,10 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 			log.Println("BindWidgets error", err, widgets)
 			return err
 		}
-		base.lpPrevWndFunc = win.SetWindowLongPtr(h, win.GWL_WNDPROC, dlg.wndCallBack)
-
+		if base.Subclassing {
+			log.Println("sub classing idd", base.idd, h)
+			base.lpPrevWndFunc = win.SetWindowLongPtr(h, win.GWL_WNDPROC, dlg.wndCallBack)
+		}
 		base.hwnd = h
 		base.parent = dlg.hwnd
 		dlg.items[h] = w
