@@ -17,7 +17,8 @@ type Widget interface {
 
 // DialogConfig  TODO.
 type DialogConfig struct {
-	Style   uint32
+	Style uint32
+	//Widgets will be bind when dialog init.
 	Widgets []Widget
 }
 
