@@ -40,11 +40,13 @@ This tool in `TDM-GCC-64/bin/windres.exe`,don't know where in MinGW.
 Generate x.syso file from rc or res file use `windres.exe` tool.
 
 genereate syso:
+
 `windres -i emptyProject/Debug/resource.res -O coff -o vsui.syso`
 
 or
 
 `windres -i ui/ui.rc -O coff -o ui.syso`
+
 
 main.go
 ```go
@@ -84,6 +86,7 @@ Don't use `go run main.go`, because golang can't load x.syso files.
 # Examples
 
 see https://github.com/whtiehack/wingui/tree/master/examples
+
 Welcome PRs.
 
 
@@ -98,6 +101,16 @@ https://github.com/sumorf/gowi
 # Screenshot
 
 <details><summary><b> UI Screenshot details </b> </summary><br>
+</details>
+
+### Effect
+![resedit](res/resedit_show.png)
+
+![wowjump](res/wowjump.png)
+
+### File size
+![size](res/size.png)
+
 
 
 ### ResEdit
@@ -112,12 +125,5 @@ https://github.com/sumorf/gowi
 ![vsreseditor](res/vsreseditor.png)
 
 
-### Effect
-![resedit](res/resedit_show.png)
-![wowjump](res/wowjump.png)
-
-### File size
-![size](res/size.png)
 
 
-</details>
