@@ -7,7 +7,7 @@ import (
 // Static a static label widget for Dialog.
 type Static struct {
 	WindowBase
-	// Color must set before Dialog init,Wideget should bind use DialogConfig.
+	// Color must set before Dialog init,Widget should bind use DialogConfig.
 	Color win.COLORREF
 	//BkMode must set same as Color
 	BkMode int32
