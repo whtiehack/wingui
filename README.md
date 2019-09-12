@@ -125,5 +125,37 @@ https://github.com/sumorf/gowi
 ![vsreseditor](res/vsreseditor.png)
 
 
+# TODOs
+
+- [ ] Image
+- [ ] ComboBox
+- [ ] ListBox
+- [ ] CheckBox
+- [ ] GroupBox
+- [ ] Radio Button
 
 
+- [ ] Slider Control
+- [ ] Progress Bar
+- [ ] Tab Control
+
+- [ ] ListView Control
+
+- [ ] Spin Control
+
+- [ ] Rich Edit
+
+- [ ] DateTimePicker
+- [ ] Month Calendar
+- [ ] TreeView Control
+
+- [ ] Hot Key
+- [ ] Accelerator
+- [ ] Menu
+
+
+
+
+## Recommend
+
+If you need to do complex GUI programs, you can use [govcl](https://github.com/ying32/govcl) or [walk](https://github.com/lxn/walk).

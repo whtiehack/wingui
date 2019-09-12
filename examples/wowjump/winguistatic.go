@@ -5,7 +5,6 @@ import (
 	"github.com/whtiehack/wingui"
 	"os/exec"
 	"syscall"
-	"unsafe"
 )
 
 type winguiStatic struct {
@@ -19,12 +18,12 @@ func (w *winguiStatic) AsWindowBase() *wingui.WindowBase {
 func (w *winguiStatic) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case win.WM_MOUSEMOVE:
-		var tme win.TRACKMOUSEEVENT
-		tme.CbSize = uint32(unsafe.Sizeof(tme))
-		tme.DwFlags = win.TME_LEAVE | win.TME_HOVER
-		tme.HwndTrack = w.AsWindowBase().Handle()
-		tme.DwHoverTime = 10
-		win.TrackMouseEvent(&tme)
+		//var tme win.TRACKMOUSEEVENT
+		//tme.CbSize = uint32(unsafe.Sizeof(tme))
+		//tme.DwFlags = win.TME_LEAVE | win.TME_HOVER
+		//tme.HwndTrack = w.AsWindowBase().Handle()
+		//tme.DwHoverTime = 10
+		//win.TrackMouseEvent(&tme)
 		win.SetCursor(win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND)))
 		break
 	}
