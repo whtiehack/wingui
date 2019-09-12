@@ -95,8 +95,9 @@ https://github.com/sumorf/gowi
 
 
 
+# Screenshot
 
-<details><summary> UI Screenshot details </summary><br>
+<details><summary><b> UI Screenshot details </b> </summary><br>
 
 
 ### ResEdit
