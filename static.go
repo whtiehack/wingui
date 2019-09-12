@@ -12,6 +12,8 @@ type Static struct {
 	Color win.COLORREF
 	//BkMode must set same as Color
 	BkMode int32
+	// TODO support link
+	LinkAddr string
 }
 
 // WndProc Button window WndProc.
@@ -28,6 +30,22 @@ func (b *Static) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 			return uintptr(hb)
 		}
 		return 0
+	case win.WM_MOUSEMOVE:
+		{
+			//tms.cbSize = sizeof(tms);
+			//tms.hwndTrack = hWnd;
+			//tms.dwFlags = TME_HOVER | TME_LEAVE;
+			//tms.dwHoverTime = 10;
+			//TrackMouseEvent(&tms);
+			win.SetCursor(win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND)));
+		}
+		break;
+	case win.WM_MOUSEHOVER: // 鼠标在控件上面时颜色为红色
+		//	SetCtrlTextColor(hWnd, NULL, RGB(255, 0, 0));
+		break;
+	case win.WM_MOUSELEAVE: // 鼠标离开时恢复原来的颜色
+		//	SetCtrlTextColor(hWnd, NULL, RGB(0, 0, 255));
+		break;
 	}
 	return b.AsWindowBase().WndProc(msg, wParam, lParam)
 }

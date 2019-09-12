@@ -35,6 +35,7 @@ type Dialog struct {
 	// Indicates whether it is a modal dialog
 	cb          ModalDialogCallBack
 	wndCallBack uintptr
+	// TODO Support optionsl sub wnd class.
 }
 
 // NewDialog create a new Dialog.

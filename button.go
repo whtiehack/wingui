@@ -15,17 +15,17 @@ func (b *Button) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("btn wnd proc", b.hwnd, msg, wParam, lParam)
 	switch msg {
 	case win.WM_COMMAND:
+		if b.OnClicked != nil && lParam == uintptr(b.hwnd) {
+			b.OnClicked()
+		}
+		return 1
+	case win.WM_LBUTTONUP:
 		//if b.OnClicked != nil {
 		//	b.OnClicked()
 		//}
-		//return 1
-	case win.WM_LBUTTONDOWN:
-		if b.OnClicked != nil {
-				b.OnClicked()
-		}
 		break
 	case win.WM_MOUSEMOVE:
-	//	log.Print("btn mouse move")
+		//	log.Print("btn mouse move")
 		break
 	}
 	return b.AsWindowBase().WndProc(msg, wParam, lParam)
