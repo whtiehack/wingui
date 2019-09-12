@@ -2,7 +2,6 @@ package wingui
 
 import (
 	"github.com/lxn/win"
-	"log"
 )
 
 // Button a widget for Dialog.
@@ -16,13 +15,18 @@ func (b *Button) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("btn wnd proc", b.hwnd, msg, wParam, lParam)
 	switch msg {
 	case win.WM_COMMAND:
+		//if b.OnClicked != nil {
+		//	b.OnClicked()
+		//}
+		//return 1
+	case win.WM_LBUTTONDOWN:
 		if b.OnClicked != nil {
-			b.OnClicked()
+				b.OnClicked()
 		}
-		return 1
+		break
 	case win.WM_MOUSEMOVE:
-		log.Print("btn mouse move")
-		return 0
+	//	log.Print("btn mouse move")
+		break
 	}
 	return b.AsWindowBase().WndProc(msg, wParam, lParam)
 }

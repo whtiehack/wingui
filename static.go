@@ -2,6 +2,7 @@ package wingui
 
 import (
 	"github.com/lxn/win"
+	"log"
 )
 
 // Static a static label widget for Dialog.
@@ -18,6 +19,7 @@ func (b *Static) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Print("static msg", msg)
 	switch msg {
 	case win.WM_CTLCOLORSTATIC:
+		log.Print("static WM_CTLCOLORSTATIC")
 		if b.Color != 0 && b.BkMode != 0 {
 			win.SetTextColor(win.HDC(wParam), b.Color); //设置文本颜色
 			win.SetBkMode(win.HDC(wParam), b.BkMode);   //设置背景透明

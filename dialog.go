@@ -76,14 +76,14 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	//log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
 	// TODO：
-	if dlg.hwnd != 0 && hwnd != dlg.hwnd {
-		if item, ok := dlg.items[hwnd]; ok {
+	if item, ok := dlg.items[hwnd]; ok {
+		return item.WndProc(msg, wParam, lParam)
+	}
+	if lParam != 0 {
+		if item, ok := dlg.items[win.HWND(lParam)]; ok {
 			return item.WndProc(msg, wParam, lParam)
-		} else {
-			log.Println("error hwnd!!", hwnd)
 		}
 	}
-
 	switch msg {
 	//case win.WM_ACTIVATEAPP:
 	//
