@@ -127,6 +127,10 @@ https://github.com/sumorf/gowi
 
 # TODOs
 
+- [x] Button
+- [x] Edit
+- [x] Static Text
+
 - [ ] Image
 - [ ] ComboBox
 - [ ] ListBox
