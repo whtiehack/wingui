@@ -13,7 +13,6 @@ import (
 type Widget interface {
 	WndProc(msg uint32, wParam, lParam uintptr) uintptr
 	AsWindowBase() *WindowBase
-	Handle() win.HWND
 }
 
 // DialogConfig  TODO.

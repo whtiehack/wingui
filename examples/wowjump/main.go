@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"os/exec"
 	"syscall"
 
 	"github.com/lxn/win"
@@ -43,12 +42,7 @@ var btn *wingui.Button
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
 func main() {
 	var err error
-	staticWingui := wingui.NewStatic(IDS_WINGUI)
-	staticWingui.Subclassing = true
-	staticWingui.Color = wingui.RGB(0, 0, 255)
-	staticWingui.ShowCursor = win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND))
-	staticWingui.BkMode = win.TRANSPARENT
-	staticWingui.OnClicked = openWinguiLink
+	staticWingui := newMyWinguiStatic(IDS_WINGUI)
 	dlg, err = wingui.NewDialog(IDD_DIALOG_MAIN, 0, &wingui.DialogConfig{Widgets: []wingui.Widget{staticWingui}})
 	if err != nil {
 		log.Panic("main dialog create error", err)
@@ -124,10 +118,4 @@ func btnClick() {
 	}
 	config.EditEnable(!running)
 	btn.SetText(text)
-}
-
-func openWinguiLink() {
-	cmd := exec.Command("cmd", "/c", "start", "https://github.com/whtiehack/wingui")
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	cmd.Start()
 }
