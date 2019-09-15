@@ -9,6 +9,8 @@ const (
 	IDD_DIALOG_OK = 106
 	// IDI_ICON1 const uintptr
 	IDI_ICON1 = 107
+	// IDB_BITMAP1 const uintptr
+	IDB_BITMAP1 = 110
 	// IDB_OK const uintptr
 	IDB_OK = 40000
 	// IDB_CANCEL const uintptr
@@ -17,4 +19,6 @@ const (
 	IDE_EDIT = 40002
 	// IDB_NORMAL const uintptr
 	IDB_NORMAL = 40003
+	// IDP_BMP const uintptr
+	IDP_BMP = 40004
 )

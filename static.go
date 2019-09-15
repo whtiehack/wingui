@@ -16,7 +16,7 @@ type Static struct {
 	OnClicked func()
 }
 
-// WndProc Button window WndProc.
+// WndProc Static window WndProc.
 func (b *Static) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Print("static msg", msg, wParam, lParam)
 	switch msg {
@@ -39,7 +39,7 @@ func (b *Static) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	return b.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
-// NewStatic create a new Button,need bind to Dialog before use.
+// NewStatic create a new Static,need bind to Dialog before use.
 func NewStatic(idd uintptr) *Static {
 	return &Static{
 		WindowBase: WindowBase{idd: idd},
@@ -48,7 +48,7 @@ func NewStatic(idd uintptr) *Static {
 	}
 }
 
-// BindNewStatic create a new Button and bind to target dlg.
+// BindNewStatic create a new Static and bind to target dlg.
 func BindNewStatic(idd uintptr, dlg *Dialog) (*Static, error) {
 	b := NewStatic(idd)
 	err := dlg.BindWidgets(b)
