@@ -11,6 +11,8 @@ const (
 	IDI_ICON1 = 107
 	// IDB_BITMAP1 const uintptr
 	IDB_BITMAP1 = 110
+	// IDB_BITMAP2 const uintptr
+	IDB_BITMAP2 = 111
 	// IDB_OK const uintptr
 	IDB_OK = 40000
 	// IDB_CANCEL const uintptr

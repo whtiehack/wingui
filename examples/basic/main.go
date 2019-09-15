@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/lxn/win"
 	"log"
 	"os"
 
@@ -36,7 +37,8 @@ func main() {
 	normalBtn.OnClicked = normalBtnClicked
 	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
 	bitmap, _ := wingui.NewBitmapFromResource(IDB_BITMAP1)
-	image.LoadBitmap(bitmap)
+	org := image.LoadBitmap(bitmap)
+	win.DeleteObject(win.HGDIOBJ(org))
 	bitmap.Dispose()
 	dlg.Show()
 	wingui.SetCurrentDialog(dlg.Handle())
