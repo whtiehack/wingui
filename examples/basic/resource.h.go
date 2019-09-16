@@ -25,4 +25,6 @@ const (
 	IDP_BMP = 40004
 	// IDB_CHANGEBMP const uintptr
 	IDB_CHANGEBMP = 40005
+	// IDB_FILEBMP const uintptr
+	IDB_FILEBMP = 40006
 )

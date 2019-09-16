@@ -2,7 +2,9 @@ package wingui
 
 import (
 	"errors"
+	"fmt"
 	"github.com/lxn/win"
+	"syscall"
 	"unsafe"
 )
 
@@ -31,8 +33,38 @@ func (b *Bitmap) GetSize() Size {
 	return b.size
 }
 
-func NewBitmapFromResource(idd uintptr) (bm *Bitmap, err error) {
-	if hBmp := win.LoadImage(hInstance, win.MAKEINTRESOURCE(idd), win.IMAGE_BITMAP, 129, 57, win.LR_CREATEDIBSECTION); hBmp == 0 {
+func NewBitmapFromResource(name string) (bm *Bitmap, err error) {
+	return newBitmapFromResource(syscall.StringToUTF16Ptr(name))
+}
+
+func NewBitmapFromResourceId(idd uintptr) (bm *Bitmap, err error) {
+	return newBitmapFromResource(win.MAKEINTRESOURCE(idd))
+}
+
+func NewBitmapFromFile(filePath string) (*Bitmap, error) {
+	var si win.GdiplusStartupInput
+	si.GdiplusVersion = 1
+	if status := win.GdiplusStartup(&si, nil); status != win.Ok {
+		return nil, errors.New(fmt.Sprintf("GdiplusStartup failed with status '%s'", status))
+	}
+	defer win.GdiplusShutdown()
+
+	var gpBmp *win.GpBitmap
+	if status := win.GdipCreateBitmapFromFile(syscall.StringToUTF16Ptr(filePath), &gpBmp); status != win.Ok {
+		return nil, errors.New(fmt.Sprintf("GdipCreateBitmapFromFile failed with status '%s' for file '%s'", status, filePath))
+	}
+	defer win.GdipDisposeImage((*win.GpImage)(gpBmp))
+
+	var hBmp win.HBITMAP
+	if status := win.GdipCreateHBITMAPFromBitmap(gpBmp, &hBmp, 0); status != win.Ok {
+		return nil, errors.New(fmt.Sprintf("GdipCreateHBITMAPFromBitmap failed with status '%s' for file '%s'", status, filePath))
+	}
+
+	return newBitmapFromHBITMAP(hBmp)
+}
+
+func newBitmapFromResource(res *uint16) (bm *Bitmap, err error) {
+	if hBmp := win.LoadImage(hInstance, res, win.IMAGE_BITMAP, 129, 57, win.LR_CREATEDIBSECTION); hBmp == 0 {
 		err = lastError("LoadImage")
 	} else {
 		bm, err = newBitmapFromHBITMAP(win.HBITMAP(hBmp))

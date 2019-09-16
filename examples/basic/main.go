@@ -38,7 +38,17 @@ func main() {
 	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
 	btnChangeBmp, _ := wingui.BindNewButton(IDB_CHANGEBMP, dlg)
 	btnChangeBmp.OnClicked = func() {
-		bitmap, _ := wingui.NewBitmapFromResource(IDB_BITMAP1)
+		bitmap, _ := wingui.NewBitmapFromResourceId(IDB_BITMAP1)
+		org := image.LoadBitmap(bitmap.GetHBitmap())
+		win.DeleteObject(win.HGDIOBJ(org))
+		bitmap.Dispose()
+	}
+	btnFileBmp, _ := wingui.BindNewButton(IDB_FILEBMP, dlg)
+	btnFileBmp.OnClicked = func() {
+		bitmap, err := wingui.NewBitmapFromFile("bitmap.jpg")
+		if err != nil {
+			log.Panic("!!en", err)
+		}
 		org := image.LoadBitmap(bitmap.GetHBitmap())
 		win.DeleteObject(win.HGDIOBJ(org))
 		bitmap.Dispose()
