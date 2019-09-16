@@ -131,7 +131,7 @@ https://github.com/sumorf/gowi
 - [x] Edit
 - [x] Static Text
 
-- [ ] Image
+- [x] Image
 - [ ] ComboBox
 - [ ] ListBox
 - [ ] CheckBox
