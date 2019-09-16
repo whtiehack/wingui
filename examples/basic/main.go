@@ -35,24 +35,8 @@ func main() {
 
 	normalBtn, _ := wingui.BindNewButton(IDB_NORMAL, dlg)
 	normalBtn.OnClicked = normalBtnClicked
-	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
-	btnChangeBmp, _ := wingui.BindNewButton(IDB_CHANGEBMP, dlg)
-	btnChangeBmp.OnClicked = func() {
-		bitmap, _ := wingui.NewBitmapFromResourceId(IDB_BITMAP1)
-		org := image.LoadBitmap(bitmap.HBitmap())
-		win.DeleteObject(win.HGDIOBJ(org))
-		bitmap.Dispose()
-	}
-	btnFileBmp, _ := wingui.BindNewButton(IDB_FILEBMP, dlg)
-	btnFileBmp.OnClicked = func() {
-		bitmap, err := wingui.NewBitmapFromFile("bitmap.jpg")
-		if err != nil {
-			log.Panic("!!en", err)
-		}
-		org := image.LoadBitmap(bitmap.HBitmap())
-		win.DeleteObject(win.HGDIOBJ(org))
-		bitmap.Dispose()
-	}
+
+	bindWidgets(dlg)
 	dlg.Show()
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
@@ -74,4 +58,40 @@ func modalBtnClicked() {
 		}
 		okdlg.BindWidgets(okbtn)
 	})
+}
+
+func bindWidgets(dlg *wingui.Dialog) {
+	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
+	// change bitmap from resource id
+	btnChangeBmp, _ := wingui.BindNewButton(IDB_CHANGEBMP, dlg)
+	btnChangeBmp.OnClicked = func() {
+		bitmap, _ := wingui.NewBitmapFromResourceId(IDB_BITMAP1)
+		org := image.LoadBitmap(bitmap.HBitmap())
+		win.DeleteObject(win.HGDIOBJ(org))
+		bitmap.Dispose()
+	}
+	// load bit map from file
+	btnFileBmp, _ := wingui.BindNewButton(IDB_FILEBMP, dlg)
+	btnFileBmp.OnClicked = func() {
+		bitmap, err := wingui.NewBitmapFromFile("bitmap.jpg")
+		if err != nil {
+			log.Panic("!!en", err)
+		}
+		org := image.LoadBitmap(bitmap.HBitmap())
+		win.DeleteObject(win.HGDIOBJ(org))
+		bitmap.Dispose()
+	}
+
+	// create bitmap from hwnd
+	hwndBmp, _ := wingui.BindNewButton(IDB_HWNDBMP, dlg)
+	hwndBmp.OnClicked = func() {
+		bitmap, err := wingui.NewBitmapFromWindow(dlg.Handle())
+		if err != nil {
+			log.Panic("!!en", err)
+		}
+		org := image.LoadBitmap(bitmap.HBitmap())
+		win.DeleteObject(win.HGDIOBJ(org))
+		bitmap.Dispose()
+	}
+
 }

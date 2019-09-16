@@ -69,6 +69,31 @@ func NewBitmapFromFile(filePath string) (*Bitmap, error) {
 	return newBitmapFromHBITMAP(hBmp)
 }
 
+func NewBitmapFromWindow(hwnd win.HWND) (*Bitmap, error) {
+	hdcMem := win.CreateCompatibleDC(0)
+	if hdcMem == 0 {
+		return nil, errors.New("CreateCompatibleDC failed")
+	}
+	defer win.DeleteDC(hdcMem)
+
+	var r win.RECT
+	if !win.GetWindowRect(hwnd, &r) {
+		return nil, errors.New("GetWindowRect failed")
+	}
+
+	hdc := win.GetDC(hwnd)
+	width, height := r.Right-r.Left, r.Bottom-r.Top
+	hBmp := win.CreateCompatibleBitmap(hdc, width, height)
+	win.ReleaseDC(hwnd, hdc)
+
+	hOld := win.SelectObject(hdcMem, win.HGDIOBJ(hBmp))
+	flags := win.PRF_CHILDREN | win.PRF_CLIENT | win.PRF_ERASEBKGND | win.PRF_NONCLIENT | win.PRF_OWNED
+	win.SendMessage(hwnd, win.WM_PRINT, uintptr(hdcMem), uintptr(flags))
+
+	win.SelectObject(hdcMem, hOld)
+	return newBitmapFromHBITMAP(hBmp)
+}
+
 func newBitmapFromResource(res *uint16) (bm *Bitmap, err error) {
 	if hBmp := win.LoadImage(hInstance, res, win.IMAGE_BITMAP, 129, 57, win.LR_CREATEDIBSECTION); hBmp == 0 {
 		err = lastError("LoadImage")

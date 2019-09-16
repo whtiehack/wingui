@@ -14,3 +14,4 @@
 #define IDP_BMP                                 40004
 #define IDB_CHANGEBMP                           40005
 #define IDB_FILEBMP                             40006
+#define IDB_HWNDBMP                             40007
