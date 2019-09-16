@@ -1,4 +1,4 @@
-package user32
+package winapi
 
 import (
 	"unsafe"

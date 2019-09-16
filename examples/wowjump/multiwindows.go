@@ -6,7 +6,7 @@ import (
 	"syscall"
 
 	"github.com/lxn/win"
-	"github.com/whtiehack/wingui/user32"
+	"github.com/whtiehack/wingui/winapi"
 )
 
 func getHwnds() []win.HWND {
@@ -16,7 +16,7 @@ func getHwnds() []win.HWND {
 	for {
 		// syscall.StringToUTF16Ptr("GxWindowClass")
 		//curh = user32.FindWindowEx(0, curh, nil, syscall.StringToUTF16Ptr("ssl.csr - 记事本"))
-		curh = user32.FindWindowEx(0, curh, syscall.StringToUTF16Ptr("GxWindowClass"), nil)
+		curh = winapi.FindWindowEx(0, curh, syscall.StringToUTF16Ptr("GxWindowClass"), nil)
 		if curh == 0 {
 			break
 		}

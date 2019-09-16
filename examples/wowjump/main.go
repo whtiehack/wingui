@@ -7,7 +7,7 @@ import (
 
 	"github.com/lxn/win"
 	"github.com/whtiehack/wingui"
-	"github.com/whtiehack/wingui/kernel32"
+	"github.com/whtiehack/wingui/winapi"
 )
 
 var dlg *wingui.Dialog
@@ -15,11 +15,11 @@ var out *wingui.Edit
 
 // ProcessMutex 防止进程多开，返回 true 表示进程已经开启
 func ProcessMutex(name string) bool {
-	r, err := kernel32.OpenMutex(2031617, 1, name)
+	r, err := winapi.OpenMutex(2031617, 1, name)
 	if err == nil || r != 0 {
 		return true
 	}
-	r, err = kernel32.CreateMutex(name)
+	r, err = winapi.CreateMutex(name)
 	if err != nil || r == 0 {
 		return true
 	}
