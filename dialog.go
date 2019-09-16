@@ -48,7 +48,6 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 		config: dialogConfig,
 	}
 	dlg.idd = idd
-	dlg.parent = parent
 	dlg.wndCallBack = syscall.NewCallback(dlg.dialogWndProc)
 	h := win.CreateDialogParam(hInstance, win.MAKEINTRESOURCE(idd), parent, dlg.wndCallBack, 0)
 	if h == 0 {
@@ -70,7 +69,6 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 		cb:     cb,
 	}
 	dlg.idd = idd
-	dlg.parent = parent
 	return win.DialogBoxParam(hInstance, win.MAKEINTRESOURCE(idd), parent, syscall.NewCallback(dlg.dialogWndProc), 0)
 }
 
@@ -148,7 +146,11 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 	var err error
 	for _, w := range widgets {
 		base := w.AsWindowBase()
-		h, err = dlg.getDlgItem(base.idd)
+		// support custom widgets.
+		h = base.Handle()
+		if h == 0 {
+			h, err = dlg.getDlgItem(base.idd)
+		}
 		if err != nil {
 			log.Println("BindWidgets error", err, widgets)
 			return err
@@ -158,7 +160,6 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 			base.lpPrevWndFunc = win.SetWindowLongPtr(h, win.GWL_WNDPROC, dlg.wndCallBack)
 		}
 		base.hwnd = h
-		base.parent = dlg.hwnd
 		dlg.items[h] = w
 	}
 

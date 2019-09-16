@@ -8,10 +8,14 @@ import (
 )
 
 // WindowBase is an interface that provides operations common to all windows.
+// if need subclass window ,must set Subclassing to true.
+// hwnd,if custom window could set by Init.
+// idd Reource Id. if custom window could set zero by Init
 type WindowBase struct {
-	hwnd          win.HWND
-	parent        win.HWND
-	idd           uintptr
+	hwnd win.HWND
+
+	idd uintptr
+	// lpPrevWndFunc is a WndProc point if Subclassing set to true.
 	lpPrevWndFunc uintptr
 	// Subclassing indicate that this window need Subclass,
 	// make sure set this flag before bind to Dialog.
@@ -21,6 +25,12 @@ type WindowBase struct {
 // AsWindowBase  return a *WindowBase.
 func (w *WindowBase) AsWindowBase() *WindowBase {
 	return w
+}
+
+// Init could init new WindowBase by youself .
+func (w *WindowBase) Init(hwnd win.HWND, idd uintptr) {
+	w.hwnd = hwnd
+	w.idd = idd
 }
 
 // Handle get hwnd.
