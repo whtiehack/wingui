@@ -15,6 +15,7 @@ type Bitmap struct {
 	dpi        int
 }
 
+// Dispose release resource.
 func (b *Bitmap) Dispose() {
 	if b.hBmp != 0 {
 		win.DeleteObject(win.HGDIOBJ(b.hBmp))
@@ -25,22 +26,27 @@ func (b *Bitmap) Dispose() {
 	}
 }
 
-func (b *Bitmap) GetHBitmap() win.HBITMAP {
+// HBitmap get handle HBITMAP
+func (b *Bitmap) HBitmap() win.HBITMAP {
 	return b.hBmp
 }
 
-func (b *Bitmap) GetSize() Size {
-	return b.size
+// Size get bitmap size
+func (bmp *Bitmap) Size() Size {
+	return bmp.size
 }
 
+// NewBitmapFromResource create a new Bitmap from resource.
 func NewBitmapFromResource(name string) (bm *Bitmap, err error) {
 	return newBitmapFromResource(syscall.StringToUTF16Ptr(name))
 }
 
+// NewBitmapFromResourceId create a new Bitmap from resource ID.
 func NewBitmapFromResourceId(idd uintptr) (bm *Bitmap, err error) {
 	return newBitmapFromResource(win.MAKEINTRESOURCE(idd))
 }
 
+// NewBitmapFromFile create a new Bitmap from  file. Could use jpg file :)
 func NewBitmapFromFile(filePath string) (*Bitmap, error) {
 	var si win.GdiplusStartupInput
 	si.GdiplusVersion = 1
