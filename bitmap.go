@@ -22,6 +22,15 @@ func (b *Bitmap) Dispose() {
 		b.hBmp = 0
 	}
 }
+
+func (b *Bitmap) GetHBitmap() win.HBITMAP {
+	return b.hBmp
+}
+
+func (b *Bitmap) GetSize() Size {
+	return b.size
+}
+
 func NewBitmapFromResource(idd uintptr) (bm *Bitmap, err error) {
 	if hBmp := win.LoadImage(hInstance, win.MAKEINTRESOURCE(idd), win.IMAGE_BITMAP, 129, 57, win.LR_CREATEDIBSECTION); hBmp == 0 {
 		err = lastError("LoadImage")

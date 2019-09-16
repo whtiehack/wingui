@@ -28,8 +28,8 @@ func (b *Image) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 }
 
 // LoadBitmap show  Bitmap on window. Don't forget to set the type to Bitmap
-func (b *Image) LoadBitmap(bitmap *Bitmap) uintptr {
-	return b.SendMessage(0x172, win.IMAGE_BITMAP, uintptr(bitmap.hBmp))
+func (b *Image) LoadBitmap(bitmap win.HBITMAP) uintptr {
+	return b.SendMessage(0x172, win.IMAGE_BITMAP, uintptr(bitmap))
 }
 
 // NewImage create a new Image,need bind to Dialog before use.

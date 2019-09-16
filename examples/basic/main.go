@@ -36,10 +36,13 @@ func main() {
 	normalBtn, _ := wingui.BindNewButton(IDB_NORMAL, dlg)
 	normalBtn.OnClicked = normalBtnClicked
 	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
-	bitmap, _ := wingui.NewBitmapFromResource(IDB_BITMAP1)
-	org := image.LoadBitmap(bitmap)
-	win.DeleteObject(win.HGDIOBJ(org))
-	bitmap.Dispose()
+	btnChangeBmp, _ := wingui.BindNewButton(IDB_CHANGEBMP, dlg)
+	btnChangeBmp.OnClicked = func() {
+		bitmap, _ := wingui.NewBitmapFromResource(IDB_BITMAP1)
+		org := image.LoadBitmap(bitmap.GetHBitmap())
+		win.DeleteObject(win.HGDIOBJ(org))
+		bitmap.Dispose()
+	}
 	dlg.Show()
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
