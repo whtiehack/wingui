@@ -29,4 +29,6 @@ const (
 	IDB_FILEBMP = 40006
 	// IDB_HWNDBMP const uintptr
 	IDB_HWNDBMP = 40007
+	// IDC_COMBOBOX const uintptr
+	IDC_COMBOBOX = 40009
 )

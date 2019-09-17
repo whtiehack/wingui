@@ -58,7 +58,7 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 	return
 }
 
-// NewModalDialog create a new modal dialog
+// NewModalDialog create a new modal Dialog.
 func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb ModalDialogCallBack) int {
 	if dialogConfig == nil {
 		dialogConfig = &DialogConfig{}

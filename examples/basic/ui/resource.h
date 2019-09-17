@@ -15,3 +15,4 @@
 #define IDB_CHANGEBMP                           40005
 #define IDB_FILEBMP                             40006
 #define IDB_HWNDBMP                             40007
+#define IDC_COMBOBOX                            40009

@@ -7,6 +7,7 @@ import (
 	"syscall"
 )
 
+// custom Widget.  implement AsWindowBase and WndProc method.
 type winguiStatic struct {
 	widget *wingui.Static
 }

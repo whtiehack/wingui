@@ -94,4 +94,24 @@ func bindWidgets(dlg *wingui.Dialog) {
 		bitmap.Dispose()
 	}
 
+	// combobox
+	combobox, _ := wingui.BindNewComboBox(IDC_COMBOBOX, dlg)
+	idx, _ := combobox.AddString("test1")
+	combobox.SetItemData(idx, uintptr(101))
+	idx, _ = combobox.AddString("test2")
+	combobox.SetItemData(idx, uintptr(102))
+	idx, _ = combobox.AddString("test3")
+	combobox.SetItemData(idx, uintptr(104))
+	combobox.DeleteString(0)
+	d, _ := combobox.GetItemData(0)
+	if d != 102 {
+		log.Panic("!! error combo GetItemData")
+	}
+	str := combobox.GetLbText(1)
+	if str != "test3" {
+		log.Panic("!! error combo GetLbText")
+	}
+	log.Println("combo cur sel:", combobox.CurrentIndex())
+
+	// other
 }
