@@ -7,13 +7,9 @@ import (
 	"syscall"
 )
 
-// custom Widget.  implement AsWindowBase and WndProc method.
+// custom Widget.  implement AsWindowBase and WndProc method by Static.
 type winguiStatic struct {
-	widget *wingui.Static
-}
-
-func (w *winguiStatic) AsWindowBase() *wingui.WindowBase {
-	return w.widget.AsWindowBase()
+	wingui.Static
 }
 
 func (w *winguiStatic) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
@@ -28,16 +24,17 @@ func (w *winguiStatic) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 		win.SetCursor(win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_HAND)))
 		break
 	}
-	return w.widget.WndProc(msg, wParam, lParam)
+	return w.Static.WndProc(msg, wParam, lParam)
 }
 
 func newMyWinguiStatic(idd uintptr) *winguiStatic {
-	staticWingui := wingui.NewStatic(IDS_WINGUI)
+	staticWingui := &winguiStatic{}
+	staticWingui.Init(0, idd)
 	staticWingui.Subclassing = true
 	staticWingui.Color = wingui.RGB(0, 0, 255)
 	staticWingui.BkMode = win.TRANSPARENT
 	staticWingui.OnClicked = openWinguiLink
-	return &winguiStatic{widget: staticWingui}
+	return staticWingui
 }
 
 func openWinguiLink() {
