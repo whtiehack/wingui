@@ -13,13 +13,23 @@ import (
 // ComboBox a ComboBox widget for Dialog.
 type ComboBox struct {
 	WindowBase
-
+	// OnSelChange
+	OnSelChange func()
 	// TODO: notify method
 }
 
 // WndProc ComboBox window WndProc.
 func (cb *ComboBox) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
+	case win.WM_COMMAND:
+		cmdCode := win.HIWORD(uint32(wParam))
+		switch cmdCode {
+		case win.CBN_SELCHANGE:
+			if cb.OnSelChange != nil {
+				cb.OnSelChange()
+			}
+			return 1
+		}
 	}
 	return cb.AsWindowBase().WndProc(msg, wParam, lParam)
 }

@@ -113,5 +113,8 @@ func bindWidgets(dlg *wingui.Dialog) {
 	}
 	log.Println("combo cur sel:", combobox.CurrentIndex())
 
+	combobox.OnSelChange = func() {
+		log.Println("! combo sel changed", combobox.CurrentIndex())
+	}
 	// other
 }
