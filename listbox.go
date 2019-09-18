@@ -5,6 +5,7 @@ package wingui
 import (
 	"errors"
 	"github.com/lxn/win"
+	"log"
 	"syscall"
 	"unsafe"
 )
@@ -13,6 +14,20 @@ import (
 type ListBox struct {
 	WindowBase
 	// TODO: notify method
+}
+
+// NewListBox create a new ListBox,need bind to Dialog before use.
+func NewListBox(idd uintptr) *ListBox {
+	return &ListBox{
+		WindowBase: WindowBase{idd: idd},
+	}
+}
+
+// BindNewListBox create a new ListBox and bind to target dlg.
+func BindNewListBox(idd uintptr, dlg *Dialog) (*ListBox, error) {
+	b := NewListBox(idd)
+	err := dlg.BindWidgets(b)
+	return b, err
 }
 
 // WndProc ListBox window WndProc.
@@ -103,16 +118,25 @@ func (lb *ListBox) DeleteString(idx int) (leftCount int, err error) {
 	return
 }
 
-// NewListBox create a new ListBox,need bind to Dialog before use.
-func NewListBox(idd uintptr) *ListBox {
-	return &ListBox{
-		WindowBase: WindowBase{idd: idd},
+// GetText gets a string from a list box.
+func (lb *ListBox) GetText(idx int) (str string) {
+	textLength := lb.SendMessage(win.LB_GETTEXTLEN, uintptr(idx), 0)
+	buf := make([]uint16, textLength+1)
+	ret := lb.SendMessage(win.LB_GETTEXT, uintptr(idx), uintptr(unsafe.Pointer(&buf[0])))
+	if int(ret) < 0 {
+		log.Println("GetText error:", lb, "idx:", idx)
+	} else {
+		str = syscall.UTF16ToString(buf)
 	}
+	return
 }
 
-// BindNewListBox create a new ListBox and bind to target dlg.
-func BindNewListBox(idd uintptr, dlg *Dialog) (*ListBox, error) {
-	b := NewListBox(idd)
-	err := dlg.BindWidgets(b)
-	return b, err
+// InsertString inserts a string or item data into a list box. Unlike the LB_ADDSTRING message,
+// the LB_INSERTSTRING message does not cause a list with the LBS_SORT style to be sorted.
+func (lb *ListBox) InsertString(idx int, str string) (err error) {
+	ret := lb.SendMessage(win.LB_INSERTSTRING, uintptr(idx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
+	if ret != uintptr(idx) {
+		err = errors.New("InsertString to ListBox error")
+	}
+	return
 }
