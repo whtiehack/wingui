@@ -84,7 +84,7 @@ func (cb *ComboBox) ResetContent() int {
 // The return value idx is the zero-based index to the string in the list box of the combo box.
 func (cb *ComboBox) AddString(str string) (idx int, err error) {
 	ret := cb.SendMessage(win.CB_ADDSTRING, 0, uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
-	if ret < 0 {
+	if int(ret) < 0 {
 		err = errors.New("add string to combobox error")
 	} else {
 		idx = int(ret)
@@ -96,7 +96,7 @@ func (cb *ComboBox) AddString(str string) (idx int, err error) {
 // The return value leftCount is a count of the strings remaining in the list
 func (cb *ComboBox) DeleteString(idx int) (leftCount int, err error) {
 	ret := cb.SendMessage(win.CB_DELETESTRING, 0, uintptr(idx))
-	if ret < 0 {
+	if int(ret) < 0 {
 		err = errors.New("DeleteString combobox error")
 	} else {
 		leftCount = int(ret)
@@ -119,7 +119,7 @@ func (cb *ComboBox) GetLbText(idx int) (str string) {
 	textLength := cb.SendMessage(win.CB_GETLBTEXTLEN, uintptr(idx), 0)
 	buf := make([]uint16, textLength+1)
 	ret := cb.SendMessage(win.CB_GETLBTEXT, uintptr(idx), uintptr(unsafe.Pointer(&buf[0])))
-	if ret < 0 {
+	if int(ret) < 0 {
 		log.Println("GetLbText error:", cb, "idx:", idx)
 	} else {
 		str = syscall.UTF16ToString(buf)
@@ -131,11 +131,11 @@ func (cb *ComboBox) GetLbText(idx int) (str string) {
 // If a matching item is found, it is selected and copied to the edit control.
 // If has error or not find,return -1
 func (cb *ComboBox) SelectString(str string, startIdx int) int {
-	ret := cb.SendMessage(win.CB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
+	ret := int(cb.SendMessage(win.CB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str)))))
 	if ret < 0 {
 		ret = -1
 	}
-	return int(ret)
+	return ret
 }
 
 // NewComboBox create a new ComboBox,need bind to Dialog before use.
