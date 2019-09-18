@@ -15,7 +15,7 @@ type ComboBox struct {
 	WindowBase
 	// OnSelChange
 	OnSelChange func()
-	// TODO: notify method
+	// TOxDO: notify method
 }
 
 // WndProc ComboBox window WndProc.
@@ -114,7 +114,7 @@ func (cb *ComboBox) InsertString(idx int, str string) (err error) {
 	return
 }
 
-// GetLbText
+// GetLbText get text of item.
 func (cb *ComboBox) GetLbText(idx int) (str string) {
 	textLength := cb.SendMessage(win.CB_GETLBTEXTLEN, uintptr(idx), 0)
 	buf := make([]uint16, textLength+1)
@@ -145,7 +145,7 @@ func NewComboBox(idd uintptr) *ComboBox {
 	}
 }
 
-// BindNewStatic create a new Image and bind to target dlg.
+// BindNewComboBox create a new ComboBox and bind to target dlg.
 func BindNewComboBox(idd uintptr, dlg *Dialog) (*ComboBox, error) {
 	b := NewComboBox(idd)
 	err := dlg.BindWidgets(b)
