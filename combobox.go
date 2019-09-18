@@ -127,6 +127,17 @@ func (cb *ComboBox) GetLbText(idx int) (str string) {
 	return
 }
 
+// SelectString Searches the list of a combo box for an item that begins with the characters in a specified string.
+// If a matching item is found, it is selected and copied to the edit control.
+// If has error or not find,return -1
+func (cb *ComboBox) SelectString(str string, startIdx int) int {
+	ret := cb.SendMessage(win.CB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str))))
+	if ret < 0 {
+		ret = -1
+	}
+	return int(ret)
+}
+
 // NewComboBox create a new ComboBox,need bind to Dialog before use.
 func NewComboBox(idd uintptr) *ComboBox {
 	return &ComboBox{

@@ -135,7 +135,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 - [x] Static Text
 
 - [x] Image
-- [ ] ComboBox
+- [x] ComboBoxx
 - [ ] ListBox
 - [ ] CheckBox
 - [ ] GroupBox
