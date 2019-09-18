@@ -140,3 +140,12 @@ func (lb *ListBox) InsertString(idx int, str string) (err error) {
 	}
 	return
 }
+
+// SelectString searches a list box for an item that begins with the characters in a specified string. If a matching item is found, the item is selected.
+func (lb *ListBox) SelectString(str string, startIdx int) int {
+	ret := int(lb.SendMessage(win.CB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str)))))
+	if ret < 0 {
+		ret = -1
+	}
+	return ret
+}
