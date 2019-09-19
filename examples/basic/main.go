@@ -102,9 +102,9 @@ func bindWidgets(dlg *wingui.Dialog) {
 	combobox.SetItemData(idx, uintptr(102))
 	idx, _ = combobox.AddString("test3")
 	combobox.SetItemData(idx, uintptr(104))
-	combobox.DeleteString(0)
-	d, _ := combobox.GetItemData(0)
-	if d != 102 {
+	combobox.DeleteString(1)
+	d, _ := combobox.GetItemData(1)
+	if d != 104 {
 		log.Panic("!! error combo GetItemData")
 	}
 	str := combobox.GetLbText(1)
@@ -116,5 +116,13 @@ func bindWidgets(dlg *wingui.Dialog) {
 	combobox.OnSelChange = func() {
 		log.Println("! combo sel changed", combobox.CurrentIndex())
 	}
+
+	// listbox
+	listbox, _ := wingui.BindNewListBox(IDL_LISTBOX, dlg)
+	listbox.AddString("@1")
+	listbox.AddString("@2")
+	listbox.AddString("@3")
+	listbox.AddString("@4")
+	listbox.DeleteString(2)
 	// other
 }

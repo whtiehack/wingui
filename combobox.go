@@ -95,7 +95,7 @@ func (cb *ComboBox) AddString(str string) (idx int, err error) {
 // DeleteString deletes a string in the list box of a combo box.
 // The return value leftCount is a count of the strings remaining in the list
 func (cb *ComboBox) DeleteString(idx int) (leftCount int, err error) {
-	ret := cb.SendMessage(win.CB_DELETESTRING, 0, uintptr(idx))
+	ret := cb.SendMessage(win.CB_DELETESTRING, uintptr(idx), 0)
 	if int(ret) < 0 {
 		err = errors.New("DeleteString combobox error")
 	} else {
