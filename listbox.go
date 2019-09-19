@@ -94,7 +94,7 @@ func (lb *ListBox) AddString(str string) (idx int, err error) {
 // DeleteString deletes a string in a list box.
 // The return value leftCount is a count of the strings remaining in the list
 func (lb *ListBox) DeleteString(idx int) (leftCount int, err error) {
-	ret := lb.SendMessage(win.LB_DELETESTRING, 0, uintptr(idx))
+	ret := lb.SendMessage(win.LB_DELETESTRING, uintptr(idx), 0)
 	if int(ret) < 0 {
 		err = errors.New("DeleteString ListBox error")
 	} else {
