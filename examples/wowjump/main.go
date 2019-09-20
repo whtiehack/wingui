@@ -36,7 +36,7 @@ func init() {
 	go process()
 }
 
-var btn *wingui.Button
+var btn *wingui.PushButton
 
 // optional  genereate resource IDs
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
