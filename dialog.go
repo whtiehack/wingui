@@ -75,6 +75,16 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	//log.Println("NewDialog.WndProc", hwnd, "msg:", msg, "wparam:", strconv.FormatInt(int64(win.HIWORD(uint32(wParam))), 16), win.LOWORD(uint32(wParam)), "lparam:", lParam)
 	// process subclassing items
+	if dlg.hwnd != hwnd {
+		if item, ok := dlg.items[hwnd]; ok {
+			return item.WndProc(msg, wParam, lParam)
+		}
+	}
+	if lParam != 0 && dlg.hwnd == hwnd {
+		if item, ok := dlg.items[win.HWND(lParam)]; ok {
+			return item.WndProc(msg, wParam, lParam)
+		}
+	}
 	switch msg {
 	//case win.WM_ACTIVATEAPP:
 	//
@@ -126,16 +136,6 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		//Return value
 		//An application should return TRUE if it processes this message.
 
-	}
-	if dlg.hwnd != hwnd {
-		if item, ok := dlg.items[hwnd]; ok {
-			return item.WndProc(msg, wParam, lParam)
-		}
-	}
-	if lParam != 0 && dlg.hwnd == hwnd {
-		if item, ok := dlg.items[win.HWND(lParam)]; ok {
-			return item.WndProc(msg, wParam, lParam)
-		}
 	}
 	return uintptr(0)
 }
