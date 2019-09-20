@@ -34,13 +34,13 @@ func (cb *ComboBox) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	return cb.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
-// CurrentIndex get currentIndex.
-func (cb *ComboBox) CurrentIndex() int {
+// GetCurSel get currentIndex.
+func (cb *ComboBox) GetCurSel() int {
 	return int(int32(cb.SendMessage(win.CB_GETCURSEL, 0, 0)))
 }
 
-// SetCurrentIndex set current index
-func (cb *ComboBox) SetCurrentIndex(value int) error {
+// SetCurSel set current index
+func (cb *ComboBox) SetCurSel(value int) error {
 	index := int(int32(cb.SendMessage(win.CB_SETCURSEL, uintptr(value), 0)))
 	if index != value {
 		return errors.New("invalid index")

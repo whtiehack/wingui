@@ -111,10 +111,10 @@ func bindWidgets(dlg *wingui.Dialog) {
 	if str != "test3" {
 		log.Panic("!! error combo GetLbText")
 	}
-	log.Println("combo cur sel:", combobox.CurrentIndex())
+	log.Println("combo cur sel:", combobox.GetCurSel())
 
 	combobox.OnSelChange = func() {
-		log.Println("! combo sel changed", combobox.CurrentIndex())
+		log.Println("! combo sel changed", combobox.GetCurSel())
 	}
 
 	// listbox
@@ -124,5 +124,13 @@ func bindWidgets(dlg *wingui.Dialog) {
 	listbox.AddString("@3")
 	listbox.AddString("@4")
 	listbox.DeleteString(2)
+
+	listbox.OnDoubleClick = func() {
+		log.Println(" list box double click getcursel:", listbox.GetCurSel(),
+			" GetSelectedIndexes:", listbox.GetSelectedIndexes())
+	}
+	listbox.OnSelChange = func() {
+		log.Println("list box on sel change:", listbox.GetCurSel())
+	}
 	// other
 }

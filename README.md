@@ -37,9 +37,9 @@ This tool in `TDM-GCC-64/bin/windres.exe`,don't know where in MinGW.
 
 ### Simple usage:
 
-Generate x.syso file from rc or res file use `windres.exe` tool.
+Generate `x.syso` file from rc or res file use `windres.exe` tool.
 
-genereate syso:
+generate `syso` file:
 
 `windres -i emptyProject/Debug/resource.res -O coff -o vsui.syso`
 
@@ -136,7 +136,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 - [x] Image
 - [x] ComboBoxx
-- [ ] ListBox
+- [x] ListBox
 - [ ] CheckBox
 - [ ] GroupBox
 - [ ] Radio Button

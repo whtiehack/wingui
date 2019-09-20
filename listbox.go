@@ -13,7 +13,9 @@ import (
 // ListBox a ListBox widget for Dialog.
 type ListBox struct {
 	WindowBase
-	// TODO: notify method
+	// TOxDO: notify method
+	OnDoubleClick func()
+	OnSelChange   func()
 }
 
 // NewListBox create a new ListBox,need bind to Dialog before use.
@@ -36,15 +38,47 @@ func (lb *ListBox) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	case win.WM_COMMAND:
 		cmdCode := win.HIWORD(uint32(wParam))
 		switch cmdCode {
+		case win.LBN_DBLCLK:
+			if lb.OnDoubleClick != nil {
+				lb.OnDoubleClick()
+			}
+		case win.LBN_SELCHANGE:
+			if lb.OnSelChange != nil {
+				lb.OnSelChange()
+			}
 		}
 	}
 	return lb.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
-// CurrentIndex gets the index of the currently selected item, if any, in a single-selection list box.
+// GetCurSel gets the index of the currently selected item, if any, in a single-selection list box.
 //  If there is no selection, the return value is -1.
-func (lb *ListBox) CurrentIndex() int {
+func (lb *ListBox) GetCurSel() int {
 	return int(int32(lb.SendMessage(win.LB_GETCURSEL, 0, 0)))
+}
+
+// SetCurSel selects a string and scrolls it into view, if necessary.
+// When the new string is selected, the list box removes the highlight from the previously selected string.
+// Use this message only with single-selection list boxes.
+// You cannot use it to set or remove a selection in a multiple-selection list box.
+func (lb *ListBox) SetCurSel(idx int) error {
+	index := int(int32(lb.SendMessage(win.LB_SETCURSEL, uintptr(idx), 0)))
+	if index != idx {
+		return errors.New("invalid index")
+	}
+	return nil
+}
+
+// SetSel selects an item in a multiple-selection list box and, if necessary, scrolls the item into view.
+// Use this message only with multiple-selection list boxes.
+//  If idx parameter is -1, the selection is added to or removed from all items,
+//  depending on the value of wParam, and no scrolling occurs.
+func (lb *ListBox) SetSel(idx int, sel bool) error {
+	ret := lb.SendMessage(win.LB_SETSEL, uintptr(win.BoolToBOOL(sel)), uintptr(idx))
+	if int(ret) == win.LB_ERR {
+		return errors.New("ListBox setsel error")
+	}
+	return nil
 }
 
 // GetSel gets the selection state of an item. If selected , return true;otherwise return false
@@ -53,12 +87,12 @@ func (lb *ListBox) GetSel(idx int) bool {
 	return int(ret) > 0
 }
 
-// SelectedIndexes gets the current selected items index.
+// GetSelectedIndexes gets the current selected items index.
 // The return value is the array of index selected.
 // If the list box is a single-selection list box, the return value is nil.
-func (lb *ListBox) SelectedIndexes() []int {
+func (lb *ListBox) GetSelectedIndexes() []int {
 	count := lb.SendMessage(win.LB_GETSELCOUNT, 0, 0)
-	if count < 1 {
+	if int(count) < 1 {
 		return nil
 	}
 	index32 := make([]int32, count)
@@ -87,6 +121,15 @@ func (lb *ListBox) GetItemData(index int) (data uintptr, err error) {
 		data = ret
 	}
 	return
+}
+
+// SetItemData sets a value associated with the specified item in a list box.
+func (lb *ListBox) SetItemData(index int, data uintptr) error {
+	ret := lb.SendMessage(win.LB_SETITEMDATA, uintptr(index), data)
+	if int(ret) == win.LB_ERR {
+		return errors.New("set item data error")
+	}
+	return nil
 }
 
 // ResetContent removes all items from a list box.
@@ -143,7 +186,7 @@ func (lb *ListBox) InsertString(idx int, str string) (err error) {
 
 // SelectString searches a list box for an item that begins with the characters in a specified string. If a matching item is found, the item is selected.
 func (lb *ListBox) SelectString(str string, startIdx int) int {
-	ret := int(lb.SendMessage(win.CB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str)))))
+	ret := int(lb.SendMessage(win.LB_SELECTSTRING, uintptr(startIdx), uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(str)))))
 	if ret < 0 {
 		ret = -1
 	}
