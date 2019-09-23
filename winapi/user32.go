@@ -7,6 +7,14 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+// Button message constants
+const (
+	// #if(WINVER >= 0x0600)
+	//#define BM_SETDONTCLICK    0x00F8
+	//#endif /* WINVER >= 0x0600 */
+	BM_SETDONTCLICK = 0x00F8
+)
+
 var libuser32 *windows.LazyDLL
 var findWindowEx *windows.LazyProc
 var getNextWindow *windows.LazyProc
