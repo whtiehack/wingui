@@ -1,6 +1,6 @@
 package wingui
 
-// https://docs.microsoft.com/zh-cn/windows/win32/controls/buttons?view=vs-2017
+// https:// docs.microsoft.com/zh-cn/windows/win32/controls/buttons?view=vs-2017
 
 import (
 	"github.com/lxn/win"
@@ -73,6 +73,52 @@ func (b *Button) SetShield(state bool) {
 // WM_LBUTTONUP messages, and the button's parent window to receive a BN_CLICKED notification code.
 func (b *Button) Click() {
 	b.SendMessage(win.BM_CLICK, 0, 0)
+}
+
+// GetCheck gets the check state of a radio button or check box.
+// 
+// checked return 1, unchecked return 0
+// 
+// if Button has BS_3STATE or BS_AUTO3STATE style, may be return  2
+// 
+// BST_CHECKED 1
+// 
+// BST_INDETERMINATE 2
+// 
+// BST_UNCHECKED 0
+func (b *Button) GetCheck() int {
+	return int(b.SendMessage(win.BM_GETCHECK, 0, 0))
+}
+
+// GetState retrieves the state of a button or check box.
+// 
+// The return value specifies the current state of the button. It is a combination of the following values.
+// 
+// Return code	Description
+// 
+// BST_CHECKED
+// The button is checked.
+// 
+// BST_DROPDOWNPUSHED
+// Windows Vista. The button is in the drop-down state. Applies only if the button has the TBSTYLE_DROPDOWN style.
+// 
+// BST_FOCUS
+// The button has the keyboard focus.
+// 
+// BST_HOT
+// The button is hot; that is, the mouse is hovering over it.
+// 
+// BST_INDETERMINATE
+// The state of the button is indeterminate. Applies only if the button has the BS_3STATE or BS_AUTO3STATE style.
+// 
+// BST_PUSHED
+// The button is being shown in the pushed state.
+// 
+// 
+// BST_UNCHECKED
+// No special state. Equivalent to zero.
+func (b *Button) GetState() int {
+	return int(b.SendMessage(win.BM_GETSTATE, 0, 0))
 }
 
 // NewButton create a new Button,need bind to Dialog before use.
