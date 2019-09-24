@@ -17,3 +17,6 @@
 #define IDB_HWNDBMP                             40007
 #define IDL_LISTBOX                             40008
 #define IDC_COMBOBOX                            40009
+#define IDB_CHECK                               40010
+#define IDB_RADIO1                              40011
+#define IDB_RADIO2                              40012

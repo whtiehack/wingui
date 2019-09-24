@@ -140,7 +140,7 @@ func (b *Button) GetState() int {
 //	BST_UNCHECKED 0
 //	Sets the button state to cleared.
 func (b *Button) SetCheck(state int) {
-	b.SendMessage(win.BM_SETSTATE, uintptr(state), 0)
+	b.SendMessage(win.BM_SETCHECK, uintptr(state), 0)
 }
 
 //	SetDontClick sets a flag on a radio button that controls the generation of BN_CLICKED messages when
@@ -347,4 +347,13 @@ func BindNewButton(idd uintptr, dlg *Dialog) (*Button, error) {
 	b := NewButton(idd)
 	err := dlg.BindWidgets(b)
 	return b, err
+}
+
+func BindNewButtons(idds []uintptr, dlg *Dialog) ([]*Button, error) {
+	btns := make([]*Button, len(idds))
+	var err error
+	for idx, idd := range idds {
+		btns[idx], err = BindNewButton(idd, dlg)
+	}
+	return btns, err
 }

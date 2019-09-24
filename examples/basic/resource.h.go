@@ -33,4 +33,10 @@ const (
 	IDL_LISTBOX = 40008
 	// IDC_COMBOBOX const uintptr
 	IDC_COMBOBOX = 40009
+	// IDB_CHECK const uintptr
+	IDB_CHECK = 40010
+	// IDB_RADIO1 const uintptr
+	IDB_RADIO1 = 40011
+	// IDB_RADIO2 const uintptr
+	IDB_RADIO2 = 40012
 )

@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/lxn/win"
+	"github.com/whtiehack/wingui"
 	"log"
 	"os"
-
-	"github.com/whtiehack/wingui"
+	"time"
 )
 
 func init() {
@@ -132,5 +132,20 @@ func bindWidgets(dlg *wingui.Dialog) {
 	listbox.OnSelChange = func() {
 		log.Println("list box on sel change:", listbox.GetCurSel())
 	}
+
+	// checkbox
+	checkbox, _ := wingui.BindNewButton(IDB_CHECK, dlg)
+	checkbox.SetCheck(1)
+	// radios
+	radios, _ := wingui.BindNewButtons([]uintptr{IDB_RADIO1, IDB_RADIO2}, dlg)
+	radios[1].Click()
+	log.Println("radiosstatus", radios[0].GetCheck(), radios[1].GetCheck())
+	go func() {
+		time.Sleep(3 * time.Second)
+		checkbox.Click()
+		radios[0].SetCheck(1)
+		radios[1].SetCheck(0)
+		log.Println("radiosstatus", radios[0].GetCheck(), radios[1].GetCheck())
+	}()
 	// other
 }
