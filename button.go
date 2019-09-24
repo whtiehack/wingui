@@ -339,7 +339,7 @@ func (b *Button) SetStyle(style int, redrawn bool) {
 
 //	NewButton create a new Button,need bind to Dialog before use.
 func NewButton(idd uintptr) *Button {
-	return &Button{WindowBase{idd: idd}, nil}
+	return &Button{WindowBase: WindowBase{idd: idd}}
 }
 
 //	BindNewButton create a new Button and bind to target dlg.
