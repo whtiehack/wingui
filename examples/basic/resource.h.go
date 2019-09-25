@@ -39,4 +39,6 @@ const (
 	IDB_RADIO1 = 40011
 	// IDB_RADIO2 const uintptr
 	IDB_RADIO2 = 40012
+	// IDS_SLIDER const uintptr
+	IDS_SLIDER = 40013
 )

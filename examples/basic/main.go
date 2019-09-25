@@ -147,5 +147,9 @@ func bindWidgets(dlg *wingui.Dialog) {
 		radios[1].SetCheck(0)
 		log.Println("radiosstatus", radios[0].GetCheck(), radios[1].GetCheck())
 	}()
+
+	// slider bar
+	sliderbar, _ := wingui.BindNewTrackBar(IDS_SLIDER, dlg)
+	sliderbar.ClearSel(false)
 	// other
 }
