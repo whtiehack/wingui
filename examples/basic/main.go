@@ -140,16 +140,27 @@ func bindWidgets(dlg *wingui.Dialog) {
 	radios, _ := wingui.BindNewButtons([]uintptr{IDB_RADIO1, IDB_RADIO2}, dlg)
 	radios[1].Click()
 	log.Println("radiosstatus", radios[0].GetCheck(), radios[1].GetCheck())
+
+	// slider bar
+	sliderBar, _ := wingui.BindNewTrackBar(IDS_SLIDER, dlg)
+	sliderBar.ClearSel(false)
+
 	go func() {
 		time.Sleep(3 * time.Second)
 		checkbox.Click()
 		radios[0].SetCheck(1)
 		radios[1].SetCheck(0)
 		log.Println("radiosstatus", radios[0].GetCheck(), radios[1].GetCheck())
+
+		linesize := sliderBar.GetLineSize()
+		numTics := sliderBar.GetNumTics()
+		pagesize := sliderBar.GetPageSize()
+		pos := sliderBar.GetPos()
+		rangeMax := sliderBar.GetRangeMax()
+		rangeMin := sliderBar.GetRangeMin()
+		log.Println("sliderBar linesize:", linesize, " numtics:", numTics,
+			" pagesize:", pagesize, " pos:", pos, " rangeMin:", rangeMin, " rangeMax:", rangeMax)
 	}()
 
-	// slider bar
-	sliderBar, _ := wingui.BindNewTrackBar(IDS_SLIDER, dlg)
-	sliderBar.ClearSel(false)
 	// other
 }
