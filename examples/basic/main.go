@@ -149,7 +149,7 @@ func bindWidgets(dlg *wingui.Dialog) {
 	}()
 
 	// slider bar
-	sliderbar, _ := wingui.BindNewTrackBar(IDS_SLIDER, dlg)
-	sliderbar.ClearSel(false)
+	sliderBar, _ := wingui.BindNewTrackBar(IDS_SLIDER, dlg)
+	sliderBar.ClearSel(false)
 	// other
 }
