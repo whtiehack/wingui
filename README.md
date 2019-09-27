@@ -106,7 +106,6 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 # Screenshot
 
 <details><summary><b> UI Screenshot details </b> </summary><br>
-</details>
 
 ### Effect
 ![resedit](res/resedit_show.png)
@@ -128,6 +127,10 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 ### Visual Studio Resource Editor
 
 ![vsreseditor](res/vsreseditor.png)
+
+
+</details>
+
 
 
 # TODOs

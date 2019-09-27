@@ -57,7 +57,7 @@ func main() {
 	config.editEnterTime = wingui.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
 	config.editCharWaitTime = wingui.NewEdit(IDE_CHAR_WAIT_TIME)
-	dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime)
+	_ = dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime)
 
 	config.InitVal()
 	dlg.Show()
