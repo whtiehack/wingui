@@ -290,6 +290,28 @@ func (tb *TrackBar) SetSel(redraw bool, start, end uint16) {
 	tb.SendMessage(winapi.TBM_SETSEL, uintptr(rd), uintptr(win.MAKELONG(start, end)))
 }
 
+//	SetSelEnd Sets the ending logical position of the current selection range in a trackbar.
+//	This message is ignored if the trackbar does not have the TBS_ENABLESELRANGE style.
+//	end Ending logical position of the selection range.
+func (tb *TrackBar) SetSelEnd(redraw bool, end int) {
+	rd := 0
+	if redraw {
+		rd = 1
+	}
+	tb.SendMessage(winapi.TBM_SETSELEND, uintptr(rd), uintptr(end))
+}
+
+//	SetSelStart Sets the starting logical position of the current selection range in a trackbar.
+//	This message is ignored if the trackbar does not have the TBS_ENABLESELRANGE style.
+//	start Starting position of the selection range.
+func (tb *TrackBar) SetSelStart(redraw bool, start int) {
+	rd := 0
+	if redraw {
+		rd = 1
+	}
+	tb.SendMessage(winapi.TBM_SETSELSTART, uintptr(rd), uintptr(start))
+}
+
 //	GetThumbLength retrieves the length of the slider in a trackbar.
 //	Returns the length, in pixels, of the slider.
 func (tb *TrackBar) GetThumbLength() int {
