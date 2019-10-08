@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"syscall"
+	"unsafe"
 
 	"github.com/lxn/win"
 )
@@ -135,7 +136,12 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		//
 		//Return value
 		//An application should return TRUE if it processes this message.
-
+		case win.WM_NOTIFY:
+			// trans message to child.
+			nmhdr := (*win.NMHDR)(unsafe.Pointer(lParam))
+			if item, ok := dlg.items[nmhdr.HwndFrom]; ok {
+				return item.WndProc(msg, wParam, lParam)
+			}
 	}
 	return uintptr(0)
 }
