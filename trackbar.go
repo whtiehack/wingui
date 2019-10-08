@@ -3,6 +3,7 @@ package wingui
 import (
 	"github.com/lxn/win"
 	"github.com/whtiehack/wingui/winapi"
+	"log"
 	"unsafe"
 )
 
@@ -393,6 +394,21 @@ func (tb *TrackBar) SetTipSide(flag int) int {
 //	Returns the previous Unicode format flag for the control.
 func (tb *TrackBar) SetUnicodeFormat(unicode int) int {
 	return int(tb.SendMessage(winapi.TBM_SETUNICODEFORMAT, uintptr(unicode), 0))
+}
+
+// WndProc TrackBar window WndProc.
+func (tb *TrackBar) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
+	switch msg {
+	case win.WM_NOTIFY:
+		nmhdr := (*win.NMHDR)(unsafe.Pointer(lParam))
+		switch nmhdr.Code {
+		// TODO
+		case win.TRBN_THUMBPOSCHANGING:
+			log.Println(" TRBN_THUMBPOSCHANGING ", lParam)
+			return 1
+		}
+	}
+	return tb.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
 // NewTrackBar create a new TrackBar,need bind to Dialog before use.
