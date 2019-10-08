@@ -127,6 +127,24 @@ func (tb *TrackBar) GetTic(idx int) int {
 	return int(tb.SendMessage(winapi.TBM_GETTIC, uintptr(idx), 0))
 }
 
+//	SetTic sets a tick mark in a trackbar at the specified logical position.
+//	position is position of the tick mark. This parameter can be any of the integer values
+//	in the trackbar's range of minimum to maximum slider positions.
+//	Returns TRUE if the tick mark is set, or FALSE otherwise.
+func (tb *TrackBar) SetTic(position int) bool {
+	return tb.SendMessage(winapi.TBM_SETTIC, 0, uintptr(position)) == 1
+}
+
+//	SetTicFreq Sets the interval frequency for tick marks in a trackbar. For example,
+//	if the frequency is set to two, a tick mark is displayed for every other increment in the trackbar's range.
+//	The default setting for the frequency is one; that is, every increment in the range is associated with a tick mark.
+// 	frequency is frequency of the tick marks.
+//	Remarks
+//	The trackbar must have the TBS_AUTOTICKS style to use this message.
+func (tb *TrackBar) SetTicFreq(frequency int) {
+	tb.SendMessage(winapi.TBM_SETTIC, uintptr(frequency), 0)
+}
+
 //	GetTicPos retrieves the current physical position of a tick mark in a trackbar.
 //	idx is a zero-based index identifying a tick mark. The positions of the first and last tick marks are not
 //	directly available via this message.
@@ -318,6 +336,13 @@ func (tb *TrackBar) GetThumbLength() int {
 	return int(tb.SendMessage(winapi.TBM_GETTHUMBLENGTH, 0, 0))
 }
 
+//	SetThumbLength sets the length of the slider in a trackbar.
+//	This message is ignored if the trackbar does not have the TBS_FIXEDLENGTH style.\
+//	length, in pixels, of the slider.
+func (tb *TrackBar) SetThumbLength(length int) {
+	tb.SendMessage(winapi.TBM_SETTHUMBLENGTH, uintptr(length), 0)
+}
+
 //	GetThumbRect retrieves the size and position of the bounding rectangle for the slider in a trackbar.
 func (tb *TrackBar) GetThumbRect() win.RECT {
 	var rect win.RECT
@@ -330,6 +355,44 @@ func (tb *TrackBar) GetThumbRect() win.RECT {
 //	If the trackbar control does not use the TBS_TOOLTIPS style, the return value is NULL.
 func (tb *TrackBar) GetTooltips() win.HWND {
 	return win.HWND(tb.SendMessage(winapi.TBM_GETTOOLTIPS, 0, 0))
+}
+
+//	SetTooltips assigns a tooltip control to a trackbar control.
+//	hWnd is a handle to an existing tooltip control.
+//	Remarks
+//	When a trackbar control is created with the TBS_TOOLTIPS style,
+//	it creates a default tooltip control that appears next to the slider, displaying the slider's current position.
+func (tb *TrackBar) SetTooltips(hWnd win.HWND) {
+	tb.SendMessage(winapi.TBM_SETTOOLTIPS, uintptr(hWnd), 0)
+}
+
+//	SetTipSide positions a tooltip control used by a trackbar control.
+//	Trackbar controls that use the TBS_TOOLTIPS style display tooltips.
+//	flag representing the location at which to display the tooltip control. This value can be one of the following:
+//	TBTS_TOP
+//	The tooltip control will be positioned above the trackbar. This flag is for use with horizontal trackbars.
+//	TBTS_LEFT
+//	The tooltip control will be positioned to the left of the trackbar. This flag is for use with vertical trackbars.
+//	TBTS_BOTTOM
+//	The tooltip control will be positioned below the trackbar. This flag is for use with horizontal trackbars.
+//	TBTS_RIGHT
+//	The tooltip control will be positioned to the right of the trackbar. This flag is for use with vertical trackbars.
+//
+//	Returns a value that represents the tooltip control's previous location.
+//	The return value equals one of the possible values for flag.
+func (tb *TrackBar) SetTipSide(flag int) int {
+	return int(tb.SendMessage(winapi.TBM_SETTIPSIDE, uintptr(flag), 0))
+}
+
+//	 SetUnicodeFormat sets the Unicode character format flag for the control.
+//	 This message allows you to change the character set used by the control
+//	 at run time rather than having to re-create the control.
+//	unicode Determines the character set that is used by the control. If this value is nonzero,
+//	the control will use Unicode characters. If this value is zero, the control will use ANSI characters.
+//	Return value
+//	Returns the previous Unicode format flag for the control.
+func (tb *TrackBar) SetUnicodeFormat(unicode int) int {
+	return int(tb.SendMessage(winapi.TBM_SETUNICODEFORMAT, uintptr(unicode), 0))
 }
 
 // NewTrackBar create a new TrackBar,need bind to Dialog before use.
