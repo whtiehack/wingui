@@ -150,7 +150,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 - [x] Radio Button
 
 -----
-- [ ] Slider Control
+- [x] Slider Control
 - [ ] Progress Bar
 - [ ] Tab Control
 

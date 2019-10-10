@@ -12,6 +12,7 @@ import (
 	"github.com/whtiehack/wingui"
 )
 
+// Config is program config.
 type Config struct {
 	NormalTime       int
 	InputTime        int

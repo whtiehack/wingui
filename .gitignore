@@ -7,3 +7,4 @@
 /examples/simple/emptyProject/Debug/emptyProject.tlog/
 *.log
 /examples/simple/emptyProject/.vs/
+.vscode

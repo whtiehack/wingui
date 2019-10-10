@@ -1,11 +1,12 @@
 package main
 
 import (
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui"
 	"log"
 	"os"
 	"time"
+
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui"
 )
 
 func init() {
