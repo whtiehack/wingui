@@ -3,11 +3,13 @@ package wingui
 import (
 	"errors"
 	"fmt"
-	"github.com/lxn/win"
 	"syscall"
 	"unsafe"
+
+	"github.com/lxn/win"
 )
 
+// Bitmap struct
 type Bitmap struct {
 	hBmp       win.HBITMAP
 	hPackedDIB win.HGLOBAL

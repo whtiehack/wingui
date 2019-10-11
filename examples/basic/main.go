@@ -161,7 +161,20 @@ func bindWidgets(dlg *wingui.Dialog) {
 		rangeMin := sliderBar.GetRangeMin()
 		log.Println("sliderBar linesize:", linesize, " numtics:", numTics,
 			" pagesize:", pagesize, " pos:", pos, " rangeMin:", rangeMin, " rangeMax:", rangeMax)
+
 	}()
 
+	// progress bar
+	progressBar, _ := wingui.BindNewProgressBar(IDP_PROGRESSBAR, dlg)
+
+	go func() {
+		pos := 0
+		for pos < 100 {
+			pos = progressBar.DeltaPos(1)
+			time.Sleep(50 * time.Millisecond)
+		}
+		progressBar.DeltaPos(-50)
+	}()
 	// other
+
 }

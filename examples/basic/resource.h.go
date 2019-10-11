@@ -41,4 +41,6 @@ const (
 	IDB_RADIO2 = 40012
 	// IDS_SLIDER const uintptr
 	IDS_SLIDER = 40013
+	// IDP_PROGRESSBAR const uintptr
+	IDP_PROGRESSBAR = 40014
 )

@@ -1,15 +1,16 @@
 package wingui
 
 import (
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"unsafe"
+
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui/winapi"
 )
 
 // https://docs.microsoft.com/zh-cn/windows/win32/controls/trackbar-controls
 
-//	TrackBar a widget for Dialog. Progress Bar
+//	TrackBar a widget for Dialog. TrackBar
 type TrackBar struct {
 	WindowBase
 }
