@@ -1,7 +1,10 @@
 // Package wingui https://docs.microsoft.com/zh-cn/windows/win32/controls/progress-bar-control#using-progress-bars
 package wingui
 
-import "github.com/lxn/win"
+import (
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui/winapi"
+)
 
 // ProgressBar a widget for Dialog. Progress Bar
 type ProgressBar struct {
@@ -19,6 +22,18 @@ type ProgressBar struct {
 // The behavior of this message is undefined if it is sent to a control that has the PBS_MARQUEE style.
 func (pb *ProgressBar) DeltaPos(delta int) int {
 	return int(pb.SendMessage(win.PBM_DELTAPOS, uintptr(delta), 0))
+}
+
+// GetBarColor Gets the color of the progress bar.
+//
+// Returns the color of the progress bar.
+//
+// This is the color set by the PBM_SETBARCOLOR message.
+// The default value is CLR_DEFAULT, which is defined in commctrl.h.
+//
+// This function only affects the classic mode, not any visual style.
+func (pb *ProgressBar) GetBarColor() int {
+	return int(pb.SendMessage(winapi.PBM_GETBARCOLOR, 0, 0))
 }
 
 // NewProgressBar create a new ProgressBar,need bind to Dialog before use.
