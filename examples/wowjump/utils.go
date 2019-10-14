@@ -1,8 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
+	"net/url"
+	"os"
+	"os/exec"
+	"strconv"
+	"strings"
 	"time"
 	"unsafe"
 
@@ -109,4 +116,132 @@ func randomMoveMouse() {
 	//mouse_move(x, y, 0, win.MOUSEEVENTF_LEFTDOWN)
 	//mouse_move(x, y, 0, win.MOUSEEVENTF_LEFTUP)
 
+}
+
+func GetLocale() (string, error) {
+	// Check the LANG environment variable, common on UNIX.
+	// XXX: we can easily override as a nice feature/bug.
+	envlang, ok := os.LookupEnv("LANG")
+	if ok {
+		return strings.Split(envlang, ".")[0], nil
+	}
+
+	// Exec powershell Get-Culture on Windows.
+	cmd := exec.Command("powershell", "Get-Culture | select -exp Name")
+	output, err := cmd.Output()
+	if err == nil {
+		return strings.Trim(string(output), "\r\n"), nil
+	}
+
+	return "", fmt.Errorf("cannot determine locale")
+}
+
+type Statistics struct {
+	prevTime time.Time
+	si       string
+	curPath  string
+	params   url.Values
+	baseUrl  string
+	client   http.Client
+	lt       int
+}
+
+func NewStatistics(baseUrl string, si string) *Statistics {
+	params := url.Values{}
+	params.Add("cc", "1")
+	params.Add("ck", "1")
+	params.Add("cl", "24-bit")
+	params.Add("ds", strconv.Itoa(int(win.GetSystemMetrics(win.SM_CXSCREEN)))+"x"+strconv.Itoa(int(win.GetSystemMetrics(win.SM_CYSCREEN))))
+	params.Add("vl", "797")
+	params.Add("et", "0")
+	params.Add("ja", "0")
+	params.Add("ln", "zh-cn")
+	lang, err := GetLocale()
+	if err != nil {
+		log.Println("system lang:", lang)
+		params.Set("ln", lang)
+	}
+	params.Add("lo", "0")
+	// params.Add("rnd", "0")
+	params.Add("si", si)
+	params.Add("v", "1.2.61")
+	params.Add("lv", "2")
+	// params.Add("sn", "30541")
+	return &Statistics{baseUrl: baseUrl, lt: 0, si: si, params: params, client: http.Client{}}
+}
+
+func (s *Statistics) Stat(path string, title string) {
+	// tt   title
+	// ep	停留时间,活跃时间
+	// et	初始进入页面 0， 当前页面有时间 3
+	// rnd  随机数
+	// su  前一个页面  离开页面时
+	// ct 新的一个页面开始   !!
+	val, _ := url.ParseQuery(s.params.Encode())
+	val.Set("rnd", strconv.Itoa(int(rand.Int31())))
+	val.Set("sn", strconv.Itoa(int(time.Now().Unix()%65535)))
+	if s.lt != 0 && int(time.Now().Unix())-s.lt > 2592E3 {
+		s.lt = int(time.Now().Unix())
+	}
+	if s.lt != 0 {
+		val.Set("lt", strconv.Itoa(s.lt))
+	}
+	if s.curPath == "" {
+		// 第一次打开
+		val.Set("ct", "!!")
+		val.Set("tt", title)
+		val.Set("et", "0")
+		s.get(val.Encode(), s.baseUrl+path)
+	} else {
+		// 离开页面
+		val.Set("et", "3")
+		t := time.Now().Sub(s.prevTime).Milliseconds()
+		ep := strconv.Itoa(int(t)) + "," + strconv.Itoa(int(t))
+		val.Set("ep", ep)
+		prevPath := s.baseUrl + s.curPath
+		s.get(val.Encode(), prevPath)
+		val.Set("rnd", strconv.Itoa(int(rand.Int31())))
+		// 进入新页面
+		val.Set("u", prevPath)
+		s.get(val.Encode(), s.baseUrl+path)
+		val.Set("rnd", strconv.Itoa(int(rand.Int31())))
+		val.Del("u")
+		val.Set("su", prevPath)
+		val.Set("tt", title)
+		val.Del("ep")
+		val.Set("et", "0")
+		val.Set("ct", "!!")
+
+		if int(time.Now().Unix())-s.lt > 2592E3 {
+			s.lt = int(time.Now().Unix())
+		}
+		val.Set("lt", strconv.Itoa(s.lt))
+		s.get(val.Encode(), s.baseUrl+path)
+	}
+	s.prevTime = time.Now()
+	s.curPath = path
+}
+
+func (s *Statistics) get(params string, referer string) error {
+
+	request, err := http.NewRequest("GET", "https://hm.baidu.com/hm.gif?"+params, nil) //请求
+
+	if err != nil {
+		//print("statistics error new request", err, "\n")
+		return err // handle error
+
+	}
+
+	request.Header.Set("Referer", referer) //设置 Referer
+	//request.Header.Set("User-Agent", referer) //设置 User-Agent
+
+	response, err := s.client.Do(request) //返回
+
+	if err != nil {
+		//print("statistics error Do", err, "\n")
+		return err
+	}
+	defer response.Body.Close()
+	//print("statistics success:", response.Status, " params:", params, " referer:", referer, "\n")
+	return nil
 }

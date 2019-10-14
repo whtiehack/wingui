@@ -1,6 +1,6 @@
 package wingui
 
-//	https://	docs.microsoft.com/zh-cn/windows/win32/controls/buttons?view=vs-2017
+//	https://docs.microsoft.com/zh-cn/windows/win32/controls/buttons?view=vs-2017
 
 import (
 	"github.com/lxn/win"

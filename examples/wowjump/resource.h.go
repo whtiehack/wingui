@@ -21,4 +21,6 @@ const (
 	IDE_ENTER_TIME = 40005
 	// IDS_WINGUI const uintptr
 	IDS_WINGUI = 40006
+	// IDB_CHANGECHAR const uintptr
+	IDB_CHANGECHAR = 40007
 )

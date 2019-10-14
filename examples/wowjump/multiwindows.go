@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"strconv"
 	"syscall"
 
 	"github.com/lxn/win"
-	"github.com/whtiehack/wingui/winapi"
 )
 
 func getHwnds() []win.HWND {
@@ -15,7 +15,7 @@ func getHwnds() []win.HWND {
 	strArr := make([]string, 0, 10)
 	for {
 		// syscall.StringToUTF16Ptr("GxWindowClass")
-		//curh = user32.FindWindowEx(0, curh, nil, syscall.StringToUTF16Ptr("ssl.csr - 记事本"))
+		//curh = winapi.FindWindowEx(0, curh, nil, syscall.StringToUTF16Ptr("ssl.csr - 记事本"))
 		curh = winapi.FindWindowEx(0, curh, syscall.StringToUTF16Ptr("GxWindowClass"), nil)
 		if curh == 0 {
 			break

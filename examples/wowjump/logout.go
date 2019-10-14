@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/lxn/win"
@@ -28,6 +29,7 @@ type Logout struct {
 	subTime      time.Duration
 	currentState LogoutStatus
 	hwnd         win.HWND
+	count        int
 }
 
 //Update should be invoke by period.
@@ -49,6 +51,7 @@ func (l *Logout) normal() {
 		l.subTime = time.Duration(rand.Int()%(config.NormalTime)*int(time.Second)) + time.Duration(config.NormalTime*int(time.Second))
 		l.prevTime = time.Now()
 		log.Println(l.hwnd, "挂机一会", l.subTime)
+		l.count++
 	}
 	if time.Now().Sub(l.prevTime) > l.subTime {
 		l.subTime = 0
@@ -66,6 +69,8 @@ func (l *Logout) input() {
 		log.Println(l.hwnd, "小退中。。。", l.subTime)
 		if !l.logout() {
 			l.subTime = 0
+		} else {
+			stat.Stat("/logout/"+strconv.Itoa(l.count), "wowjump-logout")
 		}
 		return
 	}
@@ -77,6 +82,15 @@ func (l *Logout) input() {
 
 func (l *Logout) char() {
 	if l.subTime == 0 {
+		if config.ChangeChar {
+			if !l.TryGetWindow() {
+				randomSleep(1111, 1111)
+			}
+			if !l.inputKey(win.VK_DOWN) {
+				log.Println(l, l.hwnd, "角色界面换角色失败。。等一会重试。。。")
+				return
+			}
+		}
 		l.subTime = time.Duration(rand.Int()%(config.CharWaitTime)*int(time.Second)) + time.Duration(config.CharWaitTime*int(time.Second))
 		l.prevTime = time.Now()
 		log.Println(l.hwnd, "角色界面等待一会。。。", l.subTime)
@@ -122,6 +136,16 @@ func (l *Logout) inputEnter() bool {
 	return true
 }
 
+func (l *Logout) inputKey(key uint) bool {
+	if !l.CheckWindow() {
+		return false
+	}
+	keybdInput(key, false)
+	randomSleep(211, 155)
+	keybdInput(key, true)
+	return true
+}
+
 func (l *Logout) logout() bool {
 	if !l.CheckWindow() {
 		return false
@@ -154,6 +178,7 @@ func (l *Logout) CheckWindow() bool {
 		//log.Printf("FOCUS not WOW  focus:%d  WOW:%d  focus WOW", focus, logout.hwnd)
 		win.ShowWindow(l.hwnd, win.SW_NORMAL)
 		win.SetActiveWindow(l.hwnd)
+		win.BringWindowToTop(l.hwnd)
 		win.SetForegroundWindow(l.hwnd)
 		randomSleep(2000, 1000)
 	}
@@ -167,6 +192,8 @@ func (l *Logout) TryGetWindow() bool {
 		win.ShowWindow(l.hwnd, win.SW_NORMAL)
 		randomSleep(11, 22)
 		win.SetActiveWindow(l.hwnd)
+		randomSleep(11, 22)
+		win.BringWindowToTop(l.hwnd)
 		randomSleep(11, 22)
 		win.SetForegroundWindow(l.hwnd)
 		randomSleep(11, 22)

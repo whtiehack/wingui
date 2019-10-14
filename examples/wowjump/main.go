@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 	"syscall"
 
 	"github.com/lxn/win"
@@ -12,6 +13,7 @@ import (
 
 var dlg *wingui.Dialog
 var out *wingui.Edit
+var stat *Statistics
 
 // ProcessMutex 防止进程多开，返回 true 表示进程已经开启
 func ProcessMutex(name string) bool {
@@ -32,6 +34,7 @@ func init() {
 		win.MessageBox(0, &syscall.StringToUTF16("进程已经开启了，不可以多开")[0], nil, 0)
 		os.Exit(-1)
 	}
+	stat = NewStatistics("https://smallwhite.ml/wingui/wowjump", "d36d3fe91a80f7e10b5757b91896bc98")
 	// control
 	go process()
 }
@@ -57,9 +60,11 @@ func main() {
 	config.editEnterTime = wingui.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
 	config.editCharWaitTime = wingui.NewEdit(IDE_CHAR_WAIT_TIME)
-	_ = dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime, config.editInputTime, config.editCharWaitTime)
-
+	config.btnCheckChangeChar = wingui.NewButton(IDB_CHANGECHAR)
+	_ = dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime,
+		config.editInputTime, config.editCharWaitTime, config.btnCheckChangeChar)
 	config.InitVal()
+	go stat.Stat("/main", "wowjump-main")
 	dlg.Show()
 	// Make sure Tabstop can work.
 	wingui.SetCurrentDialog(dlg.Handle())
@@ -104,6 +109,7 @@ func btnClick() {
 		if len(logouts) == 0 {
 			running = !running
 			log.Println("没有找到WOW窗口")
+			go stat.Stat("/cancel", "wowjump-cancel")
 			return
 		}
 		out.SetText("")
@@ -113,8 +119,10 @@ func btnClick() {
 		//config.SkillKey = str
 		//randomSkill.ParseSkillKey(str)
 		log.Println("开始运行")
+		go stat.Stat("/start", "wowjump-start:"+strconv.Itoa(len(logouts)))
 	} else {
 		log.Println("已经停止运行")
+		go stat.Stat("/stop", "wowjump-stop")
 	}
 	config.EditEnable(!running)
 	btn.SetText(text)

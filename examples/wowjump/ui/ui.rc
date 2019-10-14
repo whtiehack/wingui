@@ -14,14 +14,15 @@
 // Dialog resources
 //
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
-IDD_DIALOG_MAIN DIALOG 0, 0, 300, 270
+IDD_DIALOG_MAIN DIALOG 0, 0, 301, 284
 STYLE DS_3DLOOK | DS_CENTER | DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_VISIBLE | WS_GROUP | WS_POPUP | WS_SYSMENU
 EXSTYLE WS_EX_WINDOWEDGE
 CAPTION "魔兽防暂离"
 FONT 8, "Ms Shell Dlg"
 {
-    LTEXT           "WinGUI GitHub", IDS_WINGUI, 230, 225, 55, 9, SS_LEFT | SS_NOTIFY, WS_EX_STATICEDGE
-    LTEXT           "修改了时间建议盯着看一下，会不会有问题。\n<开启>之前建议先手动小退一下。", 0, 7, 222, 161, 17, SS_LEFT, WS_EX_LEFT
+    AUTOCHECKBOX    "角色界面切换人物", IDB_CHANGECHAR, 12, 222, 80, 8, 0, WS_EX_LEFT
+    LTEXT           "WinGUI GitHub", IDS_WINGUI, 230, 240, 55, 9, SS_LEFT | SS_NOTIFY, WS_EX_STATICEDGE
+    LTEXT           "修改了时间建议盯着看一下，会不会有问题。\n<开启>之前建议先手动小退一下。", 0, 7, 237, 161, 17, SS_LEFT, WS_EX_LEFT
     LTEXT           "变量配置(单位都是秒),填写的时间都是最短时间,实际时间是大于配置时间的:", 0, 6, 173, 267, 9, SS_LEFT, WS_EX_LEFT
     LTEXT           "游戏内挂机时间:", 0, 7, 189, 59, 9, SS_LEFT, WS_EX_LEFT
     LTEXT           "进入到游戏界面以后再开启，小退时间不要超过20分钟。\n开启以后根据配置的游戏内挂机时间小退一次\n不用的时候点关闭或者直接关掉\n\n\n", 0, 7, 137, 201, 30, SS_LEFT, WS_EX_LEFT
@@ -30,7 +31,7 @@ FONT 8, "Ms Shell Dlg"
     LTEXT           "小退等待时间:", 0, 127, 189, 51, 9, SS_LEFT, WS_EX_LEFT
     LTEXT           "角色界面停留时间:", 0, 7, 205, 67, 9, SS_LEFT, WS_EX_LEFT
     LTEXT           "点击进入游戏等待时间:", 0, 127, 205, 83, 9, SS_LEFT, WS_EX_LEFT
-    DEFPUSHBUTTON   "开启防掉线", IDB_RUN, 77, 247, 150, 14, 0, WS_EX_LEFT
+    DEFPUSHBUTTON   "开启防掉线", IDB_RUN, 77, 262, 150, 14, 0, WS_EX_LEFT
     EDITTEXT        IDE_NORMAL_TIME, 77, 187, 40, 12, ES_AUTOHSCROLL | ES_NUMBER, WS_EX_RIGHT
     EDITTEXT        IDE_INPUT_TIME, 217, 187, 40, 12, ES_AUTOHSCROLL | ES_NUMBER, WS_EX_RIGHT
     EDITTEXT        IDE_CHAR_WAIT_TIME, 77, 203, 40, 12, ES_AUTOHSCROLL | ES_NUMBER, WS_EX_RIGHT

@@ -2,26 +2,27 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/lxn/win"
+	"github.com/whtiehack/wingui"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"syscall"
-
-	"github.com/lxn/win"
-	"github.com/whtiehack/wingui"
 )
 
 // Config is program config.
 type Config struct {
-	NormalTime       int
-	InputTime        int
-	CharWaitTime     int
-	EnterTime        int
-	editEnterTime    *wingui.Edit
-	editNormaltime   *wingui.Edit
-	editInputTime    *wingui.Edit
-	editCharWaitTime *wingui.Edit
+	NormalTime         int
+	InputTime          int
+	CharWaitTime       int
+	EnterTime          int
+	ChangeChar         bool
+	editEnterTime      *wingui.Edit   `json:"-"`
+	editNormaltime     *wingui.Edit   `json:"-"`
+	editInputTime      *wingui.Edit   `json:"-"`
+	editCharWaitTime   *wingui.Edit   `json:"-"`
+	btnCheckChangeChar *wingui.Button `json:"-"`
 }
 
 var config = &Config{
@@ -29,10 +30,12 @@ var config = &Config{
 	InputTime:    30,
 	CharWaitTime: 60,
 	EnterTime:    30,
+	ChangeChar:   false,
 }
 
 func init() {
-	configDir, _ := os.UserHomeDir()
+	configDir := os.Getenv("AppData")
+	log.Println("config", configDir)
 	file, err := ioutil.ReadFile(configDir + "/wowjump/wowjump_config.txt")
 	if err != nil {
 		return
@@ -52,9 +55,11 @@ func (c *Config) Save() {
 	config.NormalTime, _ = strconv.Atoi(c.editNormaltime.Text())
 	config.InputTime, _ = strconv.Atoi(c.editInputTime.Text())
 	config.CharWaitTime, _ = strconv.Atoi(c.editCharWaitTime.Text())
+	config.ChangeChar = c.btnCheckChangeChar.GetCheck() == win.BST_CHECKED
 	file, _ := json.MarshalIndent(c, "", "    ")
-	configDir, _ := os.UserHomeDir()
-	ioutil.WriteFile(configDir+"/wowjump/wowjump_config.txt", file, 777)
+	configDir := os.Getenv("AppData")
+	os.Mkdir(configDir+"/wowjump", 0777)
+	ioutil.WriteFile(configDir+"/wowjump/wowjump_config.txt", file, 0777)
 }
 
 //InitVal put config val to edit.
@@ -63,6 +68,11 @@ func (c *Config) InitVal() {
 	c.editNormaltime.SetText(strconv.Itoa(c.NormalTime))
 	c.editInputTime.SetText(strconv.Itoa(c.InputTime))
 	c.editCharWaitTime.SetText(strconv.Itoa(c.CharWaitTime))
+	state := win.BST_UNCHECKED
+	if config.ChangeChar {
+		state = win.BST_CHECKED
+	}
+	c.btnCheckChangeChar.SetCheck(state)
 }
 
 //EditEnable enable edits.
@@ -71,4 +81,5 @@ func (c *Config) EditEnable(enable bool) {
 	c.editNormaltime.SetEnabled(enable)
 	c.editInputTime.SetEnabled(enable)
 	c.editCharWaitTime.SetEnabled(enable)
+	c.btnCheckChangeChar.SetEnabled(enable)
 }
