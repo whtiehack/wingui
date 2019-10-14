@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"net/http"
+	"net"
 	"net/url"
 	"os"
 	"os/exec"
@@ -142,7 +142,6 @@ type Statistics struct {
 	curPath  string
 	params   url.Values
 	baseUrl  string
-	client   http.Client
 	lt       int
 }
 
@@ -167,7 +166,7 @@ func NewStatistics(baseUrl string, si string) *Statistics {
 	params.Add("v", "1.2.61")
 	params.Add("lv", "2")
 	// params.Add("sn", "30541")
-	return &Statistics{baseUrl: baseUrl, lt: 0, si: si, params: params, client: http.Client{}}
+	return &Statistics{baseUrl: baseUrl, lt: 0, si: si, params: params}
 }
 
 func (s *Statistics) Stat(path string, title string) {
@@ -223,25 +222,39 @@ func (s *Statistics) Stat(path string, title string) {
 }
 
 func (s *Statistics) get(params string, referer string) error {
-
-	request, err := http.NewRequest("GET", "https://hm.baidu.com/hm.gif?"+params, nil) //请求
-
+	conn, err := net.Dial("tcp", "hm.baidu.com:80")
 	if err != nil {
-		//print("statistics error new request", err, "\n")
-		return err // handle error
-
-	}
-
-	request.Header.Set("Referer", referer) //设置 Referer
-	//request.Header.Set("User-Agent", referer) //设置 User-Agent
-
-	response, err := s.client.Do(request) //返回
-
-	if err != nil {
-		//print("statistics error Do", err, "\n")
+		print("what err:", err, "\n")
 		return err
 	}
-	defer response.Body.Close()
+	defer conn.Close()
+	n, err := conn.Write([]byte("GET /hm.gif?" + params + " HTTP/1.1\r\nHost: hm.baidu.com\r\nUser-Agent: Wingui\r\nReferer: " + referer + "\r\n"))
+	if err != nil {
+		print("write err:", err, "\n")
+		return err
+	}
+	print("write:", n, " err:", err, "\n")
+	var b = make([]byte, 10000)
+	l, err := conn.Read(b)
+	print("read ret:", l, " err:", err, "  bbb:", string(b[:l]), "\n")
+	//request, err := http.NewRequest("GET", "https://hm.baidu.com/hm.gif?"+params, nil) //请求
+	//
+	//if err != nil {
+	//	//print("statistics error new request", err, "\n")
+	//	return err // handle error
+	//
+	//}
+	//
+	//request.Header.Set("Referer", referer) //设置 Referer
+	////request.Header.Set("User-Agent", referer) //设置 User-Agent
+	//
+	//response, err := http.DefaultClient.Do(request) //返回
+	//
+	//if err != nil {
+	//	//print("statistics error Do", err, "\n")
+	//	return err
+	//}
+	//defer response.Body.Close()
 	//print("statistics success:", response.Status, " params:", params, " referer:", referer, "\n")
 	return nil
 }
