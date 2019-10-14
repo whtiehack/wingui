@@ -228,15 +228,20 @@ func (s *Statistics) get(params string, referer string) error {
 		return err
 	}
 	defer conn.Close()
-	n, err := conn.Write([]byte("GET /hm.gif?" + params + " HTTP/1.1\r\nHost: hm.baidu.com\r\nUser-Agent: Wingui\r\nReferer: " + referer + "\r\n"))
+	_, err = conn.Write([]byte("GET /hm.gif?" + params + " HTTP/1.1\r\n" +
+		"User-Agent: Wingui\r\n" +
+		"Referer: " + referer + "\r\n" +
+		"Host: hm.baidu.com\r\n" +
+		"Connection: close\r\n" +
+		"\r\n\r\n"))
 	if err != nil {
 		print("write err:", err, "\n")
 		return err
 	}
-	print("write:", n, " err:", err, "\n")
-	var b = make([]byte, 10000)
-	l, err := conn.Read(b)
-	print("read ret:", l, " err:", err, "  bbb:", string(b[:l]), "\n")
+	//print("write:", n, " err:", err, "\n")
+	//var b = make([]byte, 10000)
+	//l, err := conn.Read(b)
+	//print("read ret:", l, " err:", err, "  bbb:", string(b[:l]), "\n")
 	//request, err := http.NewRequest("GET", "https://hm.baidu.com/hm.gif?"+params, nil) //请求
 	//
 	//if err != nil {
