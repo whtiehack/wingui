@@ -6,10 +6,19 @@ import (
 )
 
 var (
-	kernel32        = syscall.NewLazyDLL("kernel32.dll")
-	procCreateMutex = kernel32.NewProc("CreateMutexW")
-	procOpenMutex   = kernel32.NewProc("OpenMutexW")
+	kernel32                   = syscall.NewLazyDLL("kernel32.dll")
+	procCreateMutex            = kernel32.NewProc("CreateMutexW")
+	procOpenMutex              = kernel32.NewProc("OpenMutexW")
+	getSystemDefaultLocaleName = kernel32.NewProc("GetSystemDefaultLocaleName")
+	getSystemDefaultLCID       = kernel32.NewProc("GetSystemDefaultLCID")
 )
+
+func GetSystemDefaultLocaleName() string {
+	lcid, _, _ := getSystemDefaultLCID.Call()
+	buf := make([]uint16, 128)
+	_, _, _ = getSystemDefaultLocaleName.Call(uintptr(unsafe.Pointer(&buf[0])), lcid)
+	return syscall.UTF16ToString(buf)
+}
 
 //CreateMutex kernel32 API CreateMutex
 func CreateMutex(name string) (uintptr, error) {

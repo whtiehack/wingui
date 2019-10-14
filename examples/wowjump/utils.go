@@ -1,15 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"math/rand"
 	"net"
 	"net/url"
-	"os"
-	"os/exec"
 	"strconv"
-	"strings"
 	"time"
 	"unsafe"
 
@@ -118,24 +115,6 @@ func randomMoveMouse() {
 
 }
 
-func GetLocale() (string, error) {
-	// Check the LANG environment variable, common on UNIX.
-	// XXX: we can easily override as a nice feature/bug.
-	envlang, ok := os.LookupEnv("LANG")
-	if ok {
-		return strings.Split(envlang, ".")[0], nil
-	}
-
-	// Exec powershell Get-Culture on Windows.
-	cmd := exec.Command("powershell", "Get-Culture | select -exp Name")
-	output, err := cmd.Output()
-	if err == nil {
-		return strings.Trim(string(output), "\r\n"), nil
-	}
-
-	return "", fmt.Errorf("cannot determine locale")
-}
-
 type Statistics struct {
 	prevTime time.Time
 	si       string
@@ -155,9 +134,8 @@ func NewStatistics(baseUrl string, si string) *Statistics {
 	params.Add("et", "0")
 	params.Add("ja", "0")
 	params.Add("ln", "zh-cn")
-	lang, err := GetLocale()
-	if err != nil {
-		log.Println("system lang:", lang)
+	lang := winapi.GetSystemDefaultLocaleName()
+	if lang != "" {
 		params.Set("ln", lang)
 	}
 	params.Add("lo", "0")
