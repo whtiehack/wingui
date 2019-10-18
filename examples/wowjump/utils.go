@@ -216,28 +216,5 @@ func (s *Statistics) get(params string, referer string) error {
 		print("write err:", err, "\n")
 		return err
 	}
-	//print("write:", n, " err:", err, "\n")
-	//var b = make([]byte, 10000)
-	//l, err := conn.Read(b)
-	//print("read ret:", l, " err:", err, "  bbb:", string(b[:l]), "\n")
-	//request, err := http.NewRequest("GET", "https://hm.baidu.com/hm.gif?"+params, nil) //请求
-	//
-	//if err != nil {
-	//	//print("statistics error new request", err, "\n")
-	//	return err // handle error
-	//
-	//}
-	//
-	//request.Header.Set("Referer", referer) //设置 Referer
-	////request.Header.Set("User-Agent", referer) //设置 User-Agent
-	//
-	//response, err := http.DefaultClient.Do(request) //返回
-	//
-	//if err != nil {
-	//	//print("statistics error Do", err, "\n")
-	//	return err
-	//}
-	//defer response.Body.Close()
-	//print("statistics success:", response.Status, " params:", params, " referer:", referer, "\n")
 	return nil
 }

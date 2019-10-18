@@ -7631,3 +7631,9 @@ var TD_WARNING_ICON = -1
 var TD_ERROR_ICON = -2
 var TD_INFORMATION_ICON = -3
 var TD_SHIELD_ICON = -4
+
+
+type PBRANGE struct
+{
+   Low,High int
+}

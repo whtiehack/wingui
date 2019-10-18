@@ -151,7 +151,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 -----
 - [x] Slider Control
-- [ ] Progress Bar
+- [x] Progress Bar
 - [ ] Tab Control
 
 - [ ] ListView Control
