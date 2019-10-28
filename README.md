@@ -1,6 +1,12 @@
 
 
 # Windows GUI Library  - wingui
+
+![GitHub](https://img.shields.io/github/license/whtiehack/wingui)
+[![Go Report Card](https://goreportcard.com/badge/github.com/whtiehack/wingui)](https://goreportcard.com/report/github.com/whtiehack/wingui)
+[![GoDoc](https://img.shields.io/badge/Godoc-reference-blue.svg)](https://godoc.org/github.com/whtiehack/wingui)
+![GitHub All Releases](https://img.shields.io/github/downloads/whtiehack/wingui/total)
+
 Golang GUI library for windows, UI created by ResEdit or Visual Studio Resource Editor
 
 Lightweight, high performance and small executable file size Windows GUI library.
