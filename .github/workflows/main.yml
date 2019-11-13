@@ -31,11 +31,11 @@ jobs:
       run: go mod tidy -v
 
     - name: windres
-      run: cd examples/basic | windres -i ui/ui.rc -O coff -o ui.syso
+      run: cd examples/basic;windres -i ui/ui.rc -O coff -o ui.syso
 
     - name: generate h file
-      run: cd examples/basic | go generate -v
+      run: cd examples/basic;go generate -v
 
     - name: build exe file
-      run: cd examples/basic | go build -v
+      run: cd examples/basic;go build -v
 
