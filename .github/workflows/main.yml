@@ -33,5 +33,5 @@ jobs:
         cd examples/basic
         windres -i ui/ui.rc -O coff -o ui.syso
         go generate -v
-        go build -v -ldflags="-s -w -H windowsgui"
+        go build -v
 
