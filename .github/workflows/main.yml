@@ -30,4 +30,7 @@ jobs:
     - name: Build
       run: |
         cd examples/basic
-        build.bat
+        windres -i ui/ui.rc -O coff -o ui.syso
+        go generate
+        go build -ldflags="-s -w -H windowsgui"
+
