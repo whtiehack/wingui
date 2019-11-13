@@ -40,8 +40,8 @@ jobs:
       run: cd examples/basic;go build -v
 
     - name: check simple
-      run: cd example/simple; windres -i emptyProject/Debug/resource.res -O coff -o vsui.syso;go build -ldflags="-s -w -H windowsgui"
+      run: cd examples/simple; windres -i emptyProject/Debug/resource.res -O coff -o vsui.syso;go build -ldflags="-s -w -H windowsgui"
 
     - name: check wowjump
       run: cd examples/wowjump; windres -i ui/ui.rc -O coff -o ui.syso;go generate;go build -ldflags="-s -w -H windowsgui"
-      
+
