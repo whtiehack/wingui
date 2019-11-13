@@ -29,8 +29,9 @@ jobs:
 
     - name: Build
       run: |
+        go mod tidy -v
         cd examples/basic
         windres -i ui/ui.rc -O coff -o ui.syso
-        go generate
-        go build -ldflags="-s -w -H windowsgui"
+        go generate -v
+        go build -v -ldflags="-s -w -H windowsgui"
 
