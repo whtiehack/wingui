@@ -55,7 +55,6 @@ func main() {
 	out = editLog
 	btn = wingui.NewButton(IDB_RUN)
 	btn.OnClicked = btnClick
-	setLogOutput(editLog)
 	config.editNormaltime = wingui.NewEdit(IDE_NORMAL_TIME)
 	config.editEnterTime = wingui.NewEdit(IDE_ENTER_TIME)
 	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
@@ -66,6 +65,7 @@ func main() {
 	config.InitVal()
 	go stat.Stat("/main", "wowjump-main")
 	dlg.Show()
+	setLogOutput(editLog)
 	// Make sure Tabstop can work.
 	wingui.SetCurrentDialog(dlg.Handle())
 	wingui.MessageLoop()
