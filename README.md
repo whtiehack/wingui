@@ -8,7 +8,7 @@
 ![GitHub All Releases](https://img.shields.io/github/downloads/whtiehack/wingui/total)
 
 
-[![Actions Status](https://github.com/whtiehack/wingui/workflows/Build%20Check/badge.svg)](hhttps://github.com/whtiehack/wingui/actions)
+[![Actions Status](https://github.com/whtiehack/wingui/workflows/Build%20Check/badge.svg?branch=master&event=push)](https://github.com/whtiehack/wingui/actions)
 
 Golang GUI library for windows, UI created by ResEdit or Visual Studio Resource Editor
 
