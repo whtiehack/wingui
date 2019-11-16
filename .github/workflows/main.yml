@@ -28,7 +28,7 @@ jobs:
         run: cd examples/basic;windres -i ui/ui.rc -O coff -o ui.syso
 
       - name: build basic
-        run: cd examples/basic;go generate -v;go build -v
+        run: cd examples/basic;go generate -v;go build -ldflags="-s -w -H windowsgui" -v
 
       - name: check simple
         run:
@@ -39,7 +39,8 @@ jobs:
       - name: check wowjump
         run:
           cd examples/wowjump;
-          windres -i ui/ui.rc -O coff -o ui.syso;
+          # 取消 winres调用。 生成的资源文件会变成乱码，暂时不知道如果解决。 发布 wowjump release之前需要手动生成 ui.syso.
+          # windres -i ui/ui.rc -O coff -o ui.syso;
           go generate;
           go build -ldflags="-s -w -H windowsgui"
 
