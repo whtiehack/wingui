@@ -53,8 +53,32 @@ Don't use `go run main.go`, because golang can't load x.syso files.
 package wingui
 
 /*
-void MessageLoop();
-void SetCurrentDialog(long long int h);
+#include <windows.h>
+
+HWND dlg;
+
+// Message Loop
+void MessageLoop(){
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
+        if(dlg){
+                if(!IsDialogMessage(dlg, &msg))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+        }else{
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
+
+}
+
+void SetCurrentDialog(long long int h){
+    dlg = (HWND)h;
+}
 */
 import "C"
 import (
