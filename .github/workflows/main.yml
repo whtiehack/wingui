@@ -8,9 +8,11 @@ jobs:
 
     steps:
 
+      - name: Clone repository
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
+      #          submodules: true
 
       - name: Set up Go 1.13.1
         uses: actions/setup-go@v1
@@ -41,3 +43,22 @@ jobs:
           go generate;
           go build -ldflags="-s -w -H windowsgui"
 
+      - name: Pre-release
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'whtiehack/wingui'
+        run: |
+          mkdir release
+          Compress-Archive -CompressionLevel Optimal -Force -Path examples/basic/basic.exe -DestinationPath release/basic.zip
+          Compress-Archive -CompressionLevel Optimal -Force -Path examples/simple/simple.exe -DestinationPath release/simple.zip
+          Compress-Archive -CompressionLevel Optimal -Force -Path examples/wowjump/wowjump.exe -DestinationPath release/wowjump.zip
+
+      - name: Draft Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') && github.repository == 'whtiehack/wingui'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            release/basic.zip
+            release/simple.zip
+            release/wowjump.zip
+          draft: true
