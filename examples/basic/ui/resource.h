@@ -7,7 +7,9 @@
 #define IDI_ICON1                               107
 #define IDB_BITMAP1                             110
 #define IDB_BITMAP2                             111
+#define IDD_DIALOG_TAB1                         113
 #define IDB_OK                                  40000
+#define IDC_LIST1                               40000
 #define IDB_CANCEL                              40001
 #define IDE_EDIT                                40002
 #define IDB_NORMAL                              40003

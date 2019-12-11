@@ -13,8 +13,12 @@ const (
 	IDB_BITMAP1 = 110
 	// IDB_BITMAP2 const uintptr
 	IDB_BITMAP2 = 111
+	// IDD_DIALOG_TAB1 const uintptr
+	IDD_DIALOG_TAB1 = 113
 	// IDB_OK const uintptr
 	IDB_OK = 40000
+	// IDC_LIST1 const uintptr
+	IDC_LIST1 = 40000
 	// IDB_CANCEL const uintptr
 	IDB_CANCEL = 40001
 	// IDE_EDIT const uintptr
