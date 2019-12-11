@@ -43,4 +43,6 @@ const (
 	IDS_SLIDER = 40013
 	// IDP_PROGRESSBAR const uintptr
 	IDP_PROGRESSBAR = 40014
+	// IDC_TAB1 const uintptr
+	IDC_TAB1 = 40015
 )

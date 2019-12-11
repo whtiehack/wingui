@@ -22,3 +22,4 @@
 #define IDB_RADIO2                              40012
 #define IDS_SLIDER                              40013
 #define IDP_PROGRESSBAR                         40014
+#define IDC_TAB1                                40015
