@@ -30,7 +30,7 @@ func getHwnds() []win.HWND {
 //GetMultiLogout get need control WOW windows and need user confirm.
 func GetMultiLogout() []*Logout {
 	arr := getHwnds()
-	logouts := make([]*Logout, 0, 5)
+	var logouts []*Logout
 	for _, hwnd := range arr {
 		win.ShowWindow(hwnd, win.SW_NORMAL)
 		win.SetActiveWindow(hwnd)
