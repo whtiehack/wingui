@@ -108,7 +108,7 @@ func btnClick() {
 		logouts = GetMultiLogout()
 		if len(logouts) == 0 {
 			running = !running
-			log.Println("没有找到WOW窗口")
+			log.Println("没有找到WOW窗口，如果确认已经开启了wow窗口\n可以使用管理员身份运行程序试试")
 			go stat.Stat("/cancel", "wowjump-cancel")
 			return
 		}
