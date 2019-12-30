@@ -144,6 +144,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 # TODOs
 
+<details><summary><b> click to show </b> </summary><br>
 - [x] Edit
 - [x] Static Text
 
@@ -177,9 +178,16 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 - [ ] Accelerator
 - [ ] Menu
 
-
+</details>
 
 
 ## Recommend
 
 If you need to do complex GUI programs, you can use [govcl](https://github.com/ying32/govcl) or [walk](https://github.com/lxn/walk).
+
+### Support for open source
+
+如果您觉得本项目对你有帮助，可以赞赏一下作者。
+
+![wechatpay](res/wechatpay.jpg)
+
