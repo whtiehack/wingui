@@ -12,3 +12,6 @@
 #define IDE_ENTER_TIME                          40005
 #define IDS_WINGUI                              40006
 #define IDB_CHANGECHAR                          40007
+#define IDB_LOGOUT_FLASH                        40008
+
+
