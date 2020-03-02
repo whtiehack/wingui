@@ -191,5 +191,5 @@ If you need to do complex GUI programs, you can use [govcl](https://github.com/y
 
 如果您觉得本项目对你有帮助，可以赞赏一下作者。
 
-![wechatpay](res/wechatpay.jpg)
+![wechatpay](https://cdn.jsdelivr.net/gh/whtiehack/wingui@master/res/zanshangma.png)
 
