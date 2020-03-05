@@ -15,15 +15,11 @@ const (
 	BM_SETDONTCLICK = 0x00F8
 )
 
-var libuser32 *windows.LazyDLL
-var findWindowEx *windows.LazyProc
-var getNextWindow *windows.LazyProc
-
-func init() {
-	libuser32 = windows.NewLazySystemDLL("user32.dll")
-	findWindowEx = libuser32.NewProc("FindWindowExW")
+var (
+	libuser32     = windows.NewLazySystemDLL("user32.dll")
+	findWindowEx  = libuser32.NewProc("FindWindowExW")
 	getNextWindow = libuser32.NewProc("GetNextWindow ")
-}
+)
 
 //FindWindowEx user32 API FindWindowEx
 func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpWindowName *uint16) win.HWND {
