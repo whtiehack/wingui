@@ -175,6 +175,15 @@ func bindWidgets(dlg *wingui.Dialog) {
 		}
 		progressBar.DeltaPos(-50)
 	}()
+
+	// tab control
+	tabcontrol, _ := wingui.BindTabControl(IDC_TAB1, dlg)
+
+	tab1, err := wingui.NewDialog(IDD_DIALOG_TAB1, tabcontrol.Handle(), nil)
+	if err != nil {
+		log.Println("tab1 error", err)
+	}
+	tabcontrol.InsertItemText("111", tab1)
 	// other
 
 }

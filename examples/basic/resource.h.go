@@ -17,10 +17,12 @@ const (
 	IDD_DIALOG_TAB1 = 113
 	// IDB_OK const uintptr
 	IDB_OK = 40000
-	// IDC_LIST1 const uintptr
-	IDC_LIST1 = 40000
 	// IDB_CANCEL const uintptr
 	IDB_CANCEL = 40001
+	// IDC_TAB_LIST1 const uintptr
+	IDC_TAB_LIST1 = 40001
+	// IDC_TAB_BUTTON1 const uintptr
+	IDC_TAB_BUTTON1 = 40002
 	// IDE_EDIT const uintptr
 	IDE_EDIT = 40002
 	// IDB_NORMAL const uintptr

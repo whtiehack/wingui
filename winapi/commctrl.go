@@ -182,7 +182,7 @@ const (
 	LVM_FIRST = 0 // ListView messages
 	TV_FIRST  = 0 // TreeView messages
 	HDM_FIRST = 0 // Header messages
-	TCM_FIRST = 0 // Tab control messages
+	TCM_FIRST = 0x1300 // Tab control messages
 
 	PGM_FIRST = 0 // Pager control messages
 
@@ -5792,11 +5792,11 @@ const (
 	// #define TabCtrl_GetItemCount(hwnd) \
 	//     (int)SNDMSG((hwnd), TCM_GETITEMCOUNT, 0, 0L)
 
-	TCIF_TEXT       = 0
-	TCIF_IMAGE      = 0
-	TCIF_RTLREADING = 0
-	TCIF_PARAM      = 0
-	TCIF_STATE      = 0
+	TCIF_TEXT       = 0x0001
+	TCIF_IMAGE      = 0x0002
+	TCIF_RTLREADING = 0x0004
+	TCIF_PARAM      = 0x0008
+	TCIF_STATE      = 0x0010
 
 	TCIS_BUTTONPRESSED = 0
 	TCIS_HIGHLIGHTED   = 0

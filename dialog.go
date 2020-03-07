@@ -39,6 +39,21 @@ type Dialog struct {
 	// TODO Support optionsl sub wnd class.
 }
 
+//func NewDialogIndirect(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *Dialog, err error) {
+//	dlg, err = NewDialog(idd, parent, dialogConfig)
+//	if err != nil {
+//		return
+//	}
+//	var rect = dlg.GetWindowRect()
+//	dlg.SetBounds(Rectangle{
+//		X:      0,
+//		Y:      0,
+//		Width:  int(rect.Right - rect.Left),
+//		Height: int(rect.Bottom - rect.Top),
+//	})
+//	return
+//}
+
 // NewDialog create a new Dialog.
 func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *Dialog, err error) {
 	if dialogConfig == nil {
@@ -121,27 +136,27 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		}
 		return 0
 	case win.WM_DELETEITEM:
-		// TODO
-		// Sent to the owner of a list box or combo box when the list box or combo box is destroyed or
-		// when items are removed by the LB_DELETESTRING, LB_RESETCONTENT, CB_DELETESTRING, or CB_RESETCONTENT message.
-		// The system sends a WM_DELETEITEM message for each deleted item. The system sends the WM_DELETEITEM message
-		// for any deleted list box or combo box item with nonzero item data.
-		// Parameters
-		//wParam
-		//Specifies the identifier of the control that sent the WM_DELETEITEM message.
-		//
-		//lParam
-		//Pointer to a DELETEITEMSTRUCT structure that contains information about the item deleted from a list box.
-		// https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-deleteitemstruct
-		//
-		//Return value
-		//An application should return TRUE if it processes this message.
-		case win.WM_NOTIFY:
-			// trans message to child.
-			nmhdr := (*win.NMHDR)(unsafe.Pointer(lParam))
-			if item, ok := dlg.items[nmhdr.HwndFrom]; ok {
-				return item.WndProc(msg, wParam, lParam)
-			}
+	// TODO
+	// Sent to the owner of a list box or combo box when the list box or combo box is destroyed or
+	// when items are removed by the LB_DELETESTRING, LB_RESETCONTENT, CB_DELETESTRING, or CB_RESETCONTENT message.
+	// The system sends a WM_DELETEITEM message for each deleted item. The system sends the WM_DELETEITEM message
+	// for any deleted list box or combo box item with nonzero item data.
+	// Parameters
+	//wParam
+	//Specifies the identifier of the control that sent the WM_DELETEITEM message.
+	//
+	//lParam
+	//Pointer to a DELETEITEMSTRUCT structure that contains information about the item deleted from a list box.
+	// https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-deleteitemstruct
+	//
+	//Return value
+	//An application should return TRUE if it processes this message.
+	case win.WM_NOTIFY:
+		// trans message to child.
+		nmhdr := (*win.NMHDR)(unsafe.Pointer(lParam))
+		if item, ok := dlg.items[nmhdr.HwndFrom]; ok {
+			return item.WndProc(msg, wParam, lParam)
+		}
 	}
 	return uintptr(0)
 }
