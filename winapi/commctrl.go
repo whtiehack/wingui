@@ -178,7 +178,7 @@ const (
 	ODT_LISTVIEW = 102
 
 	//====== Ranges for control message IDs =======================================
-
+	// TODO: need fix value
 	LVM_FIRST = 0 // ListView messages
 	TV_FIRST  = 0 // TreeView messages
 	HDM_FIRST = 0 // Header messages
