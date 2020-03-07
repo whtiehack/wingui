@@ -60,8 +60,10 @@ func main() {
 	config.editInputTime = wingui.NewEdit(IDE_INPUT_TIME)
 	config.editCharWaitTime = wingui.NewEdit(IDE_CHAR_WAIT_TIME)
 	config.btnCheckChangeChar = wingui.NewButton(IDB_CHANGECHAR)
+	config.btnCheckLogoutFlash = wingui.NewButton(IDB_LOGOUT_FLASH)
 	_ = dlg.BindWidgets(editLog, btn, config.editNormaltime, config.editEnterTime,
-		config.editInputTime, config.editCharWaitTime, config.btnCheckChangeChar)
+		config.editInputTime, config.editCharWaitTime, config.btnCheckChangeChar, config.btnCheckLogoutFlash)
+	config.flashHwnd = dlg.Handle()
 	config.InitVal()
 	go stat.Stat("/main", "wowjump-main")
 	dlg.Show()

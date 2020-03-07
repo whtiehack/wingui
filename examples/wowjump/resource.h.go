@@ -23,4 +23,6 @@ const (
 	IDS_WINGUI = 40006
 	// IDB_CHANGECHAR const uintptr
 	IDB_CHANGECHAR = 40007
+	// IDB_LOGOUT_FLASH const uintptr
+	IDB_LOGOUT_FLASH = 40008
 )

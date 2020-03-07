@@ -13,16 +13,19 @@ import (
 
 // Config is program config.
 type Config struct {
-	NormalTime         int
-	InputTime          int
-	CharWaitTime       int
-	EnterTime          int
-	ChangeChar         bool
-	editEnterTime      *wingui.Edit   `json:"-"`
-	editNormaltime     *wingui.Edit   `json:"-"`
-	editInputTime      *wingui.Edit   `json:"-"`
-	editCharWaitTime   *wingui.Edit   `json:"-"`
-	btnCheckChangeChar *wingui.Button `json:"-"`
+	NormalTime          int
+	InputTime           int
+	CharWaitTime        int
+	EnterTime           int
+	ChangeChar          bool
+	LogoutFlash         bool
+	editEnterTime       *wingui.Edit   `json:"-"`
+	editNormaltime      *wingui.Edit   `json:"-"`
+	editInputTime       *wingui.Edit   `json:"-"`
+	editCharWaitTime    *wingui.Edit   `json:"-"`
+	btnCheckChangeChar  *wingui.Button `json:"-"`
+	btnCheckLogoutFlash *wingui.Button `json:"-"`
+	flashHwnd win.HWND `json:"-"`
 }
 
 var config = &Config{
@@ -56,6 +59,7 @@ func (c *Config) Save() {
 	config.InputTime, _ = strconv.Atoi(c.editInputTime.Text())
 	config.CharWaitTime, _ = strconv.Atoi(c.editCharWaitTime.Text())
 	config.ChangeChar = c.btnCheckChangeChar.GetCheck() == win.BST_CHECKED
+	config.LogoutFlash = c.btnCheckLogoutFlash.GetCheck() == win.BST_CHECKED
 	file, _ := json.MarshalIndent(c, "", "    ")
 	configDir := os.Getenv("AppData")
 	os.Mkdir(configDir+"/wowjump", 0777)
@@ -73,6 +77,11 @@ func (c *Config) InitVal() {
 		state = win.BST_CHECKED
 	}
 	c.btnCheckChangeChar.SetCheck(state)
+	state = win.BST_UNCHECKED
+	if config.LogoutFlash {
+		state = win.BST_CHECKED
+	}
+	c.btnCheckLogoutFlash.SetCheck(state)
 }
 
 //EditEnable enable edits.
@@ -82,4 +91,5 @@ func (c *Config) EditEnable(enable bool) {
 	c.editInputTime.SetEnabled(enable)
 	c.editCharWaitTime.SetEnabled(enable)
 	c.btnCheckChangeChar.SetEnabled(enable)
+	c.btnCheckLogoutFlash.SetEnabled(enable)
 }

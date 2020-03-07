@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"math/rand"
 	"strconv"
@@ -59,8 +60,19 @@ func (l *Logout) normal() {
 	}
 }
 
+func (l *Logout) checkFlashWindow() {
+	if !config.LogoutFlash {
+		return
+	}
+	log.Println("准备小退。。闪烁窗口..")
+	for i := 0; i < 10; i++ {
+		winapi.FlashWindow(config.flashHwnd, i%1+1)
+		sleep(500)
+	}
+}
 func (l *Logout) input() {
 	if l.subTime == 0 {
+		l.checkFlashWindow()
 		if !l.TryGetWindow() {
 			randomSleep(1111, 1111)
 		}
