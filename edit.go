@@ -10,11 +10,21 @@ import (
 // Edit a widget for Dialog.
 type Edit struct {
 	WindowBase
+	OnChanged func()
 }
 
 // WndProc Edit Window WndProc.
 func (e *Edit) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	// log.Println("btn wnd proc", b.hwnd, msg, wParam, lParam)
+	switch msg {
+	case win.WM_COMMAND:
+		switch win.HIWORD(uint32(wParam)) {
+		case win.EN_CHANGE:
+			if e.OnChanged != nil && lParam == uintptr(e.hwnd) {
+				e.OnChanged()
+			}
+		}
+	}
 	return e.AsWindowBase().WndProc(msg, wParam, lParam)
 }
 
@@ -52,7 +62,7 @@ func (e *Edit) TextLength() int {
 
 // NewEdit create a new Edit ,need bind to Dialog before use.
 func NewEdit(idd uintptr) *Edit {
-	return &Edit{WindowBase{idd: idd}}
+	return &Edit{WindowBase: WindowBase{idd: idd}}
 }
 
 //BindNewEdit create a new Edit and bind to dlg.
