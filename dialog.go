@@ -37,6 +37,9 @@ type Dialog struct {
 	// Indicates whether it is a modal dialog
 	cb          ModalDialogCallBack
 	wndCallBack uintptr
+	// if return true,will eat message.
+	OnClose   func() bool
+	OnDestroy func()
 	// TODO Support optionsl sub wnd class.
 }
 
@@ -124,6 +127,11 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 	//	return 0
 	case win.WM_CLOSE:
 		log.Println("WM_CLOSE", hwnd)
+		if dlg.OnClose != nil {
+			if dlg.OnClose() {
+				return 0
+			}
+		}
 		if dlg.cb != nil {
 			win.EndDialog(hwnd, 0)
 		} else {
@@ -132,6 +140,9 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		return 0
 	case win.WM_DESTROY:
 		log.Println("WM_DESTROY", hwnd, dlgCount)
+		if dlg.OnDestroy != nil {
+			dlg.OnDestroy()
+		}
 		dlgCount--
 		if dlgCount == 0 {
 			win.PostQuitMessage(0)
