@@ -32,6 +32,7 @@ var dlgCount = 0
 type Dialog struct {
 	WindowBase
 	items  map[win.HWND]Widget
+	iddMap map[uintptr]Widget
 	config *DialogConfig
 	// Indicates whether it is a modal dialog
 	cb          ModalDialogCallBack
@@ -61,6 +62,7 @@ func NewDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig) (dlg *D
 	}
 	dlg = &Dialog{
 		items:  make(map[win.HWND]Widget),
+		iddMap: make(map[uintptr]Widget),
 		config: dialogConfig,
 	}
 	dlg.idd = idd
@@ -198,7 +200,12 @@ func (dlg *Dialog) BindWidgets(widgets ...Widget) error {
 		}
 		base.hwnd = h
 		dlg.items[h] = w
+		dlg.iddMap[base.idd] = w
 	}
 
 	return err
+}
+
+func (dlg *Dialog) GetWidget(idd uintptr) Widget {
+	return dlg.iddMap[idd]
 }
