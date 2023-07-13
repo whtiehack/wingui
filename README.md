@@ -27,7 +27,7 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 # Requires
 
-### GCC
+### GCC (optional, use windres.exe for generate syso file from res or rc.)
 
 MinGW
 http://www.mingw.org
