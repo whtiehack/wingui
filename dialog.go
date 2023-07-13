@@ -86,6 +86,7 @@ func NewModalDialog(idd uintptr, parent win.HWND, dialogConfig *DialogConfig, cb
 	}
 	dlg := &Dialog{
 		items:  make(map[win.HWND]Widget),
+		iddMap: make(map[uintptr]Widget),
 		config: dialogConfig,
 		cb:     cb,
 	}
