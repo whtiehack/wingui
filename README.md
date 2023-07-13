@@ -27,7 +27,7 @@ Lightweight, high performance and small executable file size Windows GUI library
 
 # Requires
 
-### GCC (optional, use windres.exe for generate syso file from res or rc.)
+### GCC (Optionally, windres.exe can be used to generate a syso file from res or rc.)
 
 MinGW
 http://www.mingw.org
@@ -41,6 +41,8 @@ http://tdm-gcc.tdragon.net/
 #### windres.exe
 
 This tool in `TDM-GCC-64/bin/windres.exe`,don't know where in MinGW.
+
+You can also use rc.exe and link.exe to generate syso file.
 
 # Usage
 
