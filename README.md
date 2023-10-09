@@ -189,9 +189,4 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 If you need to do complex GUI programs, you can use [govcl](https://github.com/ying32/govcl) or [walk](https://github.com/lxn/walk).
 
-### Support for open source
-
-如果您觉得本项目对你有帮助，可以赞赏一下作者。
-
-![wechatpay](https://cdn.jsdelivr.net/gh/whtiehack/wingui@master/res/zanshangma.png)
 
