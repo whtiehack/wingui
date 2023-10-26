@@ -23,11 +23,22 @@ func getHwnds() []win.HWND {
 		hwndArr = append(hwndArr, curh)
 		strArr = append(strArr, strconv.Itoa(int(curh)))
 	}
+	curh = 0
+	for {
+		// syscall.StringToUTF16Ptr("GxWindowClass")
+		//curh = winapi.FindWindowEx(0, curh, nil, syscall.StringToUTF16Ptr("ssl.csr - 记事本"))
+		curh = winapi.FindWindowEx(0, curh, syscall.StringToUTF16Ptr("GxWindowClassD3d"), nil)
+		if curh == 0 {
+			break
+		}
+		hwndArr = append(hwndArr, curh)
+		strArr = append(strArr, strconv.Itoa(int(curh)))
+	}
 	log.Println("hwndArr", hwndArr)
 	return hwndArr
 }
 
-//GetMultiLogout get need control WOW windows and need user confirm.
+// GetMultiLogout get need control WOW windows and need user confirm.
 func GetMultiLogout() []*Logout {
 	arr := getHwnds()
 	var logouts []*Logout
