@@ -25,7 +25,7 @@ type Config struct {
 	editCharWaitTime    *wingui.Edit   `json:"-"`
 	btnCheckChangeChar  *wingui.Button `json:"-"`
 	btnCheckLogoutFlash *wingui.Button `json:"-"`
-	flashHwnd win.HWND `json:"-"`
+	flashHwnd           win.HWND       `json:"-"`
 }
 
 var config = &Config{
@@ -52,7 +52,7 @@ func init() {
 	log.Println("解析配置文件成功", string(file))
 }
 
-//Save save config to file.
+// Save save config to file.
 func (c *Config) Save() {
 	config.EnterTime, _ = strconv.Atoi(c.editEnterTime.Text())
 	config.NormalTime, _ = strconv.Atoi(c.editNormaltime.Text())
@@ -66,7 +66,7 @@ func (c *Config) Save() {
 	ioutil.WriteFile(configDir+"/wowjump/wowjump_config.txt", file, 0777)
 }
 
-//InitVal put config val to edit.
+// InitVal put config val to edit.
 func (c *Config) InitVal() {
 	c.editEnterTime.SetText(strconv.Itoa(c.EnterTime))
 	c.editNormaltime.SetText(strconv.Itoa(c.NormalTime))
@@ -84,7 +84,7 @@ func (c *Config) InitVal() {
 	c.btnCheckLogoutFlash.SetCheck(state)
 }
 
-//EditEnable enable edits.
+// EditEnable enable edits.
 func (c *Config) EditEnable(enable bool) {
 	c.editEnterTime.SetEnabled(enable)
 	c.editNormaltime.SetEnabled(enable)

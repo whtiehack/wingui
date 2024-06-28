@@ -157,7 +157,7 @@ func (s *Statistics) Stat(path string, title string) {
 	val, _ := url.ParseQuery(s.params.Encode())
 	val.Set("rnd", strconv.Itoa(int(rand.Int31())))
 	val.Set("sn", strconv.Itoa(int(time.Now().Unix()%65535)))
-	if s.lt != 0 && int(time.Now().Unix())-s.lt > 2592E3 {
+	if s.lt != 0 && int(time.Now().Unix())-s.lt > 2592e3 {
 		s.lt = int(time.Now().Unix())
 	}
 	if s.lt != 0 {
@@ -189,7 +189,7 @@ func (s *Statistics) Stat(path string, title string) {
 		val.Set("et", "0")
 		val.Set("ct", "!!")
 
-		if int(time.Now().Unix())-s.lt > 2592E3 {
+		if int(time.Now().Unix())-s.lt > 2592e3 {
 			s.lt = int(time.Now().Unix())
 		}
 		val.Set("lt", strconv.Itoa(s.lt))
