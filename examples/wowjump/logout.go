@@ -10,7 +10,7 @@ import (
 	"github.com/lxn/win"
 )
 
-//LogoutStatus logout status.
+// LogoutStatus logout status.
 type LogoutStatus int
 
 const (
@@ -24,7 +24,7 @@ const (
 	ENTERING
 )
 
-//Logout control Wow window status.
+// Logout control Wow window status.
 type Logout struct {
 	prevTime     time.Time
 	subTime      time.Duration
@@ -33,7 +33,7 @@ type Logout struct {
 	count        int
 }
 
-//Update should be invoke by period.
+// Update should be invoke by period.
 func (l *Logout) Update() {
 	switch l.currentState {
 	case NORMAL:
@@ -131,7 +131,7 @@ func (l *Logout) enter() {
 	}
 }
 
-//Reset should be invoke by reset status.
+// Reset should be invoke by reset status.
 func (l *Logout) Reset() {
 	l.currentState = NORMAL
 	l.subTime = 0
@@ -174,12 +174,12 @@ func (l *Logout) logout() bool {
 	return true
 }
 
-//IsValid check the windows is valid.
+// IsValid check the windows is valid.
 func (l *Logout) IsValid() bool {
 	return win.IsWindowVisible(l.hwnd)
 }
 
-//CheckWindow check the window if in the foreground and in focus.
+// CheckWindow check the window if in the foreground and in focus.
 func (l *Logout) CheckWindow() bool {
 	// 检查窗口
 	if !l.IsValid() {
@@ -197,18 +197,24 @@ func (l *Logout) CheckWindow() bool {
 	return true
 }
 
-//TryGetWindow try focus window.
+// TryGetWindow try focus window.
 func (l *Logout) TryGetWindow() bool {
 	focus := win.GetForegroundWindow()
 	if focus != l.hwnd {
 		win.ShowWindow(l.hwnd, win.SW_NORMAL)
-		randomSleep(11, 22)
+		randomSleep(500, 1000)
 		win.SetActiveWindow(l.hwnd)
-		randomSleep(11, 22)
+		randomSleep(500, 1000)
 		win.BringWindowToTop(l.hwnd)
-		randomSleep(11, 22)
+		randomSleep(500, 1000)
 		win.SetForegroundWindow(l.hwnd)
-		randomSleep(11, 22)
+		randomSleep(500, 1000)
+		focus = win.GetForegroundWindow()
+		if focus != l.hwnd {
+			log.Println("当前窗口不是wow，小退过程中不要动游戏窗口", focus, l.hwnd)
+			randomSleep(500, 1000)
+			return l.TryGetWindow()
+		}
 		return false
 	}
 	return true
