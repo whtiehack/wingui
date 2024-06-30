@@ -69,6 +69,7 @@ func (l *Logout) checkFlashWindow() {
 		winapi.FlashWindow(config.flashHwnd, i%1+1)
 		sleep(500)
 	}
+	randomSleep(3333, 6666)
 }
 func (l *Logout) input() {
 	if l.subTime == 0 {
@@ -199,6 +200,9 @@ func (l *Logout) CheckWindow() bool {
 
 // TryGetWindow try focus window.
 func (l *Logout) TryGetWindow() bool {
+	if !l.IsValid() {
+		return false
+	}
 	focus := win.GetForegroundWindow()
 	if focus != l.hwnd {
 		win.ShowWindow(l.hwnd, win.SW_NORMAL)
