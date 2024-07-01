@@ -34,7 +34,7 @@ func init() {
 		win.MessageBox(0, &syscall.StringToUTF16("进程已经开启了，不可以多开")[0], nil, 0)
 		os.Exit(-1)
 	}
-	stat = NewStatistics("https://smallwhite.ml/wingui/wowjump", "d36d3fe91a80f7e10b5757b91896bc98")
+	stat = NewStatistics("https://smallwhite.cf/wingui/wowjump", "ffbfeacabe5e673d7a972c8b3977806f")
 	// control
 	go process()
 }
