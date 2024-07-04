@@ -207,15 +207,19 @@ func (l *Logout) TryGetWindow() bool {
 	if focus != l.hwnd {
 		win.ShowWindow(l.hwnd, win.SW_NORMAL)
 		randomSleep(500, 1000)
-		win.SetActiveWindow(l.hwnd)
-		randomSleep(500, 1000)
 		win.BringWindowToTop(l.hwnd)
 		randomSleep(500, 1000)
-		win.SetForegroundWindow(l.hwnd)
+		winapi.SwitchToWindow(l.hwnd, 1)
 		randomSleep(500, 1000)
 		focus = win.GetForegroundWindow()
 		if focus != l.hwnd {
 			log.Println("当前窗口不是wow，小退过程中不要动游戏窗口", focus, l.hwnd)
+			randomSleep(500, 1000)
+			hwnd := config.flashHwnd
+			if hwnd == 0 {
+				hwnd = focus
+			}
+			winapi.SwitchToWindow(hwnd, 1)
 			randomSleep(500, 1000)
 			return l.TryGetWindow()
 		}

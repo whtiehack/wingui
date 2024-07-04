@@ -16,13 +16,14 @@ const (
 )
 
 var (
-	libuser32     = windows.NewLazySystemDLL("user32.dll")
-	findWindowEx  = libuser32.NewProc("FindWindowExW")
-	getNextWindow = libuser32.NewProc("GetNextWindow ")
-	flashWindow   = libuser32.NewProc("FlashWindow")
+	libuser32      = windows.NewLazySystemDLL("user32.dll")
+	findWindowEx   = libuser32.NewProc("FindWindowExW")
+	getNextWindow  = libuser32.NewProc("GetNextWindow ")
+	flashWindow    = libuser32.NewProc("FlashWindow")
+	switchToWindow = libuser32.NewProc("SwitchToThisWindow")
 )
 
-//FindWindowEx user32 API FindWindowEx
+// FindWindowEx user32 API FindWindowEx
 func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpWindowName *uint16) win.HWND {
 	ret, _, _ := findWindowEx.Call(
 		uintptr(hWndParent),
@@ -33,7 +34,7 @@ func FindWindowEx(hWndParent win.HWND, hWndChildAfter win.HWND, lpClassName, lpW
 	return win.HWND(ret)
 }
 
-//GetNextWindow user32 API GetNextWindow
+// GetNextWindow user32 API GetNextWindow
 func GetNextWindow(hWnd win.HWND, wCmd uintptr) win.HWND {
 	ret, _, _ := getNextWindow.Call(uintptr(hWnd), wCmd)
 	return win.HWND(ret)
@@ -41,5 +42,10 @@ func GetNextWindow(hWnd win.HWND, wCmd uintptr) win.HWND {
 
 func FlashWindow(hWnd win.HWND, bInvert int) int {
 	ret, _, _ := flashWindow.Call(uintptr(hWnd), uintptr(bInvert))
+	return int(ret)
+}
+
+func SwitchToWindow(hWnd win.HWND, bInvert int) int {
+	ret, _, _ := switchToWindow.Call(uintptr(hWnd), uintptr(bInvert))
 	return int(ret)
 }
