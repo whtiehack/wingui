@@ -48,6 +48,8 @@ You can also use rc.exe and link.exe to generate syso file.
 
 ### Simple usage:
 
+> example for https://github.com/whtiehack/wingui/tree/master/examples/simple
+
 Generate `x.syso` file from rc or res file use `windres.exe` tool.
 
 generate `syso` file:
