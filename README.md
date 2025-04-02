@@ -119,15 +119,6 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 # Screenshot
 
 
-### Effect
-![resedit](res/resedit_show.png)
-
-![wowjump](res/wowjump.png)
-
-### File size
-![size](res/size.png)
-
-
 
 ### ResEdit
 ![resedit](res/resedit.png)
@@ -140,6 +131,15 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 ![vsreseditor](res/vsreseditor.png)
 
+
+
+### Effect
+![resedit](res/resedit_show.png)
+
+![wowjump](res/wowjump.png)
+
+### File size
+![size](res/size.png)
 
 
 
