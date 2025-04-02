@@ -118,7 +118,6 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 # Screenshot
 
-<details><summary><b> UI Screenshot details </b> </summary><br>
 
 ### Effect
 ![resedit](res/resedit_show.png)
@@ -141,8 +140,6 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 ![vsreseditor](res/vsreseditor.png)
 
-
-</details>
 
 
 
