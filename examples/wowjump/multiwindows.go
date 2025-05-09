@@ -34,6 +34,17 @@ func getHwnds() []win.HWND {
 		hwndArr = append(hwndArr, curh)
 		strArr = append(strArr, strconv.Itoa(int(curh)))
 	}
+	curh = 0
+	for {
+		// syscall.StringToUTF16Ptr("GxWindowClass")
+		//curh = winapi.FindWindowEx(0, curh, nil, syscall.StringToUTF16Ptr("ssl.csr - 记事本"))
+		curh = winapi.FindWindowEx(0, curh, syscall.StringToUTF16Ptr("waApplication Window"), nil)
+		if curh == 0 {
+			break
+		}
+		hwndArr = append(hwndArr, curh)
+		strArr = append(strArr, strconv.Itoa(int(curh)))
+	}
 	log.Println("hwndArr", hwndArr)
 	return hwndArr
 }

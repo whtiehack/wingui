@@ -24,6 +24,8 @@ const (
 	ENTERING
 )
 
+// 进程有1119端口就是在排队？
+
 // Logout control Wow window status.
 type Logout struct {
 	prevTime     time.Time
