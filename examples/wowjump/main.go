@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"os"
-	"strconv"
 	"syscall"
 
 	"github.com/lxn/win"
@@ -13,7 +12,6 @@ import (
 
 var dlg *wingui.Dialog
 var out *wingui.Edit
-var stat *Statistics
 
 // ProcessMutex 防止进程多开，返回 true 表示进程已经开启
 func ProcessMutex(name string) bool {
@@ -34,7 +32,6 @@ func init() {
 		win.MessageBox(0, &syscall.StringToUTF16("进程已经开启了，不可以多开")[0], nil, 0)
 		os.Exit(-1)
 	}
-	stat = NewStatistics("https://smallwhite.cf/wingui/wowjump", "ffbfeacabe5e673d7a972c8b3977806f")
 	// control
 	go process()
 }
@@ -66,7 +63,6 @@ func main() {
 		config.editInputTime, config.editCharWaitTime, config.btnCheckChangeChar, config.btnCheckLogoutFlash)
 	config.flashHwnd = dlg.Handle()
 	config.InitVal()
-	go stat.Stat("/main", "wowjump-main")
 	dlg.Show()
 	setLogOutput(editLog)
 	// Make sure Tabstop can work.
@@ -112,7 +108,6 @@ func btnClick() {
 		if len(logouts) == 0 {
 			running = !running
 			log.Println("没有找到WOW窗口，如果确认已经开启了wow窗口\n可以使用管理员身份运行程序试试")
-			go stat.Stat("/cancel", "wowjump-cancel")
 			return
 		}
 		out.SetText("")
@@ -122,10 +117,8 @@ func btnClick() {
 		//config.SkillKey = str
 		//randomSkill.ParseSkillKey(str)
 		log.Println("开始运行")
-		go stat.Stat("/start", "wowjump-start:"+strconv.Itoa(len(logouts)))
 	} else {
 		log.Println("已经停止运行")
-		go stat.Stat("/stop", "wowjump-stop")
 	}
 	config.EditEnable(!running)
 	btn.SetText(text)

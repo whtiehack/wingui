@@ -4,7 +4,6 @@ import (
 	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"math/rand"
-	"strconv"
 	"time"
 
 	"github.com/lxn/win"
@@ -84,8 +83,6 @@ func (l *Logout) input() {
 		log.Println(l.hwnd, "小退中。。。", l.subTime)
 		if !l.logout() {
 			l.subTime = 0
-		} else {
-			stat.Stat("/logout/"+strconv.Itoa(l.count), "wowjump-logout")
 		}
 		return
 	}
