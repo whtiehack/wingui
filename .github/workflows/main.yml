@@ -5,6 +5,10 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      CGO_ENABLED: 0
+      GOOS: windows
+      GOARCH: amd64
 
     steps:
 
