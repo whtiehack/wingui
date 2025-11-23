@@ -46,6 +46,35 @@ Don't use `go run main.go`, because golang can't load x.syso files.
 */
 package wingui
 
+/*
+#include <windows.h>
+
+HWND dlg;
+
+// Message Loop
+void MessageLoop(){
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
+        if(dlg){
+                if(!IsDialogMessage(dlg, &msg))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+        }else{
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
+
+}
+
+void SetCurrentDialog(long long int h){
+    dlg = (HWND)h;
+}
+*/
+import "C"
 import (
 	"github.com/lxn/win"
 	"log"
@@ -70,25 +99,13 @@ func InitHInstance(lpModuleName string) {
 	log.Println("hInstance", hInstance)
 }
 
-var dlg win.HWND
-
 // MessageLoop start windows message loop.
 func MessageLoop() {
-	// message loop
-	var msg win.MSG
-	for win.GetMessage(&msg, 0, 0, 0) > 0 {
-		if dlg > 0 {
-			if win.IsDialogMessage(dlg, &msg) {
-				continue
-			}
-		}
-		win.TranslateMessage(&msg)
-		win.DispatchMessage(&msg)
-	}
+	C.MessageLoop()
 }
 
 // SetCurrentDialog  make sure Message Loop could process dialog msg correct,such as Tabstop msg.
 // This is a optional method.
 func SetCurrentDialog(h win.HWND) {
-	dlg = h
+	C.SetCurrentDialog(C.longlong(uintptr(h)))
 }

@@ -5,10 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: windows-latest
-    env:
-      CGO_ENABLED: 0
-      GOOS: windows
-      GOARCH: amd64
 
     steps:
 
@@ -39,14 +35,12 @@ jobs:
           cd examples/simple;
           windres -i emptyProject/Debug/resource.res -O coff -o vsui.syso;
           go build -ldflags="-s -w -H windowsgui"
-      - name: Install go-winres
-        run: go install github.com/tc-hib/go-winres@latest
+
 # 取消 winres调用。 生成的资源文件会变成乱码，暂时不知道如果解决。 发布 wowjump release之前需要手动生成 ui.syso.
 # windres -i ui/ui.rc -O coff -o ui.syso;
       - name: check wowjump
         run:
           cd examples/wowjump;
-          go-winres make --in ui/ui.rc --out ui.syso --arch amd64;
           go generate;
           go build -ldflags="-s -w -H windowsgui"
 
