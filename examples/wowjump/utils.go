@@ -148,73 +148,8 @@ func NewStatistics(baseUrl string, si string) *Statistics {
 }
 
 func (s *Statistics) Stat(path string, title string) {
-	// tt   title
-	// ep	停留时间,活跃时间
-	// et	初始进入页面 0， 当前页面有时间 3
-	// rnd  随机数
-	// su  前一个页面  离开页面时
-	// ct 新的一个页面开始   !!
-	val, _ := url.ParseQuery(s.params.Encode())
-	val.Set("rnd", strconv.Itoa(int(rand.Int31())))
-	val.Set("sn", strconv.Itoa(int(time.Now().Unix()%65535)))
-	if s.lt != 0 && int(time.Now().Unix())-s.lt > 2592e3 {
-		s.lt = int(time.Now().Unix())
-	}
-	if s.lt != 0 {
-		val.Set("lt", strconv.Itoa(s.lt))
-	}
-	if s.curPath == "" {
-		// 第一次打开
-		val.Set("ct", "!!")
-		val.Set("tt", title)
-		val.Set("et", "0")
-		s.get(val.Encode(), s.baseUrl+path)
-	} else {
-		// 离开页面
-		val.Set("et", "3")
-		t := time.Now().Sub(s.prevTime).Milliseconds()
-		ep := strconv.Itoa(int(t)) + "," + strconv.Itoa(int(t))
-		val.Set("ep", ep)
-		prevPath := s.baseUrl + s.curPath
-		s.get(val.Encode(), prevPath)
-		val.Set("rnd", strconv.Itoa(int(rand.Int31())))
-		// 进入新页面
-		val.Set("u", prevPath)
-		s.get(val.Encode(), s.baseUrl+path)
-		val.Set("rnd", strconv.Itoa(int(rand.Int31())))
-		val.Del("u")
-		val.Set("su", prevPath)
-		val.Set("tt", title)
-		val.Del("ep")
-		val.Set("et", "0")
-		val.Set("ct", "!!")
-
-		if int(time.Now().Unix())-s.lt > 2592e3 {
-			s.lt = int(time.Now().Unix())
-		}
-		val.Set("lt", strconv.Itoa(s.lt))
-		s.get(val.Encode(), s.baseUrl+path)
-	}
-	s.prevTime = time.Now()
-	s.curPath = path
 }
 
 func (s *Statistics) get(params string, referer string) error {
-	conn, err := net.Dial("tcp", "hm.baidu.com:80")
-	if err != nil {
-		print("what err:", err, "\n")
-		return err
-	}
-	defer conn.Close()
-	_, err = conn.Write([]byte("GET /hm.gif?" + params + " HTTP/1.1\r\n" +
-		"User-Agent: Wingui\r\n" +
-		"Referer: " + referer + "\r\n" +
-		"Host: hm.baidu.com\r\n" +
-		"Connection: close\r\n" +
-		"\r\n\r\n"))
-	if err != nil {
-		print("write err:", err, "\n")
-		return err
-	}
 	return nil
 }
