@@ -4,7 +4,6 @@ import (
 	"github.com/whtiehack/wingui/winapi"
 	"log"
 	"math/rand"
-	"net"
 	"net/url"
 	"strconv"
 	"time"
