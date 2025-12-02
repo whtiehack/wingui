@@ -91,7 +91,7 @@ func MessageLoop() {
 }
 
 // SetCurrentDialog  make sure Message Loop could process dialog msg correct,such as Tabstop msg.
-// This is a optional method.
+// This is an optional method.
 func SetCurrentDialog(h win.HWND) {
 	dlg = h
 }
