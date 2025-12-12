@@ -8,3 +8,4 @@
 *.log
 /examples/simple/emptyProject/.vs/
 .vscode
+.claude/settings.local.json
