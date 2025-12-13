@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync/atomic"
 	"time"
 
 	"github.com/lxn/win"
@@ -189,12 +190,29 @@ func bindWidgets(dlg *wingui.Dialog) {
 		log.Println("tab1 error", err)
 		return
 	}
-	tabBtn, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab1)
-	tabBtn.OnClicked = func() {
-		log.Println("tab page button clicked")
-		tabBtn.MessageBox("tabBtn clicked: hello from wingui", "MessageBox", win.MB_OK|win.MB_ICONINFORMATION)
+	lv1, _ := wingui.BindNewListView(IDC_TAB_LIST1, tab1)
+	lv1.SetExtendedStyle(win.LVS_EX_FULLROWSELECT | win.LVS_EX_GRIDLINES | win.LVS_EX_DOUBLEBUFFER)
+	lv1.InsertColumn(0, "Name", 120, win.LVCFMT_LEFT)
+	lv1.InsertColumn(1, "Value", 80, win.LVCFMT_LEFT)
+	for i := 0; i < 5; i++ {
+		idx := lv1.InsertItem(-1, "Item "+strconv.Itoa(i))
+		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(i))
 	}
-	tabBtn.SetText("MessageBox #1")
+	lv1.OnItemActivate = func(index int) {
+		if index < 0 {
+			return
+		}
+		tab1.MessageBox("Activate: "+lv1.GetItemText(index, 0), "ListView", win.MB_OK|win.MB_ICONINFORMATION)
+	}
+
+	tabBtn, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab1)
+	tabBtn.SetText("Add Item")
+	var addSeq int32 = 5
+	tabBtn.OnClicked = func() {
+		n := int(atomic.AddInt32(&addSeq, 1) - 1)
+		idx := lv1.InsertItem(-1, "Item "+strconv.Itoa(n))
+		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(n))
+	}
 	tabcontrol.AddDialogPage("Page1", tab1)
 
 	tab2, err := wingui.NewDialog(IDD_DIALOG_TAB1, tabcontrol.Handle(), nil)
@@ -202,10 +220,24 @@ func bindWidgets(dlg *wingui.Dialog) {
 		log.Println("tab2 error", err)
 		return
 	}
+	lv2, _ := wingui.BindNewListView(IDC_TAB_LIST1, tab2)
+	lv2.SetExtendedStyle(win.LVS_EX_FULLROWSELECT | win.LVS_EX_GRIDLINES | win.LVS_EX_DOUBLEBUFFER)
+	lv2.InsertColumn(0, "Name", 120, win.LVCFMT_LEFT)
+	lv2.InsertColumn(1, "Value", 80, win.LVCFMT_LEFT)
+	for i := 0; i < 3; i++ {
+		idx := lv2.InsertItem(-1, "Row "+strconv.Itoa(i))
+		lv2.SetItemText(idx, 1, time.Now().Format("15:04:05"))
+	}
+
 	tabBtn2, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab2)
-	tabBtn2.SetText("MessageBox #2")
+	tabBtn2.SetText("Show Selected")
 	tabBtn2.OnClicked = func() {
-		tabBtn2.MessageBox("tab2 button clicked", "MessageBox", win.MB_OK|win.MB_ICONINFORMATION)
+		sel := lv2.SelectedIndex()
+		if sel < 0 {
+			tabBtn2.MessageBox("No selection", "ListView", win.MB_OK|win.MB_ICONWARNING)
+			return
+		}
+		tabBtn2.MessageBox("Selected: "+lv2.GetItemText(sel, 0)+" / "+lv2.GetItemText(sel, 1), "ListView", win.MB_OK|win.MB_ICONINFORMATION)
 	}
 	tabcontrol.AddDialogPage("Page2", tab2)
 	tabcontrol.Select(0)
