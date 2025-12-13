@@ -1,10 +1,12 @@
 package wingui
 
 import (
+	"sync/atomic"
 	"syscall"
 	"unsafe"
 
 	"github.com/lxn/win"
+	"github.com/whtiehack/wingui/winapi"
 )
 
 // WindowBase is an interface that provides operations common to all windows.
@@ -82,22 +84,22 @@ func (w *WindowBase) Show() {
 	win.ShowWindow(w.hwnd, win.SW_SHOW)
 }
 
-//Hide set window hide.
+// Hide set window hide.
 func (w *WindowBase) Hide() {
 	win.ShowWindow(w.hwnd, win.SW_HIDE)
 }
 
-//ShowMinimized show minimized btn.
+// ShowMinimized show minimized btn.
 func (w *WindowBase) ShowMinimized() {
 	win.ShowWindow(w.hwnd, win.SW_MINIMIZE)
 }
 
-//ShowMaximized show maximized btn.
+// ShowMaximized show maximized btn.
 func (w *WindowBase) ShowMaximized() {
 	win.ShowWindow(w.hwnd, win.SW_MAXIMIZE)
 }
 
-//ShowFullScreen ShowFullScreen
+// ShowFullScreen ShowFullScreen
 func (w *WindowBase) ShowFullScreen() {
 	win.ShowWindow(w.hwnd, win.SW_SHOWMAXIMIZED)
 }
@@ -107,7 +109,7 @@ func (w *WindowBase) ShowNormal() {
 	win.ShowWindow(w.hwnd, win.SW_SHOWNORMAL)
 }
 
-//IsEnabled check windows is enabled.
+// IsEnabled check windows is enabled.
 func (w *WindowBase) IsEnabled() bool {
 	return win.IsWindowEnabled(w.hwnd)
 }
@@ -138,7 +140,7 @@ func (w *WindowBase) SetDisabled(disable bool) {
 	win.EnableWindow(w.hwnd, !disable)
 }
 
-//Close close window.
+// Close close window.
 func (w *WindowBase) Close() {
 	win.SendMessage(w.hwnd, win.WM_CLOSE, 0, 0)
 }
@@ -148,7 +150,7 @@ func (w *WindowBase) SetFocus() {
 	win.SetFocus(w.hwnd)
 }
 
-//GetWindowRect get window rect
+// GetWindowRect get window rect
 func (w *WindowBase) GetWindowRect() win.RECT {
 	var rect win.RECT
 	win.GetWindowRect(w.hwnd, &rect)
@@ -188,5 +190,17 @@ func (w *WindowBase) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 
 // SendMessage sends a message to the window and returns the result.
 func (w *WindowBase) SendMessage(msg uint32, wParam, lParam uintptr) uintptr {
+	if w.hwnd == 0 {
+		return 0
+	}
+	// Calling SendMessage across threads can deadlock (common with controls + modal loops).
+	// If we don't know the UI thread yet (uiThreadID==0) or we're not on it, use SendMessageTimeout to avoid hanging the process.
+	uiTID := atomic.LoadUint32(&uiThreadID)
+	if uiTID == 0 || win.GetCurrentThreadId() != uiTID {
+		if ret, ok := winapi.SendMessageTimeout(w.hwnd, msg, wParam, lParam, winapi.SMTO_ABORTIFHUNG|winapi.SMTO_BLOCK, 2000); ok {
+			return ret
+		}
+		return 0
+	}
 	return win.SendMessage(w.hwnd, msg, wParam, lParam)
 }

@@ -16,6 +16,7 @@ func init() {
 var dlg *wingui.Dialog
 
 // optional  genereate resource IDs
+//
 //go:generate go run github.com/whtiehack/wingui/tools/genids -filename ui/resource.h -packagename main
 func main() {
 	log.Printf("resource %v %#[1]v  \n", IDD_DIALOG)
@@ -182,6 +183,11 @@ func bindWidgets(dlg *wingui.Dialog) {
 	tab1, err := wingui.NewDialog(IDD_DIALOG_TAB1, tabcontrol.Handle(), nil)
 	if err != nil {
 		log.Println("tab1 error", err)
+		return
+	}
+	tabBtn, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab1)
+	tabBtn.OnClicked = func() {
+		log.Println("tab page button clicked")
 	}
 	tabcontrol.InsertItemText("111", tab1)
 	// other

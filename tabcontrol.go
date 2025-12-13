@@ -75,31 +75,6 @@ func (tc *TabControl) layoutPages() {
 	}
 }
 
-func (tc *TabControl) ensurePageWindow(dlg *Dialog) {
-	if dlg == nil || dlg.Handle() == 0 || tc.hwnd == 0 {
-		return
-	}
-	hwnd := dlg.Handle()
-
-	// Make sure the dialog is a real child window of the tab control.
-	win.SetParent(hwnd, tc.hwnd)
-
-	style := win.GetWindowLongPtr(hwnd, win.GWL_STYLE)
-	if style&win.WS_CHILD == 0 {
-		style &^= win.WS_POPUP
-		style |= win.WS_CHILD
-		win.SetWindowLongPtr(hwnd, win.GWL_STYLE, style)
-		win.SetWindowPos(hwnd, 0, 0, 0, 0, 0, win.SWP_NOMOVE|win.SWP_NOSIZE|win.SWP_NOZORDER|win.SWP_FRAMECHANGED)
-	}
-
-	// Helps keyboard navigation within the page.
-	exStyle := win.GetWindowLongPtr(hwnd, win.GWL_EXSTYLE)
-	if exStyle&win.WS_EX_CONTROLPARENT == 0 {
-		win.SetWindowLongPtr(hwnd, win.GWL_EXSTYLE, exStyle|win.WS_EX_CONTROLPARENT)
-		win.SetWindowPos(hwnd, 0, 0, 0, 0, 0, win.SWP_NOMOVE|win.SWP_NOSIZE|win.SWP_NOZORDER|win.SWP_FRAMECHANGED)
-	}
-}
-
 func (tc *TabControl) setSelected(index int) {
 	if index < 0 || index >= len(tc.dlgs) {
 		tc.curSel = -1
@@ -153,7 +128,6 @@ func (tc *TabControl) InsertItemText(text string, dlg *Dialog) {
 	copy(tc.dlgs[newIdx+1:], tc.dlgs[newIdx:])
 	tc.dlgs[newIdx] = dlg
 
-	tc.ensurePageWindow(dlg)
 	tc.layoutPages()
 
 	// Ensure only the selected page is visible.

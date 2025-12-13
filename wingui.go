@@ -51,6 +51,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"sync/atomic"
 	"syscall"
 )
 
@@ -73,11 +74,14 @@ func InitHInstance(lpModuleName string) {
 
 var dlg win.HWND
 
+var uiThreadID uint32
+
 // MessageLoop start windows message loop.
 func MessageLoop() {
 	// message loop
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
+	atomic.StoreUint32(&uiThreadID, win.GetCurrentThreadId())
 	var msg win.MSG
 	for win.GetMessage(&msg, 0, 0, 0) > 0 {
 		if dlg > 0 {
