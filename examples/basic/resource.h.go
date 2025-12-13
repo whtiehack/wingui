@@ -51,4 +51,8 @@ const (
 	IDP_PROGRESSBAR = 40014
 	// IDC_TAB1 const uintptr
 	IDC_TAB1 = 40015
+	// IDC_TAB_BUTTON_DEL const uintptr
+	IDC_TAB_BUTTON_DEL = 40016
+	// IDC_TAB_LABEL_COUNT const uintptr
+	IDC_TAB_LABEL_COUNT = 40017
 )

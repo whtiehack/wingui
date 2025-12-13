@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -194,15 +195,18 @@ func bindWidgets(dlg *wingui.Dialog) {
 	lv1.SetExtendedStyle(win.LVS_EX_FULLROWSELECT | win.LVS_EX_GRIDLINES | win.LVS_EX_DOUBLEBUFFER)
 	lv1.InsertColumn(0, "Name", 120, win.LVCFMT_LEFT)
 	lv1.InsertColumn(1, "Value", 80, win.LVCFMT_LEFT)
+	lv1Status, _ := wingui.BindNewStatic(IDC_TAB_LABEL_COUNT, tab1)
+	updateLv1Status := func() {
+		lv1Status.SetText(fmt.Sprintf("Count: %d   Selected: %d", lv1.ItemCount(), lv1.SelectedIndex()))
+	}
 	for i := 0; i < 5; i++ {
 		idx := lv1.InsertItem(-1, "Item "+strconv.Itoa(i))
 		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(i))
 	}
+	updateLv1Status()
 	lv1.OnItemChanged = func(index int) {
-		sel := lv1.SelectedIndex()
-		if sel >= 0 {
-			tab1.SetText("Page1 - selected: " + lv1.GetItemText(sel, 0))
-		}
+		_ = index
+		updateLv1Status()
 	}
 	lv1.OnItemActivate = func(index int) {
 		if index < 0 {
@@ -212,7 +216,6 @@ func bindWidgets(dlg *wingui.Dialog) {
 	}
 
 	tabBtn, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab1)
-	tabBtn.SetText("Add Item")
 	var addSeq int32 = 5
 	tabBtn.OnClicked = func() {
 		n := int(atomic.AddInt32(&addSeq, 1) - 1)
@@ -222,7 +225,20 @@ func bindWidgets(dlg *wingui.Dialog) {
 			return
 		}
 		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(n))
-		tab1.SetText("Page1 - count: " + strconv.Itoa(lv1.ItemCount()))
+		updateLv1Status()
+	}
+	delBtn1, _ := wingui.BindNewButton(IDC_TAB_BUTTON_DEL, tab1)
+	delBtn1.OnClicked = func() {
+		sel := lv1.SelectedIndex()
+		if sel < 0 {
+			delBtn1.MessageBox("No selection", "ListView", win.MB_OK|win.MB_ICONWARNING)
+			return
+		}
+		if !lv1.DeleteItem(sel) {
+			delBtn1.MessageBox("DeleteItem failed", "ListView", win.MB_OK|win.MB_ICONERROR)
+			return
+		}
+		updateLv1Status()
 	}
 	tabcontrol.AddDialogPage("Page1", tab1)
 
@@ -235,13 +251,21 @@ func bindWidgets(dlg *wingui.Dialog) {
 	lv2.SetExtendedStyle(win.LVS_EX_FULLROWSELECT | win.LVS_EX_GRIDLINES | win.LVS_EX_DOUBLEBUFFER)
 	lv2.InsertColumn(0, "Name", 120, win.LVCFMT_LEFT)
 	lv2.InsertColumn(1, "Value", 80, win.LVCFMT_LEFT)
+	lv2Status, _ := wingui.BindNewStatic(IDC_TAB_LABEL_COUNT, tab2)
+	updateLv2Status := func() {
+		lv2Status.SetText(fmt.Sprintf("Count: %d   Selected: %d", lv2.ItemCount(), lv2.SelectedIndex()))
+	}
 	for i := 0; i < 3; i++ {
 		idx := lv2.InsertItem(-1, "Row "+strconv.Itoa(i))
 		lv2.SetItemText(idx, 1, time.Now().Format("15:04:05"))
 	}
+	updateLv2Status()
+	lv2.OnItemChanged = func(index int) {
+		_ = index
+		updateLv2Status()
+	}
 
 	tabBtn2, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab2)
-	tabBtn2.SetText("Show Selected")
 	tabBtn2.OnClicked = func() {
 		sel := lv2.SelectedIndex()
 		if sel < 0 {
@@ -249,6 +273,19 @@ func bindWidgets(dlg *wingui.Dialog) {
 			return
 		}
 		tabBtn2.MessageBox("Selected: "+lv2.GetItemText(sel, 0)+" / "+lv2.GetItemText(sel, 1), "ListView", win.MB_OK|win.MB_ICONINFORMATION)
+	}
+	delBtn2, _ := wingui.BindNewButton(IDC_TAB_BUTTON_DEL, tab2)
+	delBtn2.OnClicked = func() {
+		sel := lv2.SelectedIndex()
+		if sel < 0 {
+			delBtn2.MessageBox("No selection", "ListView", win.MB_OK|win.MB_ICONWARNING)
+			return
+		}
+		if !lv2.DeleteItem(sel) {
+			delBtn2.MessageBox("DeleteItem failed", "ListView", win.MB_OK|win.MB_ICONERROR)
+			return
+		}
+		updateLv2Status()
 	}
 	tabcontrol.AddDialogPage("Page2", tab2)
 	tabcontrol.Select(0)
