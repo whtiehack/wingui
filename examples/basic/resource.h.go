@@ -55,4 +55,14 @@ const (
 	IDC_TAB_BUTTON_DEL = 40016
 	// IDC_TAB_LABEL_COUNT const uintptr
 	IDC_TAB_LABEL_COUNT = 40017
+	// IDC_SPIN_EDIT const uintptr
+	IDC_SPIN_EDIT = 40018
+	// IDC_SPIN1 const uintptr
+	IDC_SPIN1 = 40019
+	// IDC_SPIN_LABEL const uintptr
+	IDC_SPIN_LABEL = 40020
+	// IDC_SPIN_SET42 const uintptr
+	IDC_SPIN_SET42 = 40021
+	// IDC_SPIN_RANGE const uintptr
+	IDC_SPIN_RANGE = 40022
 )

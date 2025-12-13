@@ -66,6 +66,44 @@ func modalBtnClicked() {
 }
 
 func bindWidgets(dlg *wingui.Dialog) {
+	// SpinControl (UpDown) demo
+	spinEdit, _ := wingui.BindNewEdit(IDC_SPIN_EDIT, dlg)
+	spin, _ := wingui.BindNewSpinControl(IDC_SPIN1, dlg)
+	spinLabel, _ := wingui.BindNewStatic(IDC_SPIN_LABEL, dlg)
+	spin.SetBuddy(spinEdit.Handle())
+	spin.SetRange32(0, 100)
+	spin.SetPos32(0)
+	updateSpinLabel := func() {
+		spinLabel.SetText(fmt.Sprintf("Spin: %d", spin.GetPos32()))
+	}
+	updateSpinLabel()
+
+	spin.OnDeltaPos = func(pos, delta int32) (cancel bool) {
+		next := pos + delta
+		spinLabel.SetText(fmt.Sprintf("Spin: %d", next))
+		return false
+	}
+
+	spinEdit.OnChanged = func() {
+		v, err := strconv.Atoi(spinEdit.Text())
+		if err != nil {
+			return
+		}
+		spin.SetPos32(int32(v))
+		updateSpinLabel()
+	}
+
+	spinSet42, _ := wingui.BindNewButton(IDC_SPIN_SET42, dlg)
+	spinSet42.OnClicked = func() {
+		spin.SetPos32(42)
+		updateSpinLabel()
+	}
+	spinRange, _ := wingui.BindNewButton(IDC_SPIN_RANGE, dlg)
+	spinRange.OnClicked = func() {
+		spin.SetRange32(0, 100)
+		updateSpinLabel()
+	}
+
 	image, _ := wingui.BindNewImage(IDP_BMP, dlg)
 	// change bitmap from resource id
 	btnChangeBmp, _ := wingui.BindNewButton(IDB_CHANGEBMP, dlg)

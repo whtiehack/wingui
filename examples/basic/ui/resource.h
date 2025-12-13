@@ -28,3 +28,8 @@
 #define IDC_TAB1                                40015
 #define IDC_TAB_BUTTON_DEL                      40016
 #define IDC_TAB_LABEL_COUNT                     40017
+#define IDC_SPIN_EDIT                           40018
+#define IDC_SPIN1                               40019
+#define IDC_SPIN_LABEL                          40020
+#define IDC_SPIN_SET42                          40021
+#define IDC_SPIN_RANGE                          40022
