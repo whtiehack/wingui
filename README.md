@@ -165,9 +165,9 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 -----
 - [x] Slider Control
 - [x] Progress Bar
-- [ ] Tab Control
+- [x] Tab Control
 
-- [ ] ListView Control
+- [x] ListView Control
 
 - [ ] Spin Control
 
