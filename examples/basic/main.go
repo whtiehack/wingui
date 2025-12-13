@@ -364,6 +364,110 @@ func bindWidgets(dlg *wingui.Dialog) {
 		updateRichLabel()
 	}
 	tabcontrol.AddDialogPage("RichEdit", richPage)
+
+	// TreeView demo page
+	treePage, err := wingui.NewDialog(IDD_DIALOG_TREE, tabcontrol.Handle(), nil)
+	if err != nil {
+		log.Println("tree page error", err)
+		return
+	}
+	tree, _ := wingui.BindNewTreeView(IDC_TREE1, treePage)
+	treeLabel, _ := wingui.BindNewStatic(IDC_TREE_LABEL, treePage)
+	var treeSeq int32
+	updateTreeLabel := func() {
+		sel := tree.GetSelection()
+		if sel == 0 {
+			treeLabel.SetText(fmt.Sprintf("Sel: - (%d)", tree.ItemCount()))
+			return
+		}
+		treeLabel.SetText(fmt.Sprintf("Sel:%s", tree.GetItemText(sel)))
+	}
+
+	rootA := tree.InsertItem(win.TVI_ROOT, win.TVI_LAST, "Root A")
+	_ = tree.InsertItem(rootA, win.TVI_LAST, "Child A1")
+	_ = tree.InsertItem(rootA, win.TVI_LAST, "Child A2")
+	rootB := tree.InsertItem(win.TVI_ROOT, win.TVI_LAST, "Root B")
+	_ = tree.InsertItem(rootB, win.TVI_LAST, "Child B1")
+	tree.Expand(rootA, win.TVE_EXPAND)
+	tree.SelectItem(rootA)
+	updateTreeLabel()
+
+	tree.OnSelChanged = func(item win.HTREEITEM) {
+		_ = item
+		updateTreeLabel()
+	}
+	tree.OnDblClick = func(item win.HTREEITEM) {
+		if item != 0 {
+			tree.Expand(item, win.TVE_TOGGLE)
+		}
+	}
+
+	addChildBtn, _ := wingui.BindNewButton(IDC_TREE_ADD_CHILD, treePage)
+	addChildBtn.OnClicked = func() {
+		sel := tree.GetSelection()
+		parent := win.TVI_ROOT
+		if sel != 0 {
+			parent = sel
+		}
+		n := atomic.AddInt32(&treeSeq, 1)
+		item := tree.InsertItem(parent, win.TVI_LAST, fmt.Sprintf("Node %d", n))
+		if item != 0 {
+			tree.Expand(parent, win.TVE_EXPAND)
+			tree.SelectItem(item)
+			tree.EnsureVisible(item)
+		}
+		updateTreeLabel()
+	}
+
+	addSibBtn, _ := wingui.BindNewButton(IDC_TREE_ADD_SIB, treePage)
+	addSibBtn.OnClicked = func() {
+		sel := tree.GetSelection()
+		parent := win.TVI_ROOT
+		after := win.TVI_LAST
+		if sel != 0 {
+			parent = tree.ParentItem(sel)
+			if parent == 0 {
+				parent = win.TVI_ROOT
+			}
+			after = sel
+		}
+		n := atomic.AddInt32(&treeSeq, 1)
+		item := tree.InsertItem(parent, after, fmt.Sprintf("Node %d", n))
+		if item != 0 {
+			tree.SelectItem(item)
+			tree.EnsureVisible(item)
+		}
+		updateTreeLabel()
+	}
+
+	delBtn, _ := wingui.BindNewButton(IDC_TREE_DELETE, treePage)
+	delBtn.OnClicked = func() {
+		sel := tree.GetSelection()
+		if sel == 0 {
+			return
+		}
+		tree.DeleteItem(sel)
+		updateTreeLabel()
+	}
+
+	expandBtn, _ := wingui.BindNewButton(IDC_TREE_EXPAND, treePage)
+	expandBtn.OnClicked = func() {
+		sel := tree.GetSelection()
+		if sel == 0 {
+			return
+		}
+		tree.Expand(sel, win.TVE_EXPAND)
+	}
+	collapseBtn, _ := wingui.BindNewButton(IDC_TREE_COLLAPSE, treePage)
+	collapseBtn.OnClicked = func() {
+		sel := tree.GetSelection()
+		if sel == 0 {
+			return
+		}
+		tree.Expand(sel, win.TVE_COLLAPSE)
+	}
+
+	tabcontrol.AddDialogPage("TreeView", treePage)
 	tabcontrol.Select(0)
 	// other
 

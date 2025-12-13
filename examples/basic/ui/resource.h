@@ -9,6 +9,7 @@
 #define IDB_BITMAP2                             111
 #define IDD_DIALOG_TAB1                         113
 #define IDD_DIALOG_RICH                         114
+#define IDD_DIALOG_TREE                         115
 #define IDB_OK                                  40000
 #define IDB_CANCEL                              40001
 #define IDC_TAB_LIST1                           40001
@@ -38,3 +39,10 @@
 #define IDC_RICH_APPEND                         40024
 #define IDC_RICH_CLEAR                          40025
 #define IDC_RICH_LABEL_LEN                      40026
+#define IDC_TREE1                               40027
+#define IDC_TREE_ADD_CHILD                      40028
+#define IDC_TREE_ADD_SIB                        40029
+#define IDC_TREE_DELETE                         40030
+#define IDC_TREE_EXPAND                         40031
+#define IDC_TREE_COLLAPSE                       40032
+#define IDC_TREE_LABEL                          40033
