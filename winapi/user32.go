@@ -31,6 +31,7 @@ var (
 	switchToWindow     = libuser32.NewProc("SwitchToThisWindow")
 	sendMessageTimeout = libuser32.NewProc("SendMessageTimeoutW")
 	trackPopupMenuEx   = libuser32.NewProc("TrackPopupMenuEx")
+	getSubMenu         = libuser32.NewProc("GetSubMenu")
 )
 
 // FindWindowEx user32 API FindWindowEx
@@ -87,4 +88,10 @@ func TrackPopupMenuEx(hMenu win.HMENU, flags uint32, x, y int32, hWnd win.HWND) 
 		0,
 	)
 	return uint32(ret)
+}
+
+// GetSubMenu wraps user32!GetSubMenu.
+func GetSubMenu(hMenu win.HMENU, pos int32) win.HMENU {
+	ret, _, _ := getSubMenu.Call(uintptr(hMenu), uintptr(pos))
+	return win.HMENU(ret)
 }

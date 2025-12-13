@@ -91,4 +91,12 @@ const (
 	IDC_TREE_COLLAPSE = 40032
 	// IDC_TREE_LABEL const uintptr
 	IDC_TREE_LABEL = 40033
+	// IDM_MAINMENU const uintptr
+	IDM_MAINMENU = 50000
+	// IDM_FILE_EXIT const uintptr
+	IDM_FILE_EXIT = 50001
+	// IDM_DEMO_HELLO const uintptr
+	IDM_DEMO_HELLO = 50002
+	// IDM_DEMO_TOGGLE const uintptr
+	IDM_DEMO_TOGGLE = 50003
 )

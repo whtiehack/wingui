@@ -8,10 +8,54 @@ import (
 	"github.com/whtiehack/wingui/winapi"
 )
 
+/*
+Manual menu creation example:
+
+	const (
+		idExit   = 60001
+		idHello  = 60002
+		idToggle = 60003
+	)
+
+	menu := wingui.NewMenu()
+	fileMenu := wingui.NewPopupMenu()
+	_ = fileMenu.AppendItem(idExit, "Exit")
+	_ = menu.AppendSubMenu(fileMenu, "File")
+
+	demoMenu := wingui.NewPopupMenu()
+	_ = demoMenu.AppendItem(idHello, "Hello MessageBox")
+	_ = demoMenu.AppendItem(idToggle, "Toggle Checked")
+	_ = menu.AppendSubMenu(demoMenu, "Demo")
+
+	_ = dlg.SetMenu(menu)
+
+	checked := false
+	dlg.OnCommand = func(id uint16) {
+		switch id {
+		case idExit:
+			dlg.Close()
+		case idHello:
+			wingui.MessageBox(dlg.Handle(), "Hello from Menu", "Menu", win.MB_OK|win.MB_ICONINFORMATION)
+		case idToggle:
+			checked = !checked
+			demoMenu.CheckItem(idToggle, checked)
+		}
+	}
+*/
+
 // Menu wraps a Win32 HMENU.
 type Menu struct {
 	hMenu win.HMENU
 	count uint32
+}
+
+// NewMenuFromResource loads a menu resource by id (from the module hInstance).
+func NewMenuFromResource(id uintptr) *Menu {
+	h := win.LoadMenu(hInstance, win.MAKEINTRESOURCE(id))
+	if h == 0 {
+		return nil
+	}
+	return &Menu{hMenu: h}
 }
 
 // Handle returns the underlying HMENU.
@@ -20,6 +64,18 @@ func (m *Menu) Handle() win.HMENU {
 		return 0
 	}
 	return m.hMenu
+}
+
+// SubMenu returns the submenu at the given position (0-based), or nil.
+func (m *Menu) SubMenu(pos int32) *Menu {
+	if m == nil || m.hMenu == 0 {
+		return nil
+	}
+	h := winapi.GetSubMenu(m.hMenu, pos)
+	if h == 0 {
+		return nil
+	}
+	return &Menu{hMenu: h}
 }
 
 // Destroy releases the underlying HMENU.

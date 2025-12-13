@@ -46,3 +46,8 @@
 #define IDC_TREE_EXPAND                         40031
 #define IDC_TREE_COLLAPSE                       40032
 #define IDC_TREE_LABEL                          40033
+
+#define IDM_MAINMENU                            50000
+#define IDM_FILE_EXIT                           50001
+#define IDM_DEMO_HELLO                          50002
+#define IDM_DEMO_TOGGLE                         50003

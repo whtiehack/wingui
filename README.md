@@ -179,7 +179,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 - [ ] Hot Key
 - [ ] Accelerator
-- [ ] Menu
+- [x] Menu
 
 </details>
 

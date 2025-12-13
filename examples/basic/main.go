@@ -31,33 +31,22 @@ func main() {
 		log.Panic("main dialog create error", err)
 	}
 
-	// Menu demo
-	const (
-		idMenuExit   = 60001
-		idMenuHello  = 60002
-		idMenuToggle = 60003
-	)
-	menu := wingui.NewMenu()
-	fileMenu := wingui.NewPopupMenu()
-	_ = fileMenu.AppendItem(idMenuExit, "Exit")
-	_ = menu.AppendSubMenu(fileMenu, "File")
-
-	demoMenu := wingui.NewPopupMenu()
-	_ = demoMenu.AppendItem(idMenuHello, "Hello MessageBox")
-	_ = demoMenu.AppendItem(idMenuToggle, "Toggle Checked")
-	_ = menu.AppendSubMenu(demoMenu, "Demo")
-
+	// Menu demo (menu loaded from ui.rc resource)
+	menu := wingui.NewMenuFromResource(IDM_MAINMENU)
 	_ = dlg.SetMenu(menu)
+	demoMenu := menu.SubMenu(1)
 	checked := false
 	dlg.OnCommand = func(id uint16) {
 		switch id {
-		case idMenuExit:
+		case IDM_FILE_EXIT:
 			dlg.Close()
-		case idMenuHello:
+		case IDM_DEMO_HELLO:
 			wingui.MessageBox(dlg.Handle(), "Hello from Menu", "Menu", win.MB_OK|win.MB_ICONINFORMATION)
-		case idMenuToggle:
+		case IDM_DEMO_TOGGLE:
 			checked = !checked
-			demoMenu.CheckItem(idMenuToggle, checked)
+			if demoMenu != nil {
+				demoMenu.CheckItem(IDM_DEMO_TOGGLE, checked)
+			}
 		}
 	}
 	dlg.SetIcon(IDI_ICON1)
