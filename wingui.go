@@ -53,6 +53,7 @@ import (
 	"runtime"
 	"sync/atomic"
 	"syscall"
+	"unsafe"
 )
 
 var hInstance win.HINSTANCE
@@ -60,6 +61,12 @@ var hInstance win.HINSTANCE
 func init() {
 	log.SetOutput(os.Stdout)
 	InitHInstance("")
+	// Ensure common controls classes (ListView/Tab/Progress etc.) are registered.
+	icc := win.INITCOMMONCONTROLSEX{
+		DwSize: uint32(unsafe.Sizeof(win.INITCOMMONCONTROLSEX{})),
+		DwICC:  win.ICC_WIN95_CLASSES,
+	}
+	win.InitCommonControlsEx(&icc)
 }
 
 // InitHInstance init hInstance,used by Dialog APIs.

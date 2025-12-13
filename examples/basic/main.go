@@ -198,6 +198,12 @@ func bindWidgets(dlg *wingui.Dialog) {
 		idx := lv1.InsertItem(-1, "Item "+strconv.Itoa(i))
 		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(i))
 	}
+	lv1.OnItemChanged = func(index int) {
+		sel := lv1.SelectedIndex()
+		if sel >= 0 {
+			tab1.SetText("Page1 - selected: " + lv1.GetItemText(sel, 0))
+		}
+	}
 	lv1.OnItemActivate = func(index int) {
 		if index < 0 {
 			return
@@ -211,7 +217,12 @@ func bindWidgets(dlg *wingui.Dialog) {
 	tabBtn.OnClicked = func() {
 		n := int(atomic.AddInt32(&addSeq, 1) - 1)
 		idx := lv1.InsertItem(-1, "Item "+strconv.Itoa(n))
+		if idx < 0 {
+			tabBtn.MessageBox("InsertItem failed", "ListView", win.MB_OK|win.MB_ICONERROR)
+			return
+		}
 		lv1.SetItemText(idx, 1, "V"+strconv.Itoa(n))
+		tab1.SetText("Page1 - count: " + strconv.Itoa(lv1.ItemCount()))
 	}
 	tabcontrol.AddDialogPage("Page1", tab1)
 

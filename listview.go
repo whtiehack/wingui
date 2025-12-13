@@ -5,7 +5,6 @@ import (
 	"unsafe"
 
 	"github.com/lxn/win"
-	"github.com/whtiehack/wingui/winapi"
 )
 
 // ListView is a wrapper for the Win32 SysListView32 control.
@@ -20,6 +19,8 @@ type ListView struct {
 	// OnItemChanged fires on LVN_ITEMCHANGED.
 	OnItemChanged func(index int)
 }
+
+const lvmGetItemCount = win.LVM_FIRST + 4
 
 func (lv *ListView) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
@@ -48,7 +49,7 @@ func (lv *ListView) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 
 // SetExtendedStyle sets extended list-view styles (e.g. LVS_EX_FULLROWSELECT).
 func (lv *ListView) SetExtendedStyle(style uint32) {
-	lv.SendMessage(winapi.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, uintptr(style))
+	lv.SendMessage(win.LVM_SETEXTENDEDLISTVIEWSTYLE, 0, uintptr(style))
 }
 
 // InsertColumn inserts a column at index and returns the actual inserted index (or -1).
@@ -61,7 +62,7 @@ func (lv *ListView) InsertColumn(index int, text string, width int, fmt int32) i
 		PszText: &utf16[0],
 		ISubItem: int32(index),
 	}
-	ret := lv.SendMessage(winapi.LVM_INSERTCOLUMNW, uintptr(index), uintptr(unsafe.Pointer(&col)))
+	ret := lv.SendMessage(win.LVM_INSERTCOLUMN, uintptr(index), uintptr(unsafe.Pointer(&col)))
 	return int(int32(ret))
 }
 
@@ -77,7 +78,7 @@ func (lv *ListView) InsertItem(index int, text string) int {
 		ISubItem: 0,
 		PszText:  &utf16[0],
 	}
-	ret := lv.SendMessage(winapi.LVM_INSERTITEMW, 0, uintptr(unsafe.Pointer(&item)))
+	ret := lv.SendMessage(win.LVM_INSERTITEM, 0, uintptr(unsafe.Pointer(&item)))
 	return int(int32(ret))
 }
 
@@ -89,7 +90,7 @@ func (lv *ListView) SetItemText(itemIndex int, subItem int, text string) bool {
 		ISubItem: int32(subItem),
 		PszText:  &utf16[0],
 	}
-	ret := lv.SendMessage(winapi.LVM_SETITEMTEXTW, uintptr(itemIndex), uintptr(unsafe.Pointer(&item)))
+	ret := lv.SendMessage(win.LVM_SETITEMTEXT, uintptr(itemIndex), uintptr(unsafe.Pointer(&item)))
 	return ret != 0
 }
 
@@ -102,28 +103,28 @@ func (lv *ListView) GetItemText(itemIndex int, subItem int) string {
 		CchTextMax:  int32(len(buf)),
 		PszText:     &buf[0],
 	}
-	lv.SendMessage(winapi.LVM_GETITEMTEXTW, uintptr(itemIndex), uintptr(unsafe.Pointer(&item)))
+	lv.SendMessage(win.LVM_GETITEMTEXT, uintptr(itemIndex), uintptr(unsafe.Pointer(&item)))
 	return syscall.UTF16ToString(buf)
 }
 
 // ItemCount returns the number of items in the list.
 func (lv *ListView) ItemCount() int {
-	return int(int32(lv.SendMessage(winapi.LVM_GETITEMCOUNT, 0, 0)))
+	return int(int32(lv.SendMessage(lvmGetItemCount, 0, 0)))
 }
 
 // DeleteAllItems deletes all items.
 func (lv *ListView) DeleteAllItems() bool {
-	return lv.SendMessage(winapi.LVM_DELETEALLITEMS, 0, 0) != 0
+	return lv.SendMessage(win.LVM_DELETEALLITEMS, 0, 0) != 0
 }
 
 // DeleteItem deletes an item at index.
 func (lv *ListView) DeleteItem(index int) bool {
-	return lv.SendMessage(winapi.LVM_DELETEITEM, uintptr(index), 0) != 0
+	return lv.SendMessage(win.LVM_DELETEITEM, uintptr(index), 0) != 0
 }
 
 // SelectedIndex returns the first selected item index, or -1 if none.
 func (lv *ListView) SelectedIndex() int {
-	ret := lv.SendMessage(winapi.LVM_GETNEXTITEM, ^uintptr(0), uintptr(win.LVNI_SELECTED))
+	ret := lv.SendMessage(win.LVM_GETNEXTITEM, ^uintptr(0), uintptr(win.LVNI_SELECTED))
 	return int(int32(ret))
 }
 
