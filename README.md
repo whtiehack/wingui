@@ -169,7 +169,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 - [x] ListView Control
 
-- [ ] Spin Control
+- [x] Spin Control
 
 - [ ] Rich Edit
 

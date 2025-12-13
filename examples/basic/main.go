@@ -79,7 +79,13 @@ func bindWidgets(dlg *wingui.Dialog) {
 	updateSpinLabel()
 
 	spin.OnDeltaPos = func(pos, delta int32) (cancel bool) {
+		min, max := spin.GetRange32()
 		next := pos + delta
+		if next < min {
+			next = min
+		} else if next > max {
+			next = max
+		}
 		spinLabel.SetText(fmt.Sprintf("Spin: %d", next))
 		return false
 	}
