@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/lxn/win"
@@ -179,6 +180,9 @@ func bindWidgets(dlg *wingui.Dialog) {
 
 	// tab control
 	tabcontrol, _ := wingui.BindTabControl(IDC_TAB1, dlg)
+	tabcontrol.OnSelChange = func(newIndex int) {
+		dlg.SetText("Dialog Hello - tab " + strconv.Itoa(newIndex))
+	}
 
 	tab1, err := wingui.NewDialog(IDD_DIALOG_TAB1, tabcontrol.Handle(), nil)
 	if err != nil {
@@ -190,7 +194,21 @@ func bindWidgets(dlg *wingui.Dialog) {
 		log.Println("tab page button clicked")
 		tabBtn.MessageBox("tabBtn clicked: hello from wingui", "MessageBox", win.MB_OK|win.MB_ICONINFORMATION)
 	}
-	tabcontrol.InsertItemText("111", tab1)
+	tabBtn.SetText("MessageBox #1")
+	tabcontrol.AddDialogPage("Page1", tab1)
+
+	tab2, err := wingui.NewDialog(IDD_DIALOG_TAB1, tabcontrol.Handle(), nil)
+	if err != nil {
+		log.Println("tab2 error", err)
+		return
+	}
+	tabBtn2, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab2)
+	tabBtn2.SetText("MessageBox #2")
+	tabBtn2.OnClicked = func() {
+		tabBtn2.MessageBox("tab2 button clicked", "MessageBox", win.MB_OK|win.MB_ICONINFORMATION)
+	}
+	tabcontrol.AddDialogPage("Page2", tab2)
+	tabcontrol.Select(0)
 	// other
 
 }

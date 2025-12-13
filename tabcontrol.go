@@ -29,6 +29,11 @@ type TabControl struct {
 	OnSelChanging func(oldIndex int) (cancel bool)
 }
 
+// ItemCount returns the number of tabs.
+func (tc *TabControl) ItemCount() int {
+	return int(int32(tc.SendMessage(winapi.TCM_GETITEMCOUNT, 0, 0)))
+}
+
 // GetCurSel returns the zero-based index of the selected tab, or -1 if none.
 func (tc *TabControl) GetCurSel() int {
 	return int(int32(tc.SendMessage(winapi.TCM_GETCURSEL, 0, 0)))
@@ -43,6 +48,9 @@ func (tc *TabControl) SetCurSel(index int) int {
 func (tc *TabControl) Select(index int) {
 	tc.SetCurSel(index)
 	tc.setSelected(index)
+	if tc.OnSelChange != nil {
+		tc.OnSelChange(index)
+	}
 }
 
 func (tc *TabControl) contentRect() (win.RECT, bool) {
@@ -102,10 +110,12 @@ func (tc *TabControl) setSelected(index int) {
 	}
 }
 
-// InsertItemText inserts a tab with the given text and binds it to a child dialog used as the page.
-func (tc *TabControl) InsertItemText(text string, dlg *Dialog) {
+// InsertDialogPage inserts a tab with the given text at index and binds it to a child dialog used as the page.
+// If index is out of range, it appends at the end.
+// Returns the actual inserted tab index, or -1 on failure.
+func (tc *TabControl) InsertDialogPage(index int, text string, dlg *Dialog) int {
 	if dlg == nil {
-		return
+		return -1
 	}
 
 	utf16Text := syscall.StringToUTF16(text)
@@ -117,10 +127,13 @@ func (tc *TabControl) InsertItemText(text string, dlg *Dialog) {
 	tagItem.cchTextMax = int32(len(utf16Text))
 	tagItem.lParam = uintptr(dlg.Handle())
 
-	ret := tc.SendMessage(winapi.TCM_INSERTITEMW, uintptr(len(tc.dlgs)), uintptr(unsafe.Pointer(&tagItem)))
+	if index < 0 || index > len(tc.dlgs) {
+		index = len(tc.dlgs)
+	}
+	ret := tc.SendMessage(winapi.TCM_INSERTITEMW, uintptr(index), uintptr(unsafe.Pointer(&tagItem)))
 	newIdx := int(int32(ret))
 	if newIdx < 0 {
-		return
+		return -1
 	}
 
 	// Keep the page list aligned with tab indexes, even if Windows inserts at a different index.
@@ -137,6 +150,55 @@ func (tc *TabControl) InsertItemText(text string, dlg *Dialog) {
 	} else {
 		tc.setSelected(tc.curSel)
 	}
+	return newIdx
+}
+
+// AddDialogPage appends a new tab bound to dlg and returns its index (or -1 on failure).
+func (tc *TabControl) AddDialogPage(text string, dlg *Dialog) int {
+	return tc.InsertDialogPage(len(tc.dlgs), text, dlg)
+}
+
+// GetDialogPage returns the page dialog for the given tab index.
+func (tc *TabControl) GetDialogPage(index int) *Dialog {
+	if index < 0 || index >= len(tc.dlgs) {
+		return nil
+	}
+	return tc.dlgs[index]
+}
+
+// CurrentDialogPage returns the currently selected page dialog (if any).
+func (tc *TabControl) CurrentDialogPage() *Dialog {
+	return tc.GetDialogPage(tc.GetCurSel())
+}
+
+// DeleteItem removes the tab at index and updates internal page mapping.
+// It does not destroy the page dialog; it will be hidden.
+func (tc *TabControl) DeleteItem(index int) bool {
+	if index < 0 || index >= tc.ItemCount() {
+		return false
+	}
+	if index >= 0 && index < len(tc.dlgs) && tc.dlgs[index] != nil {
+		tc.dlgs[index].Hide()
+	}
+
+	ok := tc.SendMessage(winapi.TCM_DELETEITEM, uintptr(index), 0) != 0
+	if !ok {
+		return false
+	}
+	if index >= 0 && index < len(tc.dlgs) {
+		copy(tc.dlgs[index:], tc.dlgs[index+1:])
+		tc.dlgs[len(tc.dlgs)-1] = nil
+		tc.dlgs = tc.dlgs[:len(tc.dlgs)-1]
+	}
+
+	// Clamp selection and refresh page visibility.
+	newSel := tc.GetCurSel()
+	if newSel < 0 && tc.ItemCount() > 0 {
+		newSel = 0
+		tc.SetCurSel(newSel)
+	}
+	tc.setSelected(newSel)
+	return true
 }
 
 // WndProc TabControl window WndProc.
