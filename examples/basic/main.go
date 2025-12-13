@@ -188,6 +188,7 @@ func bindWidgets(dlg *wingui.Dialog) {
 	tabBtn, _ := wingui.BindNewButton(IDC_TAB_BUTTON1, tab1)
 	tabBtn.OnClicked = func() {
 		log.Println("tab page button clicked")
+		tabBtn.MessageBox("tabBtn clicked: hello from wingui", "MessageBox", win.MB_OK|win.MB_ICONINFORMATION)
 	}
 	tabcontrol.InsertItemText("111", tab1)
 	// other
