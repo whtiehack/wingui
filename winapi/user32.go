@@ -30,6 +30,7 @@ var (
 	flashWindow        = libuser32.NewProc("FlashWindow")
 	switchToWindow     = libuser32.NewProc("SwitchToThisWindow")
 	sendMessageTimeout = libuser32.NewProc("SendMessageTimeoutW")
+	trackPopupMenuEx   = libuser32.NewProc("TrackPopupMenuEx")
 )
 
 // FindWindowEx user32 API FindWindowEx
@@ -72,4 +73,18 @@ func SendMessageTimeout(hWnd win.HWND, msg uint32, wParam, lParam uintptr, flags
 		uintptr(unsafe.Pointer(&result)),
 	)
 	return result, ret != 0
+}
+
+// TrackPopupMenuEx wraps user32!TrackPopupMenuEx.
+// If TPM_RETURNCMD is specified in flags, the return value is the selected command id (0 if canceled).
+func TrackPopupMenuEx(hMenu win.HMENU, flags uint32, x, y int32, hWnd win.HWND) uint32 {
+	ret, _, _ := trackPopupMenuEx.Call(
+		uintptr(hMenu),
+		uintptr(flags),
+		uintptr(x),
+		uintptr(y),
+		uintptr(hWnd),
+		0,
+	)
+	return uint32(ret)
 }

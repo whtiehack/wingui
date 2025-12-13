@@ -30,6 +30,36 @@ func main() {
 	if err != nil {
 		log.Panic("main dialog create error", err)
 	}
+
+	// Menu demo
+	const (
+		idMenuExit   = 60001
+		idMenuHello  = 60002
+		idMenuToggle = 60003
+	)
+	menu := wingui.NewMenu()
+	fileMenu := wingui.NewPopupMenu()
+	_ = fileMenu.AppendItem(idMenuExit, "Exit")
+	_ = menu.AppendSubMenu(fileMenu, "File")
+
+	demoMenu := wingui.NewPopupMenu()
+	_ = demoMenu.AppendItem(idMenuHello, "Hello MessageBox")
+	_ = demoMenu.AppendItem(idMenuToggle, "Toggle Checked")
+	_ = menu.AppendSubMenu(demoMenu, "Demo")
+
+	_ = dlg.SetMenu(menu)
+	checked := false
+	dlg.OnCommand = func(id uint16) {
+		switch id {
+		case idMenuExit:
+			dlg.Close()
+		case idMenuHello:
+			wingui.MessageBox(dlg.Handle(), "Hello from Menu", "Menu", win.MB_OK|win.MB_ICONINFORMATION)
+		case idMenuToggle:
+			checked = !checked
+			demoMenu.CheckItem(idMenuToggle, checked)
+		}
+	}
 	dlg.SetIcon(IDI_ICON1)
 	log.Println("dlg create end", dlg)
 	btn := wingui.NewButton(IDB_OK)

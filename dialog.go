@@ -40,6 +40,8 @@ type Dialog struct {
 	// if return true,will eat message.
 	OnClose   func() bool
 	OnDestroy func()
+	// OnCommand handles WM_COMMAND for menu/accelerator commands (lParam==0).
+	OnCommand func(id uint16)
 	// TODO Support optionsl sub wnd class.
 }
 
@@ -124,8 +126,13 @@ func (dlg *Dialog) dialogWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintp
 		}
 		return 1
 	//case win.WM_COMMAND:
-	//	// process WM_COMMAND for dlg items.
-	//	return 0
+	case win.WM_COMMAND:
+		// Menu/accelerator commands have lParam==0.
+		if lParam == 0 && dlg.OnCommand != nil {
+			dlg.OnCommand(uint16(win.LOWORD(uint32(wParam))))
+			return 0
+		}
+		return 0
 	case win.WM_CLOSE:
 		log.Println("WM_CLOSE", hwnd)
 		if dlg.OnClose != nil {
