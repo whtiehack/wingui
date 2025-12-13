@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"strconv"
 	"sync/atomic"
@@ -14,6 +15,7 @@ import (
 
 func init() {
 	log.SetOutput(os.Stdout)
+	rand.Seed(time.Now().UnixNano())
 }
 
 var dlg *wingui.Dialog
@@ -349,7 +351,11 @@ func bindWidgets(dlg *wingui.Dialog) {
 
 	appendBtn, _ := wingui.BindNewButton(IDC_RICH_APPEND, richPage)
 	appendBtn.OnClicked = func() {
-		rich.AppendText(time.Now().Format("15:04:05") + " hello rich edit\r\n")
+		r := uint32(60 + rand.Intn(160))
+		g := uint32(60 + rand.Intn(160))
+		b := uint32(60 + rand.Intn(160))
+		color := win.COLORREF(r | (g << 8) | (b << 16))
+		rich.AppendTextColor(time.Now().Format("15:04:05")+" hello rich edit\r\n", color)
 		updateRichLabel()
 	}
 	clearBtn, _ := wingui.BindNewButton(IDC_RICH_CLEAR, richPage)

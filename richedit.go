@@ -7,6 +7,37 @@ import (
 	"github.com/lxn/win"
 )
 
+const (
+	emSetCharFormat = win.WM_USER + 68
+
+	scfSelection = 0x0001
+
+	cfmColor = 0x40000000
+)
+
+type charformat2W struct {
+	cbSize        uint32
+	dwMask        uint32
+	dwEffects     uint32
+	yHeight       int32
+	yOffset       int32
+	crTextColor   win.COLORREF
+	bCharSet      byte
+	bPitchAndFam  byte
+	szFaceName    [32]uint16
+	wWeight       uint16
+	sSpacing      int16
+	crBackColor   win.COLORREF
+	lcid          uint32
+	dwReserved    uint32
+	sStyle        int16
+	wKerning      uint16
+	bUnderlineTyp byte
+	bAnimation    byte
+	bRevAuthor    byte
+	bReserved1    byte
+}
+
 // RichEdit is a wrapper for the Win32 Rich Edit control.
 // The class is provided by Msftedit.dll (RICHEDIT50W) or Riched20.dll (RichEdit20W).
 type RichEdit struct {
@@ -73,6 +104,26 @@ func (re *RichEdit) AppendText(value string) {
 	re.SetTextSelection(l, l)
 	re.ReplaceSelectedText(value, false)
 	re.SetTextSelection(s, e)
+}
+
+// SetSelectionTextColor sets the selected text (and typing attributes) color.
+func (re *RichEdit) SetSelectionTextColor(color win.COLORREF) bool {
+	cf := charformat2W{
+		cbSize:      uint32(unsafe.Sizeof(charformat2W{})),
+		dwMask:      cfmColor,
+		crTextColor: color,
+	}
+	ret := re.SendMessage(emSetCharFormat, scfSelection, uintptr(unsafe.Pointer(&cf)))
+	return ret != 0
+}
+
+// AppendTextColor appends text with a specific color.
+func (re *RichEdit) AppendTextColor(value string, color win.COLORREF) {
+	l := re.TextLength()
+	re.SetTextSelection(l, l)
+	_ = re.SetSelectionTextColor(color)
+	re.ReplaceSelectedText(value, false)
+	_ = re.SetSelectionTextColor(win.COLORREF(0))
 }
 
 // TextLength returns current text length.
