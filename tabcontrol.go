@@ -206,8 +206,10 @@ func (tc *TabControl) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case win.WM_NOTIFY:
 		nmhdr := (*win.NMHDR)(unsafe.Pointer(lParam))
-		switch int(nmhdr.Code) {
-		case win.TCN_SELCHANGING:
+		// NMHDR.Code is effectively an int32; many notification codes are negative.
+		code := int32(nmhdr.Code)
+		switch code {
+		case int32(win.TCN_SELCHANGING):
 			oldIdx := tc.GetCurSel()
 			if tc.OnSelChanging != nil && tc.OnSelChanging(oldIdx) {
 				// Returning non-zero cancels the selection change.
@@ -217,7 +219,7 @@ func (tc *TabControl) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
 				tc.dlgs[oldIdx].Hide()
 			}
 			return 0
-		case win.TCN_SELCHANGE:
+		case int32(win.TCN_SELCHANGE):
 			newIdx := tc.GetCurSel()
 			tc.setSelected(newIdx)
 			if tc.OnSelChange != nil {
