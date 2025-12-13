@@ -12,17 +12,37 @@ import (
 type RichEdit struct {
 	WindowBase
 	OnChanged func()
+	lastLen   int
 }
 
 func (re *RichEdit) WndProc(msg uint32, wParam, lParam uintptr) uintptr {
+	maybeEmitChange := func() {
+		if re.OnChanged == nil || re.hwnd == 0 {
+			return
+		}
+		cur := re.TextLength()
+		if re.lastLen != cur {
+			re.lastLen = cur
+			re.OnChanged()
+		}
+	}
+
 	switch msg {
 	case win.WM_COMMAND:
 		switch win.HIWORD(uint32(wParam)) {
 		case win.EN_CHANGE:
-			if re.OnChanged != nil && lParam == uintptr(re.hwnd) {
-				re.OnChanged()
+			if lParam == uintptr(re.hwnd) {
+				maybeEmitChange()
+			}
+		case win.EN_UPDATE:
+			if lParam == uintptr(re.hwnd) {
+				maybeEmitChange()
 			}
 		}
+	case win.WM_CHAR, win.WM_PASTE, win.WM_CUT, win.WM_CLEAR, win.WM_UNDO:
+		ret := re.AsWindowBase().WndProc(msg, wParam, lParam)
+		maybeEmitChange()
+		return ret
 	}
 	return re.AsWindowBase().WndProc(msg, wParam, lParam)
 }
@@ -67,7 +87,10 @@ func (re *RichEdit) SetReadOnly(readOnly bool) {
 
 // NewRichEdit creates a new RichEdit, need bind to Dialog before use.
 func NewRichEdit(idd uintptr) *RichEdit {
-	return &RichEdit{WindowBase: WindowBase{idd: idd}}
+	return &RichEdit{
+		WindowBase: WindowBase{idd: idd, Subclassing: true},
+		lastLen:    -1,
+	}
 }
 
 // BindNewRichEdit creates a new RichEdit and bind to target dlg.
@@ -76,4 +99,3 @@ func BindNewRichEdit(idd uintptr, dlg *Dialog) (*RichEdit, error) {
 	err := dlg.BindWidgets(re)
 	return re, err
 }
-
