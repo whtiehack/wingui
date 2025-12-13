@@ -71,7 +71,7 @@ func bindWidgets(dlg *wingui.Dialog) {
 	spin, _ := wingui.BindNewSpinControl(IDC_SPIN1, dlg)
 	spinLabel, _ := wingui.BindNewStatic(IDC_SPIN_LABEL, dlg)
 	spin.SetBuddy(spinEdit.Handle())
-	spin.SetRange32(0, 100)
+	spin.SetRange32(-1000, 1000)
 	spin.SetPos32(0)
 	updateSpinLabel := func() {
 		spinLabel.SetText(fmt.Sprintf("Spin: %d", spin.GetPos32()))
@@ -332,6 +332,32 @@ func bindWidgets(dlg *wingui.Dialog) {
 		updateLv2Status()
 	}
 	tabcontrol.AddDialogPage("Page2", tab2)
+
+	// RichEdit demo page
+	richPage, err := wingui.NewDialog(IDD_DIALOG_RICH, tabcontrol.Handle(), nil)
+	if err != nil {
+		log.Println("rich page error", err)
+		return
+	}
+	rich, _ := wingui.BindNewRichEdit(IDC_RICHEDIT1, richPage)
+	richLabel, _ := wingui.BindNewStatic(IDC_RICH_LABEL_LEN, richPage)
+	updateRichLabel := func() {
+		richLabel.SetText(fmt.Sprintf("Len: %d", rich.TextLength()))
+	}
+	updateRichLabel()
+	rich.OnChanged = updateRichLabel
+
+	appendBtn, _ := wingui.BindNewButton(IDC_RICH_APPEND, richPage)
+	appendBtn.OnClicked = func() {
+		rich.AppendText(time.Now().Format("15:04:05") + " hello rich edit\r\n")
+		updateRichLabel()
+	}
+	clearBtn, _ := wingui.BindNewButton(IDC_RICH_CLEAR, richPage)
+	clearBtn.OnClicked = func() {
+		rich.SetText("")
+		updateRichLabel()
+	}
+	tabcontrol.AddDialogPage("RichEdit", richPage)
 	tabcontrol.Select(0)
 	// other
 

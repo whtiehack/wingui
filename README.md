@@ -171,7 +171,7 @@ https://docs.microsoft.com/zh-cn/windows/win32/controls/window-controls
 
 - [x] Spin Control
 
-- [ ] Rich Edit
+- [x] Rich Edit
 
 - [ ] DateTimePicker
 - [ ] Month Calendar

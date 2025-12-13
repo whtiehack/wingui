@@ -8,6 +8,7 @@
 #define IDB_BITMAP1                             110
 #define IDB_BITMAP2                             111
 #define IDD_DIALOG_TAB1                         113
+#define IDD_DIALOG_RICH                         114
 #define IDB_OK                                  40000
 #define IDB_CANCEL                              40001
 #define IDC_TAB_LIST1                           40001
@@ -33,3 +34,7 @@
 #define IDC_SPIN_LABEL                          40020
 #define IDC_SPIN_SET42                          40021
 #define IDC_SPIN_RANGE                          40022
+#define IDC_RICHEDIT1                           40023
+#define IDC_RICH_APPEND                         40024
+#define IDC_RICH_CLEAR                          40025
+#define IDC_RICH_LABEL_LEN                      40026

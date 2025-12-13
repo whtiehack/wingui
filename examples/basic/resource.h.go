@@ -15,6 +15,8 @@ const (
 	IDB_BITMAP2 = 111
 	// IDD_DIALOG_TAB1 const uintptr
 	IDD_DIALOG_TAB1 = 113
+	// IDD_DIALOG_RICH const uintptr
+	IDD_DIALOG_RICH = 114
 	// IDB_OK const uintptr
 	IDB_OK = 40000
 	// IDB_CANCEL const uintptr
@@ -65,4 +67,12 @@ const (
 	IDC_SPIN_SET42 = 40021
 	// IDC_SPIN_RANGE const uintptr
 	IDC_SPIN_RANGE = 40022
+	// IDC_RICHEDIT1 const uintptr
+	IDC_RICHEDIT1 = 40023
+	// IDC_RICH_APPEND const uintptr
+	IDC_RICH_APPEND = 40024
+	// IDC_RICH_CLEAR const uintptr
+	IDC_RICH_CLEAR = 40025
+	// IDC_RICH_LABEL_LEN const uintptr
+	IDC_RICH_LABEL_LEN = 40026
 )

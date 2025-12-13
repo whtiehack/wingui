@@ -48,6 +48,7 @@ package wingui
 
 import (
 	"github.com/lxn/win"
+	"golang.org/x/sys/windows"
 	"log"
 	"os"
 	"runtime"
@@ -67,6 +68,9 @@ func init() {
 		DwICC:  win.ICC_WIN95_CLASSES,
 	}
 	win.InitCommonControlsEx(&icc)
+	// Ensure Rich Edit classes are registered (RICHEDIT50W / RichEdit20W).
+	_ = windows.NewLazySystemDLL("Msftedit.dll").Load()
+	_ = windows.NewLazySystemDLL("Riched20.dll").Load()
 }
 
 // InitHInstance init hInstance,used by Dialog APIs.
